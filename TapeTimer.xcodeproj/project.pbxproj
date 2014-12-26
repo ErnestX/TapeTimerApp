@@ -1,0 +1,471 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 46;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		CA7A23FD1A4D368200697A86 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CA7A23FC1A4D368200697A86 /* Foundation.framework */; };
+		CA7A23FF1A4D368200697A86 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CA7A23FE1A4D368200697A86 /* CoreGraphics.framework */; };
+		CA7A24011A4D368200697A86 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CA7A24001A4D368200697A86 /* UIKit.framework */; };
+		CA7A24071A4D368200697A86 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = CA7A24051A4D368200697A86 /* InfoPlist.strings */; };
+		CA7A24091A4D368200697A86 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = CA7A24081A4D368200697A86 /* main.m */; };
+		CA7A240D1A4D368200697A86 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = CA7A240C1A4D368200697A86 /* AppDelegate.m */; };
+		CA7A24101A4D368200697A86 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = CA7A240E1A4D368200697A86 /* Main.storyboard */; };
+		CA7A24131A4D368200697A86 /* ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = CA7A24121A4D368200697A86 /* ViewController.m */; };
+		CA7A24151A4D368200697A86 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = CA7A24141A4D368200697A86 /* Images.xcassets */; };
+		CA7A241C1A4D368200697A86 /* XCTest.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CA7A241B1A4D368200697A86 /* XCTest.framework */; };
+		CA7A241D1A4D368200697A86 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CA7A23FC1A4D368200697A86 /* Foundation.framework */; };
+		CA7A241E1A4D368200697A86 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CA7A24001A4D368200697A86 /* UIKit.framework */; };
+		CA7A24261A4D368200697A86 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = CA7A24241A4D368200697A86 /* InfoPlist.strings */; };
+		CA7A24281A4D368200697A86 /* TapeTimerTests.m in Sources */ = {isa = PBXBuildFile; fileRef = CA7A24271A4D368200697A86 /* TapeTimerTests.m */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		CA7A241F1A4D368200697A86 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = CA7A23F11A4D368200697A86 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = CA7A23F81A4D368200697A86;
+			remoteInfo = TapeTimer;
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXFileReference section */
+		CA7A23F91A4D368200697A86 /* TapeTimer.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = TapeTimer.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		CA7A23FC1A4D368200697A86 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
+		CA7A23FE1A4D368200697A86 /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
+		CA7A24001A4D368200697A86 /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
+		CA7A24041A4D368200697A86 /* TapeTimer-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "TapeTimer-Info.plist"; sourceTree = "<group>"; };
+		CA7A24061A4D368200697A86 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
+		CA7A24081A4D368200697A86 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
+		CA7A240A1A4D368200697A86 /* TapeTimer-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "TapeTimer-Prefix.pch"; sourceTree = "<group>"; };
+		CA7A240B1A4D368200697A86 /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
+		CA7A240C1A4D368200697A86 /* AppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
+		CA7A240F1A4D368200697A86 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
+		CA7A24111A4D368200697A86 /* ViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ViewController.h; sourceTree = "<group>"; };
+		CA7A24121A4D368200697A86 /* ViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ViewController.m; sourceTree = "<group>"; };
+		CA7A24141A4D368200697A86 /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Images.xcassets; sourceTree = "<group>"; };
+		CA7A241A1A4D368200697A86 /* TapeTimerTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = TapeTimerTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		CA7A241B1A4D368200697A86 /* XCTest.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = XCTest.framework; path = Library/Frameworks/XCTest.framework; sourceTree = DEVELOPER_DIR; };
+		CA7A24231A4D368200697A86 /* TapeTimerTests-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "TapeTimerTests-Info.plist"; sourceTree = "<group>"; };
+		CA7A24251A4D368200697A86 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
+		CA7A24271A4D368200697A86 /* TapeTimerTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = TapeTimerTests.m; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		CA7A23F61A4D368200697A86 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				CA7A23FF1A4D368200697A86 /* CoreGraphics.framework in Frameworks */,
+				CA7A24011A4D368200697A86 /* UIKit.framework in Frameworks */,
+				CA7A23FD1A4D368200697A86 /* Foundation.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		CA7A24171A4D368200697A86 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				CA7A241C1A4D368200697A86 /* XCTest.framework in Frameworks */,
+				CA7A241E1A4D368200697A86 /* UIKit.framework in Frameworks */,
+				CA7A241D1A4D368200697A86 /* Foundation.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		CA7A23F01A4D368200697A86 = {
+			isa = PBXGroup;
+			children = (
+				CA7A24021A4D368200697A86 /* TapeTimer */,
+				CA7A24211A4D368200697A86 /* TapeTimerTests */,
+				CA7A23FB1A4D368200697A86 /* Frameworks */,
+				CA7A23FA1A4D368200697A86 /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		CA7A23FA1A4D368200697A86 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				CA7A23F91A4D368200697A86 /* TapeTimer.app */,
+				CA7A241A1A4D368200697A86 /* TapeTimerTests.xctest */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		CA7A23FB1A4D368200697A86 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				CA7A23FC1A4D368200697A86 /* Foundation.framework */,
+				CA7A23FE1A4D368200697A86 /* CoreGraphics.framework */,
+				CA7A24001A4D368200697A86 /* UIKit.framework */,
+				CA7A241B1A4D368200697A86 /* XCTest.framework */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		CA7A24021A4D368200697A86 /* TapeTimer */ = {
+			isa = PBXGroup;
+			children = (
+				CA7A240B1A4D368200697A86 /* AppDelegate.h */,
+				CA7A240C1A4D368200697A86 /* AppDelegate.m */,
+				CA7A240E1A4D368200697A86 /* Main.storyboard */,
+				CA7A24111A4D368200697A86 /* ViewController.h */,
+				CA7A24121A4D368200697A86 /* ViewController.m */,
+				CA7A24141A4D368200697A86 /* Images.xcassets */,
+				CA7A24031A4D368200697A86 /* Supporting Files */,
+			);
+			path = TapeTimer;
+			sourceTree = "<group>";
+		};
+		CA7A24031A4D368200697A86 /* Supporting Files */ = {
+			isa = PBXGroup;
+			children = (
+				CA7A24041A4D368200697A86 /* TapeTimer-Info.plist */,
+				CA7A24051A4D368200697A86 /* InfoPlist.strings */,
+				CA7A24081A4D368200697A86 /* main.m */,
+				CA7A240A1A4D368200697A86 /* TapeTimer-Prefix.pch */,
+			);
+			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
+		CA7A24211A4D368200697A86 /* TapeTimerTests */ = {
+			isa = PBXGroup;
+			children = (
+				CA7A24271A4D368200697A86 /* TapeTimerTests.m */,
+				CA7A24221A4D368200697A86 /* Supporting Files */,
+			);
+			path = TapeTimerTests;
+			sourceTree = "<group>";
+		};
+		CA7A24221A4D368200697A86 /* Supporting Files */ = {
+			isa = PBXGroup;
+			children = (
+				CA7A24231A4D368200697A86 /* TapeTimerTests-Info.plist */,
+				CA7A24241A4D368200697A86 /* InfoPlist.strings */,
+			);
+			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		CA7A23F81A4D368200697A86 /* TapeTimer */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = CA7A242B1A4D368200697A86 /* Build configuration list for PBXNativeTarget "TapeTimer" */;
+			buildPhases = (
+				CA7A23F51A4D368200697A86 /* Sources */,
+				CA7A23F61A4D368200697A86 /* Frameworks */,
+				CA7A23F71A4D368200697A86 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = TapeTimer;
+			productName = TapeTimer;
+			productReference = CA7A23F91A4D368200697A86 /* TapeTimer.app */;
+			productType = "com.apple.product-type.application";
+		};
+		CA7A24191A4D368200697A86 /* TapeTimerTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = CA7A242E1A4D368200697A86 /* Build configuration list for PBXNativeTarget "TapeTimerTests" */;
+			buildPhases = (
+				CA7A24161A4D368200697A86 /* Sources */,
+				CA7A24171A4D368200697A86 /* Frameworks */,
+				CA7A24181A4D368200697A86 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				CA7A24201A4D368200697A86 /* PBXTargetDependency */,
+			);
+			name = TapeTimerTests;
+			productName = TapeTimerTests;
+			productReference = CA7A241A1A4D368200697A86 /* TapeTimerTests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		CA7A23F11A4D368200697A86 /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				LastUpgradeCheck = 0510;
+				ORGANIZATIONNAME = "Jialiang Xiang";
+				TargetAttributes = {
+					CA7A24191A4D368200697A86 = {
+						TestTargetID = CA7A23F81A4D368200697A86;
+					};
+				};
+			};
+			buildConfigurationList = CA7A23F41A4D368200697A86 /* Build configuration list for PBXProject "TapeTimer" */;
+			compatibilityVersion = "Xcode 3.2";
+			developmentRegion = English;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+				Base,
+			);
+			mainGroup = CA7A23F01A4D368200697A86;
+			productRefGroup = CA7A23FA1A4D368200697A86 /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				CA7A23F81A4D368200697A86 /* TapeTimer */,
+				CA7A24191A4D368200697A86 /* TapeTimerTests */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		CA7A23F71A4D368200697A86 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				CA7A24151A4D368200697A86 /* Images.xcassets in Resources */,
+				CA7A24071A4D368200697A86 /* InfoPlist.strings in Resources */,
+				CA7A24101A4D368200697A86 /* Main.storyboard in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		CA7A24181A4D368200697A86 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				CA7A24261A4D368200697A86 /* InfoPlist.strings in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		CA7A23F51A4D368200697A86 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				CA7A24131A4D368200697A86 /* ViewController.m in Sources */,
+				CA7A240D1A4D368200697A86 /* AppDelegate.m in Sources */,
+				CA7A24091A4D368200697A86 /* main.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		CA7A24161A4D368200697A86 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				CA7A24281A4D368200697A86 /* TapeTimerTests.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		CA7A24201A4D368200697A86 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = CA7A23F81A4D368200697A86 /* TapeTimer */;
+			targetProxy = CA7A241F1A4D368200697A86 /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
+
+/* Begin PBXVariantGroup section */
+		CA7A24051A4D368200697A86 /* InfoPlist.strings */ = {
+			isa = PBXVariantGroup;
+			children = (
+				CA7A24061A4D368200697A86 /* en */,
+			);
+			name = InfoPlist.strings;
+			sourceTree = "<group>";
+		};
+		CA7A240E1A4D368200697A86 /* Main.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				CA7A240F1A4D368200697A86 /* Base */,
+			);
+			name = Main.storyboard;
+			sourceTree = "<group>";
+		};
+		CA7A24241A4D368200697A86 /* InfoPlist.strings */ = {
+			isa = PBXVariantGroup;
+			children = (
+				CA7A24251A4D368200697A86 /* en */,
+			);
+			name = InfoPlist.strings;
+			sourceTree = "<group>";
+		};
+/* End PBXVariantGroup section */
+
+/* Begin XCBuildConfiguration section */
+		CA7A24291A4D368200697A86 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				COPY_PHASE_STRIP = NO;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 7.1;
+				ONLY_ACTIVE_ARCH = YES;
+				SDKROOT = iphoneos;
+			};
+			name = Debug;
+		};
+		CA7A242A1A4D368200697A86 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				COPY_PHASE_STRIP = YES;
+				ENABLE_NS_ASSERTIONS = NO;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 7.1;
+				SDKROOT = iphoneos;
+				VALIDATE_PRODUCT = YES;
+			};
+			name = Release;
+		};
+		CA7A242C1A4D368200697A86 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = "TapeTimer/TapeTimer-Prefix.pch";
+				INFOPLIST_FILE = "TapeTimer/TapeTimer-Info.plist";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				WRAPPER_EXTENSION = app;
+			};
+			name = Debug;
+		};
+		CA7A242D1A4D368200697A86 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = "TapeTimer/TapeTimer-Prefix.pch";
+				INFOPLIST_FILE = "TapeTimer/TapeTimer-Info.plist";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				WRAPPER_EXTENSION = app;
+			};
+			name = Release;
+		};
+		CA7A242F1A4D368200697A86 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(BUILT_PRODUCTS_DIR)/TapeTimer.app/TapeTimer";
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(SDKROOT)/Developer/Library/Frameworks",
+					"$(inherited)",
+					"$(DEVELOPER_FRAMEWORKS_DIR)",
+				);
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = "TapeTimer/TapeTimer-Prefix.pch";
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				INFOPLIST_FILE = "TapeTimerTests/TapeTimerTests-Info.plist";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				TEST_HOST = "$(BUNDLE_LOADER)";
+				WRAPPER_EXTENSION = xctest;
+			};
+			name = Debug;
+		};
+		CA7A24301A4D368200697A86 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(BUILT_PRODUCTS_DIR)/TapeTimer.app/TapeTimer";
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(SDKROOT)/Developer/Library/Frameworks",
+					"$(inherited)",
+					"$(DEVELOPER_FRAMEWORKS_DIR)",
+				);
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = "TapeTimer/TapeTimer-Prefix.pch";
+				INFOPLIST_FILE = "TapeTimerTests/TapeTimerTests-Info.plist";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				TEST_HOST = "$(BUNDLE_LOADER)";
+				WRAPPER_EXTENSION = xctest;
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		CA7A23F41A4D368200697A86 /* Build configuration list for PBXProject "TapeTimer" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				CA7A24291A4D368200697A86 /* Debug */,
+				CA7A242A1A4D368200697A86 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		CA7A242B1A4D368200697A86 /* Build configuration list for PBXNativeTarget "TapeTimer" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				CA7A242C1A4D368200697A86 /* Debug */,
+				CA7A242D1A4D368200697A86 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+		};
+		CA7A242E1A4D368200697A86 /* Build configuration list for PBXNativeTarget "TapeTimerTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				CA7A242F1A4D368200697A86 /* Debug */,
+				CA7A24301A4D368200697A86 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = CA7A23F11A4D368200697A86 /* Project object */;
+}
