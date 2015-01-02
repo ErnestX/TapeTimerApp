@@ -7,6 +7,7 @@
 //
 
 #import "ViewController.h"
+#import "TimerView.h"
 
 @interface ViewController ()
 
@@ -17,7 +18,11 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-	// Do any additional setup after loading the view, typically from a nib.
+    
+    TimerView* timerView = [[TimerView alloc] initWithFrame:self.view.frame];
+    [self.view addSubview:timerView];
+    
+    // TODO: add red pointer line subview
 }
 
 - (void)didReceiveMemoryWarning

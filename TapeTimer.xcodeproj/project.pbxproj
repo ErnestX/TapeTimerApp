@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		CA4BCB1B1A5535DB007B5E94 /* RulerScrollController.m in Sources */ = {isa = PBXBuildFile; fileRef = CA4BCB1A1A5535DB007B5E94 /* RulerScrollController.m */; };
 		CA7A23FD1A4D368200697A86 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CA7A23FC1A4D368200697A86 /* Foundation.framework */; };
 		CA7A23FF1A4D368200697A86 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CA7A23FE1A4D368200697A86 /* CoreGraphics.framework */; };
 		CA7A24011A4D368200697A86 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CA7A24001A4D368200697A86 /* UIKit.framework */; };
@@ -21,6 +22,8 @@
 		CA7A241E1A4D368200697A86 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CA7A24001A4D368200697A86 /* UIKit.framework */; };
 		CA7A24261A4D368200697A86 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = CA7A24241A4D368200697A86 /* InfoPlist.strings */; };
 		CA7A24281A4D368200697A86 /* TapeTimerTests.m in Sources */ = {isa = PBXBuildFile; fileRef = CA7A24271A4D368200697A86 /* TapeTimerTests.m */; };
+		CA7A24331A4D397700697A86 /* TimerView.m in Sources */ = {isa = PBXBuildFile; fileRef = CA7A24321A4D397700697A86 /* TimerView.m */; };
+		CA7A24361A4D42A100697A86 /* RulerScaleLayer.m in Sources */ = {isa = PBXBuildFile; fileRef = CA7A24351A4D42A100697A86 /* RulerScaleLayer.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -34,6 +37,8 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		CA4BCB191A5535DB007B5E94 /* RulerScrollController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RulerScrollController.h; sourceTree = "<group>"; };
+		CA4BCB1A1A5535DB007B5E94 /* RulerScrollController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RulerScrollController.m; sourceTree = "<group>"; };
 		CA7A23F91A4D368200697A86 /* TapeTimer.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = TapeTimer.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		CA7A23FC1A4D368200697A86 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		CA7A23FE1A4D368200697A86 /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
@@ -53,6 +58,10 @@
 		CA7A24231A4D368200697A86 /* TapeTimerTests-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "TapeTimerTests-Info.plist"; sourceTree = "<group>"; };
 		CA7A24251A4D368200697A86 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		CA7A24271A4D368200697A86 /* TapeTimerTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = TapeTimerTests.m; sourceTree = "<group>"; };
+		CA7A24311A4D397700697A86 /* TimerView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TimerView.h; sourceTree = "<group>"; };
+		CA7A24321A4D397700697A86 /* TimerView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TimerView.m; sourceTree = "<group>"; };
+		CA7A24341A4D42A100697A86 /* RulerScaleLayer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RulerScaleLayer.h; sourceTree = "<group>"; };
+		CA7A24351A4D42A100697A86 /* RulerScaleLayer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RulerScaleLayer.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -79,6 +88,19 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		CA4BCB1C1A564AAD007B5E94 /* tapeTimer */ = {
+			isa = PBXGroup;
+			children = (
+				CA7A24311A4D397700697A86 /* TimerView.h */,
+				CA7A24321A4D397700697A86 /* TimerView.m */,
+				CA7A24341A4D42A100697A86 /* RulerScaleLayer.h */,
+				CA7A24351A4D42A100697A86 /* RulerScaleLayer.m */,
+				CA4BCB191A5535DB007B5E94 /* RulerScrollController.h */,
+				CA4BCB1A1A5535DB007B5E94 /* RulerScrollController.m */,
+			);
+			name = tapeTimer;
+			sourceTree = "<group>";
+		};
 		CA7A23F01A4D368200697A86 = {
 			isa = PBXGroup;
 			children = (
@@ -119,6 +141,7 @@
 				CA7A24121A4D368200697A86 /* ViewController.m */,
 				CA7A24141A4D368200697A86 /* Images.xcassets */,
 				CA7A24031A4D368200697A86 /* Supporting Files */,
+				CA4BCB1C1A564AAD007B5E94 /* tapeTimer */,
 			);
 			path = TapeTimer;
 			sourceTree = "<group>";
@@ -250,7 +273,10 @@
 			buildActionMask = 2147483647;
 			files = (
 				CA7A24131A4D368200697A86 /* ViewController.m in Sources */,
+				CA4BCB1B1A5535DB007B5E94 /* RulerScrollController.m in Sources */,
 				CA7A240D1A4D368200697A86 /* AppDelegate.m in Sources */,
+				CA7A24361A4D42A100697A86 /* RulerScaleLayer.m in Sources */,
+				CA7A24331A4D397700697A86 /* TimerView.m in Sources */,
 				CA7A24091A4D368200697A86 /* main.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -456,6 +482,7 @@
 				CA7A242D1A4D368200697A86 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		CA7A242E1A4D368200697A86 /* Build configuration list for PBXNativeTarget "TapeTimerTests" */ = {
 			isa = XCConfigurationList;
@@ -464,6 +491,7 @@
 				CA7A24301A4D368200697A86 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};
