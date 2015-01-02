@@ -10,25 +10,10 @@
 
 @implementation RulerScaleLayer
 
-///*
-// create a new layer and initialize properties.
-// */
-//+ (id) newWithFrame:(CGRect)fra WithRangeFrom:(NSInteger)f to:(NSInteger)t withScaleFactor:(float)s
-//{
-//    RulerScaleLayer* rsl = [RulerScaleLayer layer];
-//    rsl.anchorPoint = CGPointMake(0.5, 0); // set the anchor point to the top middle
-//    rsl.frame = fra;
-//    rsl.rangeFrom = f;
-//    rsl.rangeTo = t;
-//    rsl.scaleFactor = s;
-//    
-//    return rsl;
-//}
-
 /*
  create a new tail layer after the current tail layer and initialize properties
  */
-+ (id) newTailWithTimerView:(TimerView*)tv WithRangeFrom:(NSInteger)f to:(NSInteger)t withScaleFactor:(float)s
++ (id) newTailForTimerView:(TimerView*)tv WithRangeFrom:(NSInteger)f to:(NSInteger)t withScaleFactor:(float)s
 {
     RulerScaleLayer* rsl = [RulerScaleLayer layer];
     if (rsl) {
@@ -52,7 +37,20 @@
             rsl.absoluteRulerLocation = 0;
         }
     }
-    
+    return rsl;
+}
+
++ (id) newWithYPosition:(float)py WithHeight:(float)h WithWidth:(float)w WithRangeFrom:(NSInteger)f To:(NSInteger)t WithScaleFactor:(float)s
+{
+    RulerScaleLayer* rsl = [RulerScaleLayer layer];
+    if (rsl) {
+        rsl.anchorPoint = CGPointMake(0.5, 0); // set the anchor point to the top middle
+        rsl.frame = CGRectMake(0, 0, w, h);
+        rsl.position = CGPointMake(rsl.position.x, py);
+        rsl.rangeFrom = f;
+        rsl.rangeTo = t;
+        rsl.scaleFactor = s;
+    }
     return rsl;
 }
 

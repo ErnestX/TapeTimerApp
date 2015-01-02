@@ -18,24 +18,47 @@
     if (self) {
         self.timerView = tv;
         self.currentAbsoluteRulerLocation = 0;
+        
+        [self addNewTailRulerLayer];
+//        RulerScaleLayer* rulerScale = [RulerScaleLayer newTailForTimerView:tv WithRangeFrom:0 to:10 withScaleFactor:1];
+//        rulerScale.contentsScale = [[UIScreen mainScreen] scale];
+//        [tv.layer addSublayer:rulerScale];
+//        [rulerScale setNeedsDisplay];
     }
     return self;
 }
 
-//- (void) scrollToAbsoluteLocationMockUp:(float)location
-//{
-//    // use CATransaction to disable transactions
-//    [CATransaction begin];
-//    [CATransaction setDisableActions:YES];
-//    
-//    // TODO: below is a stub merely to test one-layer setup.
-//    ((CALayer*)[[self getRulerLayers] objectAtIndex:0]).position = CGPointMake(((CALayer*)[[self getRulerLayers] objectAtIndex:0]).position.x, location);
-//    
-//    [CATransaction commit];
-//    
-//    // update absolute location
-//    self.currentAbsoluteRulerLocation = location;
-//}
+- (void) addNewTailRulerLayer
+{
+    float positionY;
+    float absRulerLoc;
+        
+    if ([self getRulerLayers].count != 0) {
+        // set the layer right after the current tail layer
+        RulerScaleLayer* currentTail = [self getRulerLayers].lastObject;
+        // adjust to tail position
+        positionY = currentTail.position.y + currentTail.frame.size.height;
+        // calculate absolute position based on current tail
+        absRulerLoc = currentTail.absoluteRulerLocation + currentTail.frame.size.height;
+    } else {
+        // this must be the head layer
+        // in this case the frame is already correct, no need to adjust position
+        // calculate absolute position based on current tail
+        positionY = 0;
+        absRulerLoc = 0;
+    }
+    RulerScaleLayer* rsl = [RulerScaleLayer newWithYPosition:positionY WithHeight:self.timerView.frame.size.height
+                            WithWidth:self.timerView.frame.size.width WithRangeFrom:0 To:10 WithScaleFactor:1];
+    
+    rsl.contentsScale = [[UIScreen mainScreen]scale];
+    [self.timerView.layer addSublayer:rsl];
+    [rsl setNeedsDisplay];
+}
+
+- (void) removeHeadRulerLayer
+{
+    // stub
+}
 
 - (void) scrollToAbsoluteRulerLocation:(float)rl
 {

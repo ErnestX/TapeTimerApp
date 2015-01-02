@@ -20,17 +20,11 @@
     if (self)
     {
         self.backgroundColor = [UIColor whiteColor];
-        
-        RulerScaleLayer* rulerScale = [RulerScaleLayer newTailWithTimerView:self WithRangeFrom:0 to:10 withScaleFactor:1];
-        rulerScale.contentsScale = [[UIScreen mainScreen] scale];
-        [self.layer addSublayer:rulerScale];
-        [rulerScale setNeedsDisplay];
+        self.rulerScrollController = [[RulerScrollController alloc] initWithTimerView:self];
         
         self.userInteractionEnabled = YES;
         UIPanGestureRecognizer* panRecognizer = [[UIPanGestureRecognizer alloc] initWithTarget:self action:@selector(handlePan:)];
         [self addGestureRecognizer:panRecognizer];
-        
-        self.rulerScrollController = [[RulerScrollController alloc] initWithTimerView:self];
     }
     
     return self;

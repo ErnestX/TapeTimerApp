@@ -17,7 +17,7 @@
 @property TimerView* timerView;
 @property float currentAbsoluteRulerLocation;
 
-- (void) createNewTailRulerLayer;
+- (void) addNewTailRulerLayer;
 - (void) removeHeadRulerLayer;
 
 - (float) getCurrentAbsoluteRulerLocation;

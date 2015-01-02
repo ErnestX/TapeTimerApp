@@ -16,7 +16,7 @@
 @property NSInteger rangeTo;
 @property float scaleFactor;
 
-+ (id) newWithFrame: (CGRect) fra WithRangeFrom: (NSInteger) f to :(NSInteger) t withScaleFactor :(float) s;
-+ (id) newTailWithTimerView: (TimerView*) tv WithRangeFrom:(NSInteger)f to:(NSInteger)t withScaleFactor:(float)s;
++ (id) newTailForTimerView: (TimerView*) tv WithRangeFrom:(NSInteger)f to:(NSInteger)t withScaleFactor:(float)s;
++ (id) newWithYPosition:(float)py WithHeight:(float)h WithWidth:(float)w WithRangeFrom:(NSInteger)f To:(NSInteger)t WithScaleFactor:(float)s;
 
 @end
