@@ -103,43 +103,27 @@
     if ([self getRulerLayers].count != 0) {
         // step1: add and remove layer if necessary
         
-        // add tail when: the tail view is on screen
-        // add head when: the head view is on screen, unless the absLoc is 0 (at the beginning)
+        // add tail when: the tail view is on screen or further up
+        if ([self getTailLayer].position.y < [self getScreenHeight]) {
+            [self addNewTailRulerLayer];
+        }
+        // add head when: the head view is on screen or further down, unless the absLoc is 0 (at the beginning)
+        if ([self getHeadLayer].position.y > 0 && [self getHeadLayer].absoluteRulerLocation != 0) {
+            [self addNewHeadRulerLayer];
+        }
         // remove tail when it is off screen by height *2 (position off by height)
         // remove head when it is off screen by height *2 (position off by height*2)
-        if ([self getTailLayer].position.y < [[UIScreen mainScreen]bounds].size.height + TOLARANCE)
-        {
-            // remove the head layer, unless it's the only layer present
-            if ([self getRulerLayers].count > 1) {
-                //[self removeHeadRulerLayer];
-                NSLog(@"head layer deleted");
-            }
-            // add a tail layer
-            [self addNewTailRulerLayer];
-            NSLog(@"new tail layer added");
-        }
         
-        if ([self getHeadLayer].position.y + [self getLayerHeight] - TOLARANCE > 0)
-        {
-            // remove the tail layer, unless it's the only layer present
-            if ([self getRulerLayers].count > 1) {
-                //[self removeTailLayer];
-                NSLog(@"tail layer deleted");
-            }
-            // add a head layer
-            [self addNewHeadRulerLayer];
-            NSLog(@"new head layer added");
-        }
         // step2: scroll all layers
         float distance = rulerLocation - self.currentAbsoluteRulerLocation; // positive: scroll down or pan up
         for (RulerScaleLayer* rsl in [self getRulerLayers])
         {
             rsl.position = CGPointMake(rsl.position.x, rsl.position.y + distance);
         }
-    }
     
-    // update absolute location
-    self.currentAbsoluteRulerLocation = rulerLocation;
+        // update absolute location
+        self.currentAbsoluteRulerLocation = rulerLocation;
+    }
 }
 
 /*
@@ -196,6 +180,11 @@
 - (RulerScaleLayer*) getTailLayer
 {
     return [self getRulerLayers].lastObject;
+}
+
+- (float) getScreenHeight
+{
+    return [[UIScreen mainScreen] bounds].size.height;
 }
 
 @end
