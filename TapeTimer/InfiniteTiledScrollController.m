@@ -10,9 +10,6 @@
 #import "RulerScaleLayer.h"
 
 @implementation InfiniteTiledScrollController
-{
-    float TOLARANCE;
-}
 
 // custom initializer. use this inistead of init
 - (InfiniteTiledScrollController*) initWithTimerView:(TimerView *)tv
@@ -24,8 +21,41 @@
         
         [self addNewTailRulerLayer];
     }
-    TOLARANCE = 100.0f;
     return self;
+}
+
+#pragma mark - Layer Management
+
+/*
+ add tail when: the tail view is on screen or further up
+ */
+- (BOOL) shouldAddNewTail
+{
+    return [self getTailLayer].position.y < [self getScreenHeight];
+}
+
+/*
+ remove tail when it is off screen by height *2 (position off by height)
+ */
+- (BOOL) shouldRemoveTail
+{
+    return [self getTailLayer].position.y > [self getScreenHeight] * 2;
+}
+
+/*
+ add head when: the head view is on screen or further down, unless the absLoc is 0 (at the beginning)
+ */
+- (BOOL) shouldAddNewHead
+{
+    return [self getHeadLayer].position.y > 0 && [self getHeadLayer].absoluteRulerLocation != 0;
+}
+
+/*
+ remove head when it is off screen by height *2 (position off by height*2)
+ */
+- (BOOL) shouldRemoveHead
+{
+    return [self getHeadLayer].position.y < -1 * [self getScreenHeight] * 2;
 }
 
 - (void) addNewTailRulerLayer
@@ -93,11 +123,30 @@
     NSLog(@"head layer added");
 }
 
-- (void) removeTailLayer
+- (void) removeTailRulerLayer
 {
     [[self getTailLayer] removeFromSuperlayer];
     NSLog(@"tail layer removed");
 }
+
+- (void)manageLayersOnScreen
+{
+    if ([self shouldAddNewTail]) {
+        [self addNewTailRulerLayer];
+    }
+    else if ([self shouldRemoveTail]) {
+        [self removeTailRulerLayer];
+    }
+    
+    if ([self shouldAddNewHead]) {
+        [self addNewHeadRulerLayer];
+    }
+    else if ([self shouldRemoveHead]) {
+        [self removeHeadRulerLayer];
+    }
+}
+
+#pragma mark - Scrolling
 
 /*
  scroll with implicit animation. Don't call directly
@@ -106,24 +155,7 @@
 {
     if ([self getRulerLayers].count != 0) {
         // step1: add and remove layer if necessary
-        
-        // add tail when: the tail view is on screen or further up
-        if ([self getTailLayer].position.y < [self getScreenHeight]) {
-            [self addNewTailRulerLayer];
-        }
-        // remove tail when it is off screen by height *2 (position off by height)
-        else if ([self getTailLayer].position.y > [self getScreenHeight] * 2) {
-            [self removeTailLayer];
-        }
-        
-        // add head when: the head view is on screen or further down, unless the absLoc is 0 (at the beginning)
-        if ([self getHeadLayer].position.y > 0 && [self getHeadLayer].absoluteRulerLocation != 0) {
-            [self addNewHeadRulerLayer];
-        }
-        // remove head when it is off screen by height *2 (position off by height*2)
-        else if ([self getHeadLayer].position.y < -1 * [self getScreenHeight] * 2) {
-            [self removeHeadRulerLayer];
-        }
+        [self manageLayersOnScreen];
         
         // step2: scroll all layers
         float distance = rulerLocation - self.currentAbsoluteRulerLocation; // positive: scroll down or pan up
@@ -156,13 +188,15 @@
  */
 - (void) scrollToAbsoluteRulerLocationWithFriction:(float)rulerLocation WithInitialSpeed:(float)v
 {
-    
+
 }
 
 - (void) scrollToAbsRulerLocWithFricAndEdgeBounce:(float)rulerLocation WithInitialSpeed:(float)v
 {
     
 }
+
+#pragma mark - Getters
 
 /*
  return the TimerView delegate's ruler layers
