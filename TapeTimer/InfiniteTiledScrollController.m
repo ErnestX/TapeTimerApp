@@ -150,6 +150,7 @@
 
 /*
  scroll with implicit animation. Don't call directly
+ Cannot scroll more than one screen at a time
  */
 - (void)scrollToAbsoluteRulerLocation:(float)rulerLocation
 {
@@ -157,12 +158,16 @@
         // step1: add and remove layer if necessary
         [self manageLayersOnScreen];
         
-        // step2: scroll all layers
+        // step2: scroll
         float distance = rulerLocation - self.currentAbsoluteRulerLocation; // positive: scroll down or pan up
+        
+        // TODO: add condition. simply scroll all layers if distance is small
         for (RulerScaleLayer* rsl in [self getRulerLayers])
         {
             rsl.position = CGPointMake(rsl.position.x, rsl.position.y + distance);
         }
+        
+        //TODO: otherwise, do nothing, and throw error
     
         // update absolute location
         self.currentAbsoluteRulerLocation = rulerLocation;
@@ -171,6 +176,7 @@
 
 /*
  scroll with implicit animation disabled
+ Cannot scroll more than one screen at a time
  */
 - (void) scrollToAbsoluteRulerLocationNotAnimated:(float)rulerLocation
 {
@@ -183,17 +189,10 @@
     [CATransaction commit];
 }
 
-/*
- 
- */
-- (void) scrollToAbsoluteRulerLocationWithFriction:(float)rulerLocation WithInitialSpeed:(float)v
+- (void) scrollWithFricAndEdgeBounceAtInitialSpeed:(float)v
 {
-
-}
-
-- (void) scrollToAbsRulerLocWithFricAndEdgeBounce:(float)rulerLocation WithInitialSpeed:(float)v
-{
-    
+    //TODO: call scrollToAbsRulerLocation page by page, with each initial speed calculated
+    [self scrollToAbsoluteRulerLocation:self.currentAbsoluteRulerLocation + 30]; // stub
 }
 
 #pragma mark - Getters

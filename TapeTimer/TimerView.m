@@ -12,11 +12,11 @@
 @implementation TimerView
 {
     float previousLocation;
+    float lastScrollSpeed;
 }
 
-- (id) initWithFrame:(CGRect)frame
+- (void)myInit
 {
-    self = [super initWithFrame:frame];
     if (self)
     {
         self.backgroundColor = [UIColor whiteColor];
@@ -26,7 +26,20 @@
         UIPanGestureRecognizer* panRecognizer = [[UIPanGestureRecognizer alloc] initWithTarget:self action:@selector(handlePan:)];
         [self addGestureRecognizer:panRecognizer];
     }
-    
+}
+
+- (id) initWithCoder:(NSCoder *)aDecoder
+{
+    NSLog(@"initWithCoderCalled");
+    self = [super initWithCoder:aDecoder];
+    [self myInit];
+    return self;
+}
+
+- (id) initWithFrame:(CGRect)frame
+{
+    self = [super initWithFrame:frame];
+    [self myInit];
     return self;
 }
 
@@ -36,14 +49,31 @@
  */
 - (void) touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event
 {
+    NSLog(@"touch began");
+    [super touchesBegan:touches withEvent:event];
     // Remember original location
     previousLocation = self.rulerScrollController.getCurrentAbsoluteRulerLocation;
 }
 
 - (void) handlePan: (UIPanGestureRecognizer*) uigr
 {
+    lastScrollSpeed = [uigr velocityInView:self].y;
     CGPoint translation = [uigr translationInView:self]; // pan up or scroll down = negative
     [self.rulerScrollController scrollToAbsoluteRulerLocationNotAnimated:(translation.y + previousLocation)];
+}
+
+- (void) touchesCancelled:(NSSet *)touches withEvent:(UIEvent *)event
+{
+    [super touchesCancelled:touches withEvent:event];
+    NSLog(@"touch cancelled");
+}
+
+- (void) touchesEnded:(NSSet *)touches withEvent:(UIEvent *)event
+{
+    [super touchesEnded:touches withEvent:event];
+    NSLog(@"touch ended");
+    // start animation with lastScrollSpeed as initial speed
+    [self.rulerScrollController scrollWithFricAndEdgeBounceAtInitialSpeed:lastScrollSpeed];
 }
 
 @end

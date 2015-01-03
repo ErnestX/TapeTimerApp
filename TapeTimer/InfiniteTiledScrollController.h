@@ -17,11 +17,10 @@
 @property TimerView* timerView;
 @property float currentAbsoluteRulerLocation;
 
-- (void) addNewTailRulerLayer;
-- (void) removeHeadRulerLayer;
+- (InfiniteTiledScrollController*) initWithTimerView: (TimerView*) tv;
 
 - (float) getCurrentAbsoluteRulerLocation;
 - (void) scrollToAbsoluteRulerLocationNotAnimated: (float) location;
-- (InfiniteTiledScrollController*) initWithTimerView: (TimerView*) tv;
+- (void) scrollWithFricAndEdgeBounceAtInitialSpeed:(float)v;
 
 @end
