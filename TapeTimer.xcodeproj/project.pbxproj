@@ -7,7 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		CA4BCB1B1A5535DB007B5E94 /* RulerScrollController.m in Sources */ = {isa = PBXBuildFile; fileRef = CA4BCB1A1A5535DB007B5E94 /* RulerScrollController.m */; };
+		CA4BCB1B1A5535DB007B5E94 /* InfiniteTiledScrollController.m in Sources */ = {isa = PBXBuildFile; fileRef = CA4BCB1A1A5535DB007B5E94 /* InfiniteTiledScrollController.m */; };
 		CA7A23FD1A4D368200697A86 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CA7A23FC1A4D368200697A86 /* Foundation.framework */; };
 		CA7A23FF1A4D368200697A86 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CA7A23FE1A4D368200697A86 /* CoreGraphics.framework */; };
 		CA7A24011A4D368200697A86 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CA7A24001A4D368200697A86 /* UIKit.framework */; };
@@ -37,8 +37,8 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
-		CA4BCB191A5535DB007B5E94 /* RulerScrollController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RulerScrollController.h; sourceTree = "<group>"; };
-		CA4BCB1A1A5535DB007B5E94 /* RulerScrollController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RulerScrollController.m; sourceTree = "<group>"; };
+		CA4BCB191A5535DB007B5E94 /* InfiniteTiledScrollController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = InfiniteTiledScrollController.h; sourceTree = "<group>"; };
+		CA4BCB1A1A5535DB007B5E94 /* InfiniteTiledScrollController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = InfiniteTiledScrollController.m; sourceTree = "<group>"; };
 		CA7A23F91A4D368200697A86 /* TapeTimer.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = TapeTimer.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		CA7A23FC1A4D368200697A86 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		CA7A23FE1A4D368200697A86 /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
@@ -95,8 +95,8 @@
 				CA7A24321A4D397700697A86 /* TimerView.m */,
 				CA7A24341A4D42A100697A86 /* RulerScaleLayer.h */,
 				CA7A24351A4D42A100697A86 /* RulerScaleLayer.m */,
-				CA4BCB191A5535DB007B5E94 /* RulerScrollController.h */,
-				CA4BCB1A1A5535DB007B5E94 /* RulerScrollController.m */,
+				CA4BCB191A5535DB007B5E94 /* InfiniteTiledScrollController.h */,
+				CA4BCB1A1A5535DB007B5E94 /* InfiniteTiledScrollController.m */,
 			);
 			name = tapeTimer;
 			sourceTree = "<group>";
@@ -273,7 +273,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				CA7A24131A4D368200697A86 /* ViewController.m in Sources */,
-				CA4BCB1B1A5535DB007B5E94 /* RulerScrollController.m in Sources */,
+				CA4BCB1B1A5535DB007B5E94 /* InfiniteTiledScrollController.m in Sources */,
 				CA7A240D1A4D368200697A86 /* AppDelegate.m in Sources */,
 				CA7A24361A4D42A100697A86 /* RulerScaleLayer.m in Sources */,
 				CA7A24331A4D397700697A86 /* TimerView.m in Sources */,

@@ -7,12 +7,12 @@
 //
 
 #import <UIKit/UIKit.h>
-#import "RulerScrollController.h"
+#import "InfiniteTiledScrollController.h"
 
-@class RulerScrollController;
+@class InfiniteTiledScrollController;
 
 @interface TimerView : UIView
 
-@property RulerScrollController* rulerScrollController;
+@property InfiniteTiledScrollController* rulerScrollController;
 
 @end

@@ -12,7 +12,7 @@
 @class TimerView;
 
 // this is a wrapper for the ruler layers
-@interface RulerScrollController : NSObject
+@interface InfiniteTiledScrollController : NSObject
 
 @property TimerView* timerView;
 @property float currentAbsoluteRulerLocation;
@@ -21,7 +21,7 @@
 - (void) removeHeadRulerLayer;
 
 - (float) getCurrentAbsoluteRulerLocation;
-- (void) scrollToAbsoluteRulerLocation: (float) location;
-- (RulerScrollController*) initWithTimerView: (TimerView*) tv;
+- (void) scrollToAbsoluteRulerLocationNotAnimated: (float) location;
+- (InfiniteTiledScrollController*) initWithTimerView: (TimerView*) tv;
 
 @end

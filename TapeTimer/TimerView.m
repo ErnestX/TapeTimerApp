@@ -20,7 +20,7 @@
     if (self)
     {
         self.backgroundColor = [UIColor whiteColor];
-        self.rulerScrollController = [[RulerScrollController alloc] initWithTimerView:self];
+        self.rulerScrollController = [[InfiniteTiledScrollController alloc] initWithTimerView:self];
         
         self.userInteractionEnabled = YES;
         UIPanGestureRecognizer* panRecognizer = [[UIPanGestureRecognizer alloc] initWithTarget:self action:@selector(handlePan:)];
@@ -43,7 +43,7 @@
 - (void) handlePan: (UIPanGestureRecognizer*) uigr
 {
     CGPoint translation = [uigr translationInView:self]; // pan up or scroll down = negative
-    [self.rulerScrollController scrollToAbsoluteRulerLocation:(translation.y + previousLocation)];
+    [self.rulerScrollController scrollToAbsoluteRulerLocationNotAnimated:(translation.y + previousLocation)];
 }
 
 @end
