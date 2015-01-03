@@ -102,6 +102,11 @@
 {
     if ([self getRulerLayers].count != 0) {
         // step1: add and remove layer if necessary
+        
+        // add tail when: the tail view is on screen
+        // add head when: the head view is on screen, unless the absLoc is 0 (at the beginning)
+        // remove tail when it is off screen by height *2 (position off by height)
+        // remove head when it is off screen by height *2 (position off by height*2)
         if ([self getTailLayer].position.y < [[UIScreen mainScreen]bounds].size.height + TOLARANCE)
         {
             // remove the head layer, unless it's the only layer present
