@@ -50,15 +50,17 @@
     // TODO: calculate initial range and scale
     RulerScaleLayer* rsl = [RulerScaleLayer newWithYPosition:positionY WithHeight:self.timerView.frame.size.height
                             WithWidth:self.timerView.frame.size.width WithRangeFrom:0 To:10 WithScaleFactor:1];
-    
+    rsl.absoluteRulerLocation = absRulerLoc;
     rsl.contentsScale = [[UIScreen mainScreen]scale];
     [self.timerView.layer addSublayer:rsl];
     [rsl setNeedsDisplay];
+    NSLog(@"tail layer added");
 }
 
 - (void) removeHeadRulerLayer
 {
     [[self getHeadLayer] removeFromSuperlayer];
+    NSLog(@"head layer removed");
 }
 
 - (void) addNewHeadRulerLayer
@@ -83,16 +85,18 @@
     // TODO: calculate initial range and scale
     RulerScaleLayer* rsl = [RulerScaleLayer newWithYPosition:positionY WithHeight:self.timerView.frame.size.height
                                                    WithWidth:self.timerView.frame.size.width WithRangeFrom:0 To:10 WithScaleFactor:1];
-    
+    rsl.absoluteRulerLocation = absRulerLoc;
     rsl.contentsScale = [[UIScreen mainScreen]scale];
     // important: need to make sure the new layer is at back instead of front
     [self.timerView.layer insertSublayer:rsl atIndex:0];
     [rsl setNeedsDisplay];
+    NSLog(@"head layer added");
 }
 
 - (void) removeTailLayer
 {
     [[self getTailLayer] removeFromSuperlayer];
+    NSLog(@"tail layer removed");
 }
 
 /*
@@ -107,12 +111,19 @@
         if ([self getTailLayer].position.y < [self getScreenHeight]) {
             [self addNewTailRulerLayer];
         }
+        // remove tail when it is off screen by height *2 (position off by height)
+        else if ([self getTailLayer].position.y > [self getScreenHeight] * 2) {
+            [self removeTailLayer];
+        }
+        
         // add head when: the head view is on screen or further down, unless the absLoc is 0 (at the beginning)
         if ([self getHeadLayer].position.y > 0 && [self getHeadLayer].absoluteRulerLocation != 0) {
             [self addNewHeadRulerLayer];
         }
-        // remove tail when it is off screen by height *2 (position off by height)
         // remove head when it is off screen by height *2 (position off by height*2)
+        else if ([self getHeadLayer].position.y < -1 * [self getScreenHeight] * 2) {
+            [self removeHeadRulerLayer];
+        }
         
         // step2: scroll all layers
         float distance = rulerLocation - self.currentAbsoluteRulerLocation; // positive: scroll down or pan up
