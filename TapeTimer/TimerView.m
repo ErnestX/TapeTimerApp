@@ -23,7 +23,9 @@
         self.rulerScrollController = [[InfiniteTiledScrollController alloc] initWithTimerView:self];
         
         self.userInteractionEnabled = YES;
+        
         UIPanGestureRecognizer* panRecognizer = [[UIPanGestureRecognizer alloc] initWithTarget:self action:@selector(handlePan:)];
+        panRecognizer.cancelsTouchesInView = NO; // so that touch event won't be cancelled
         [self addGestureRecognizer:panRecognizer];
     }
 }
