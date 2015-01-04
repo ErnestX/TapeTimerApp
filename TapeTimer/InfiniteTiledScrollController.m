@@ -10,6 +10,9 @@
 #import "RulerScaleLayer.h"
 
 @implementation InfiniteTiledScrollController
+{
+    NSInteger timerViewDefaultSubLayerNumber;
+}
 
 // custom initializer. use this inistead of init
 - (InfiniteTiledScrollController*) initWithTimerView:(TimerView *)tv
@@ -18,7 +21,8 @@
     if (self) {
         self.timerView = tv;
         self.currentAbsoluteRulerLocation = 0;
-        
+        timerViewDefaultSubLayerNumber = [self getTimerViewSubLayers].count;
+        NSLog(@"layer number: %d", timerViewDefaultSubLayerNumber);
         [self addNewTailRulerLayer];
     }
     return self;
@@ -62,8 +66,7 @@
 {
     float positionY;
     float absRulerLoc;
-        
-    if ([self getRulerLayers].count != 0) {
+    if ([self getRulerLayerCount] > 0) {
         // set the layer right after the current tail layer
         RulerScaleLayer* currentTail = [self getTailLayer];
         // calculate new tail position
@@ -98,7 +101,7 @@
     float positionY;
     float absRulerLoc;
     
-    if ([self getRulerLayers].count != 0) {
+    if ([self getRulerLayerCount] > 0) {
         // set the layer right before the current head layer
         RulerScaleLayer* currentHead = [self getHeadLayer];
         // calculate new head position
@@ -154,7 +157,7 @@
  */
 - (void)scrollToAbsoluteRulerLocation:(float)rulerLocation
 {
-    if ([self getRulerLayers].count != 0) {
+    if ([self getRulerLayerCount] > 0) {
         // step1: add and remove layer if necessary
         [self manageLayersOnScreen];
         
@@ -162,8 +165,10 @@
         float distance = rulerLocation - self.currentAbsoluteRulerLocation; // positive: scroll down or pan up
         
         // TODO: add condition. simply scroll all layers if distance is small
-        for (RulerScaleLayer* rsl in [self getRulerLayers])
+        // for (RulerScaleLayer* rsl in [self getTimerViewSubLayers])
+        for (int i = timerViewDefaultSubLayerNumber; i < [self getRulerLayerCount] + timerViewDefaultSubLayerNumber; i++)
         {
+            RulerScaleLayer* rsl = [[self getTimerViewSubLayers] objectAtIndex:i];
             rsl.position = CGPointMake(rsl.position.x, rsl.position.y + distance);
         }
         
@@ -200,9 +205,14 @@
 /*
  return the TimerView delegate's ruler layers
  */
-- (NSArray*) getRulerLayers
+- (NSArray*) getTimerViewSubLayers
 {
     return self.timerView.layer.sublayers;
+}
+
+- (NSInteger) getRulerLayerCount
+{
+    return [self getTimerViewSubLayers].count - timerViewDefaultSubLayerNumber;
 }
 
 - (float) getCurrentAbsoluteRulerLocation
@@ -213,17 +223,18 @@
 - (float) getLayerHeight
 {
     // should I use presentation layer?
-    return ((CALayer*)[[self getRulerLayers] objectAtIndex:0]).frame.size.height;
+    // 2 instead of 0 b/c backing layer
+    return ((CALayer*)[[self getTimerViewSubLayers] objectAtIndex:2]).frame.size.height;
 }
 
 - (RulerScaleLayer*) getHeadLayer
 {
-    return [[self getRulerLayers] objectAtIndex:0];
+    return [[self getTimerViewSubLayers] objectAtIndex:timerViewDefaultSubLayerNumber];
 }
 
 - (RulerScaleLayer*) getTailLayer
 {
-    return [self getRulerLayers].lastObject;
+    return [self getTimerViewSubLayers].lastObject;
 }
 
 - (float) getScreenHeight

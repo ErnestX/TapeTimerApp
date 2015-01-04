@@ -19,8 +19,8 @@
 {
     [super viewDidLoad];
     
-    TimerView* timerView = [[TimerView alloc] initWithFrame:self.view.frame];
-    [self.view addSubview:timerView];
+//    TimerView* timerView = [[TimerView alloc] initWithFrame:self.view.frame];
+//    [self.view addSubview:timerView];
     
     // TODO: add red pointer line subview
 }
