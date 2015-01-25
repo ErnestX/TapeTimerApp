@@ -22,7 +22,7 @@
         self.timerView = tv;
         self.currentAbsoluteRulerLocation = 0;
         timerViewDefaultSubLayerNumber = [self getTimerViewSubLayers].count;
-        NSLog(@"layer number: %d", timerViewDefaultSubLayerNumber);
+        NSLog(@"layer number: %ld", (long)timerViewDefaultSubLayerNumber);
         [self addNewTailRulerLayer];
     }
     return self;
@@ -166,7 +166,7 @@
         
         // TODO: add condition. simply scroll all layers if distance is small
         // for (RulerScaleLayer* rsl in [self getTimerViewSubLayers])
-        for (int i = timerViewDefaultSubLayerNumber; i < [self getRulerLayerCount] + timerViewDefaultSubLayerNumber; i++)
+        for (NSInteger i = timerViewDefaultSubLayerNumber; i < [self getRulerLayerCount] + timerViewDefaultSubLayerNumber; i++)
         {
             RulerScaleLayer* rsl = [[self getTimerViewSubLayers] objectAtIndex:i];
             rsl.position = CGPointMake(rsl.position.x, rsl.position.y + distance);
@@ -197,6 +197,7 @@
 - (void) scrollWithFricAndEdgeBounceAtInitialSpeed:(float)v
 {
     //TODO: call scrollToAbsRulerLocation page by page, with each initial speed calculated
+    
     [self scrollToAbsoluteRulerLocation:self.currentAbsoluteRulerLocation + 30]; // stub
 }
 

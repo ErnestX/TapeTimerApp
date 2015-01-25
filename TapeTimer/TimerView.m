@@ -45,6 +45,8 @@
     return self;
 }
 
+#pragma mark - Touch Events
+
 /* why we need to remember previous location: the translation is calculated from the 
  position the pan begins. So the value gets larger and larger as moving further and
  further from the beginning position. 
