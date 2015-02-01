@@ -7,7 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		CA3BE82F1A7574E800EEA471 /* pop.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CA3BE82A1A75749A00EEA471 /* pop.framework */; };
+		CA3BE82F1A7574E800EEA471 /* pop.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CA3BE82A1A75749A00EEA471 /* pop.framework */; settings = {ATTRIBUTES = (Required, ); }; };
 		CA4BCB1B1A5535DB007B5E94 /* InfiniteTiledScrollController.m in Sources */ = {isa = PBXBuildFile; fileRef = CA4BCB1A1A5535DB007B5E94 /* InfiniteTiledScrollController.m */; };
 		CA7A23FD1A4D368200697A86 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CA7A23FC1A4D368200697A86 /* Foundation.framework */; };
 		CA7A23FF1A4D368200697A86 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CA7A23FE1A4D368200697A86 /* CoreGraphics.framework */; };

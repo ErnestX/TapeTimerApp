@@ -8,6 +8,7 @@
 
 #import "InfiniteTiledScrollController.h"
 #import "RulerScaleLayer.h"
+#import "POP.h"
 
 @implementation InfiniteTiledScrollController
 {
