@@ -122,7 +122,8 @@
     rsl.absoluteRulerLocation = absRulerLoc;
     rsl.contentsScale = [[UIScreen mainScreen]scale];
     // important: need to make sure the new layer is at back instead of front
-    [self.timerView.layer insertSublayer:rsl atIndex:0];
+    [self.timerView.layer insertSublayer:rsl atIndex:(int)timerViewDefaultSubLayerNumber]; // not plus one because this is the count, and when treated as index, is the index plus one
+    // bug caused by the layer inserted at 0. Not all the sublayers are ruler layers!!! Thus, the non-ruler layers are pushed over the default layer numbers, and considered ruler layer, but they are merely CALayer.
     [rsl setNeedsDisplay];
     NSLog(@"head layer added");
 }
@@ -195,25 +196,41 @@
     [CATransaction commit];
 }
 
-
+/*
+ Handels momentum scrolling and edge bounce. Call after the finger released from the screen. 
+ */
 - (void) scrollWithFricAndEdgeBounceAtInitialSpeed:(CGPoint)v
 {
-//    v.x = 0;
-//    POPDecayAnimation *decayAnimation = [POPDecayAnimation animation];
-//    
-//    POPAnimatableProperty *prop = [POPAnimatableProperty propertyWithName:@"position_on_screen" initializer:^(POPMutableAnimatableProperty *prop) {
-//        prop.readBlock = ^(id obj, CGFloat values[]) {
-//            for (NSInteger i = timerViewDefaultSubLayerNumber; i < [self getRulerLayerCount] + timerViewDefaultSubLayerNumber; i++)
-//            {
-//                RulerScaleLayer* rsl = [[self getTimerViewSubLayers] objectAtIndex:i];
-//                values[i] = rsl.position.y;
-//            }
-//        };
-//    }];
+    v.x = 0;
+    POPDecayAnimation *decayAnimation = [POPDecayAnimation animation];
     
-    //TODO: call scrollToAbsRulerLocation page by page, with each initial speed calculated
+    POPAnimatableProperty *prop = [POPAnimatableProperty propertyWithName:@"position_on_screen" initializer:^(POPMutableAnimatableProperty *prop) {
+        prop.readBlock = ^(id obj, CGFloat values[]) {
+            for (NSInteger i = 0; i < [self getRulerLayerCount]; i++)
+            {
+                RulerScaleLayer* rsl = [self getRulerLayerAtIndex:i];
+                values[i] = rsl.position.y;
+            }
+        };
+        
+        prop.writeBlock = ^(id obj, const CGFloat values[]) {
+            for (NSInteger i = 0; i < [self getRulerLayerCount]; i++)
+            {
+                RulerScaleLayer* rsl = [self getRulerLayerAtIndex:i];
+                [rsl setPosition: CGPointMake(rsl.position.x, values[i])];
+            }
+        };
+        // dynamics threshold
+        prop.threshold = 0.005;
+    }];
     
-    [self scrollToAbsoluteRulerLocation:self.currentAbsoluteRulerLocation + 30]; // stub
+    decayAnimation.property = prop;
+    decayAnimation.velocity = [NSValue valueWithCGPoint:v];
+    [self pop_addAnimation:decayAnimation forKey:@"momentum"];
+    
+    //TODO fix bug: bad access, after the layer is deleted.
+    
+    //[self scrollToAbsoluteRulerLocation:self.currentAbsoluteRulerLocation + 30]; // stub
 }
 
 #pragma mark - Getters
