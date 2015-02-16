@@ -12,7 +12,7 @@
 @implementation TimerView
 {
     float previousLocation;
-    float lastScrollSpeed;
+    CGPoint lastScrollSpeed;
 }
 
 - (void)myInit
@@ -25,6 +25,7 @@
         self.userInteractionEnabled = YES;
         
         UIPanGestureRecognizer* panRecognizer = [[UIPanGestureRecognizer alloc] initWithTarget:self action:@selector(handlePan:)];
+        //panRecognizer.cancelsTouchesInView = NO; // so that touch event won't be cancelled (no longer needed after switched to gesturerecognizer's built-in states)
         [self addGestureRecognizer:panRecognizer];
     }
 }
@@ -59,7 +60,7 @@
         
         case UIGestureRecognizerStateChanged:
         {
-            lastScrollSpeed = [uigr velocityInView:self].y;
+            lastScrollSpeed = [uigr velocityInView:self];
             CGPoint translation = [uigr translationInView:self]; // pan up or scroll down = negative
             [self.rulerScrollController scrollToAbsoluteRulerLocationNotAnimated:(translation.y + previousLocation)];
         }
@@ -70,11 +71,6 @@
             NSLog(@"touch ended");
             // start animation with lastScrollSpeed as initial speed
             [self.rulerScrollController scrollWithFricAndEdgeBounceAtInitialSpeed:lastScrollSpeed];
-        }
-        
-        case UIGestureRecognizerStateCancelled:
-        {
-            NSLog(@"touch cancelled");
         }
     }
     

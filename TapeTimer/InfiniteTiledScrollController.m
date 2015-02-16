@@ -167,9 +167,9 @@
         
         // TODO: add condition. simply scroll all layers if distance is small
         // for (RulerScaleLayer* rsl in [self getTimerViewSubLayers])
-        for (NSInteger i = timerViewDefaultSubLayerNumber; i < [self getRulerLayerCount] + timerViewDefaultSubLayerNumber; i++)
+        for (NSInteger i = 0; i < [self getRulerLayerCount]; i++)
         {
-            RulerScaleLayer* rsl = [[self getTimerViewSubLayers] objectAtIndex:i];
+            RulerScaleLayer* rsl = [self getRulerLayerAtIndex:i];
             rsl.position = CGPointMake(rsl.position.x, rsl.position.y + distance);
         }
         
@@ -195,14 +195,33 @@
     [CATransaction commit];
 }
 
-- (void) scrollWithFricAndEdgeBounceAtInitialSpeed:(float)v
+
+- (void) scrollWithFricAndEdgeBounceAtInitialSpeed:(CGPoint)v
 {
+//    v.x = 0;
+//    POPDecayAnimation *decayAnimation = [POPDecayAnimation animation];
+//    
+//    POPAnimatableProperty *prop = [POPAnimatableProperty propertyWithName:@"position_on_screen" initializer:^(POPMutableAnimatableProperty *prop) {
+//        prop.readBlock = ^(id obj, CGFloat values[]) {
+//            for (NSInteger i = timerViewDefaultSubLayerNumber; i < [self getRulerLayerCount] + timerViewDefaultSubLayerNumber; i++)
+//            {
+//                RulerScaleLayer* rsl = [[self getTimerViewSubLayers] objectAtIndex:i];
+//                values[i] = rsl.position.y;
+//            }
+//        };
+//    }];
+    
     //TODO: call scrollToAbsRulerLocation page by page, with each initial speed calculated
     
     [self scrollToAbsoluteRulerLocation:self.currentAbsoluteRulerLocation + 30]; // stub
 }
 
 #pragma mark - Getters
+
+- (RulerScaleLayer*) getRulerLayerAtIndex:(NSInteger) index
+{
+    return [[self getTimerViewSubLayers] objectAtIndex:index + timerViewDefaultSubLayerNumber];
+}
 
 /*
  return the TimerView delegate's ruler layers
