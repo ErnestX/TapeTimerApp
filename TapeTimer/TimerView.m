@@ -70,7 +70,7 @@
         {
             NSLog(@"touch ended");
             // start animation with lastScrollSpeed as initial speed
-            //[self.rulerScrollController scrollWithFricAndEdgeBounceAtInitialSpeed:lastScrollSpeed];
+            [self.rulerScrollController scrollWithFricAndEdgeBounceAtInitialSpeed:lastScrollSpeed];
         }
     }
     

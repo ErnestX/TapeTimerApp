@@ -122,7 +122,7 @@
     rsl.absoluteRulerLocation = absRulerLoc;
     rsl.contentsScale = [[UIScreen mainScreen]scale];
     // important: need to make sure the new layer is at back instead of front
-    [self.timerView.layer insertSublayer:rsl atIndex:(int)timerViewDefaultSubLayerNumber]; // not plus one because this is the count, and when treated as index, is the index plus one
+    [self.timerView.layer insertSublayer:rsl atIndex:(int)timerViewDefaultSubLayerNumber]; // not plus one because this is the count, and when treated as index, is the index plus one.
     // bug caused by the layer inserted at 0. Not all the sublayers are ruler layers!!! Thus, the non-ruler layers are pushed over the default layer numbers, and considered ruler layer, but they are merely CALayer.
     [rsl setNeedsDisplay];
     NSLog(@"head layer added");
@@ -228,7 +228,7 @@
     decayAnimation.velocity = [NSValue valueWithCGPoint:v];
     [self pop_addAnimation:decayAnimation forKey:@"momentum"];
     
-    //TODO fix bug: bad access, after the layer is deleted.
+    //TODO fix bug: bad access, after a layer is deleted.
     
     //[self scrollToAbsoluteRulerLocation:self.currentAbsoluteRulerLocation + 30]; // stub
 }
