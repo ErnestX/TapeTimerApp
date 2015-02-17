@@ -204,19 +204,21 @@
  */
 - (void) scrollWithFricAndEdgeBounceAtInitialSpeed:(float)v
 {
-    __block float vTemp = v * 0.1;
+    __block float vTemp = v * 0.1; // convert velocity to moving distance
+    
     POPCustomAnimation *customAnimation = [POPCustomAnimation animationWithBlock:^BOOL(id obj, POPCustomAnimation *animation) {
         for (NSInteger i = 0; i < [self getRulerLayerCount]; i++)
         {
             RulerScaleLayer* rsl = [self getRulerLayerAtIndex:i];
             [rsl setPosition: CGPointMake(rsl.position.x, rsl.position.y + vTemp)];
         }
-        [self manageLayersOnScreen];
+        
+        [self manageLayersOnScreen]; // add and remove layers as needed
         
         if (vTemp > 0) {
-            vTemp -= FRICTION;
+            vTemp -= FRICTION; // scrolling up
         } else {
-            vTemp += FRICTION;
+            vTemp += FRICTION; // scrolling down
         }
         NSLog(@"velocity = %f", vTemp);
         if (fabsf(vTemp) < FRICTION) {
@@ -227,10 +229,6 @@
     }];
     
     [self pop_addAnimation:customAnimation forKey:@"custom_animation"];
-    
-    //TODO expected bug: bad access, after a layer is deleted.
-    
-    //[self scrollToAbsoluteRulerLocation:self.currentAbsoluteRulerLocation + 30]; // stub
 }
 
 #pragma mark - Getters
