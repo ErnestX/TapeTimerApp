@@ -13,6 +13,7 @@
 @implementation InfiniteTiledScrollController
 {
     NSInteger timerViewDefaultSubLayerNumber;
+    float FRICTION;
 }
 
 // custom initializer. use this inistead of init
@@ -25,6 +26,8 @@
         timerViewDefaultSubLayerNumber = [self getTimerViewSubLayers].count;
         NSLog(@"layer number: %ld", (long)timerViewDefaultSubLayerNumber);
         [self addNewTailRulerLayer];
+        
+        FRICTION = 5;
     }
     return self;
 }
@@ -209,12 +212,17 @@
             [rsl setPosition: CGPointMake(rsl.position.x, rsl.position.y + vTemp)];
         }
         [self manageLayersOnScreen];
-        vTemp = vTemp + 5;
-        NSLog(@"%f", vTemp);
+        
         if (vTemp > 0) {
-            return NO;
+            vTemp -= FRICTION;
         } else {
-            return YES;
+            vTemp += FRICTION;
+        }
+        NSLog(@"velocity = %f", vTemp);
+        if (fabsf(vTemp) < FRICTION) {
+            return NO; // animation stop
+        } else {
+            return YES; // not there yet
         }
     }];
     
