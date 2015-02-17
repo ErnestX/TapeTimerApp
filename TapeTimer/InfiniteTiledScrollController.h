@@ -21,6 +21,6 @@
 
 - (float) getCurrentAbsoluteRulerLocation;
 - (void) scrollToAbsoluteRulerLocationNotAnimated: (float) location;
-- (void) scrollWithFricAndEdgeBounceAtInitialSpeed:(CGPoint)v;
+- (void) scrollWithFricAndEdgeBounceAtInitialSpeed:(float)v;
 
 @end

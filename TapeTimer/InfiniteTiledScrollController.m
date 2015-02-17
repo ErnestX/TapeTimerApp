@@ -199,45 +199,67 @@
 /*
  Handels momentum scrolling and edge bounce. Call after the finger released from the screen. 
  */
-- (void) scrollWithFricAndEdgeBounceAtInitialSpeed:(CGPoint)v
+- (void) scrollWithFricAndEdgeBounceAtInitialSpeed:(float)v
 {
-    v.x = 0;
-    POPDecayAnimation *decayAnimation = [POPDecayAnimation animation];
+//    v.x = 0;
+//    POPDecayAnimation *decayAnimation = [POPDecayAnimation animation];
+//    
+//    POPAnimatableProperty *prop = [POPAnimatableProperty propertyWithName:@"position_on_screen" initializer:^(POPMutableAnimatableProperty *prop) {
+//        prop.readBlock = ^(id obj, CGFloat values[]) {
+//            for (NSInteger i = 0; i < [self getRulerLayerCount]; i++)
+//            {
+//                RulerScaleLayer* rsl = [self getRulerLayerAtIndex:i];
+//                values[i] = rsl.position.y;
+//            }
+//        };
+//        
+//        prop.writeBlock = ^(id obj, const CGFloat values[]) {
+//            for (NSInteger i = 0; i < [self getRulerLayerCount]; i++)
+//            {
+//                RulerScaleLayer* rsl = [self getRulerLayerAtIndex:i];
+//                [rsl setPosition: CGPointMake(rsl.position.x, values[i])];
+//            }
+//        };
+//        // dynamics threshold
+//        prop.threshold = 0.005;
+//    }];
+//    
+//    decayAnimation.property = prop;
+//    decayAnimation.velocity = [NSValue valueWithCGPoint:v];
+//    [self pop_addAnimation:decayAnimation forKey:@"momentum"];
     
-    POPAnimatableProperty *prop = [POPAnimatableProperty propertyWithName:@"position_on_screen" initializer:^(POPMutableAnimatableProperty *prop) {
-        prop.readBlock = ^(id obj, CGFloat values[]) {
-            for (NSInteger i = 0; i < [self getRulerLayerCount]; i++)
-            {
-                RulerScaleLayer* rsl = [self getRulerLayerAtIndex:i];
-                values[i] = rsl.position.y;
-            }
-        };
+    POPCustomAnimation *customAnimation = [POPCustomAnimation animationWithBlock:^BOOL(id obj, POPCustomAnimation *animation) {
+        for (NSInteger i = 0; i < [self getRulerLayerCount]; i++)
+        {
+            RulerScaleLayer* rsl = [self getRulerLayerAtIndex:i];
+            [rsl setPosition: CGPointMake(rsl.position.x, rsl.position.y + (v * 0.01))];
+        }
+        __block float v = v-100;
         
-        prop.writeBlock = ^(id obj, const CGFloat values[]) {
-            for (NSInteger i = 0; i < [self getRulerLayerCount]; i++)
-            {
-                RulerScaleLayer* rsl = [self getRulerLayerAtIndex:i];
-                [rsl setPosition: CGPointMake(rsl.position.x, values[i])];
-            }
-        };
-        // dynamics threshold
-        prop.threshold = 0.005;
+        if (v > 0) {
+            return YES;
+        } else {
+            return NO;
+        }
     }];
     
-    decayAnimation.property = prop;
-    decayAnimation.velocity = [NSValue valueWithCGPoint:v];
-    [self pop_addAnimation:decayAnimation forKey:@"momentum"];
+    [self pop_addAnimation:customAnimation forKey:@"custom_animation"];
     
-    //TODO fix bug: bad access, after a layer is deleted.
+    //TODO expected bug: bad access, after a layer is deleted.
     
     //[self scrollToAbsoluteRulerLocation:self.currentAbsoluteRulerLocation + 30]; // stub
 }
 
 #pragma mark - Getters
 
+/*
+ index = 0: return the first ruler layer
+ index = 1: return the ruler layer after the first one
+ etc.
+ */
 - (RulerScaleLayer*) getRulerLayerAtIndex:(NSInteger) index
 {
-    return [[self getTimerViewSubLayers] objectAtIndex:index + timerViewDefaultSubLayerNumber];
+    return [[self getTimerViewSubLayers] objectAtIndex:(index + timerViewDefaultSubLayerNumber)];
 }
 
 /*
