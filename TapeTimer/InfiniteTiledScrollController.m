@@ -201,45 +201,20 @@
  */
 - (void) scrollWithFricAndEdgeBounceAtInitialSpeed:(float)v
 {
-//    v.x = 0;
-//    POPDecayAnimation *decayAnimation = [POPDecayAnimation animation];
-//    
-//    POPAnimatableProperty *prop = [POPAnimatableProperty propertyWithName:@"position_on_screen" initializer:^(POPMutableAnimatableProperty *prop) {
-//        prop.readBlock = ^(id obj, CGFloat values[]) {
-//            for (NSInteger i = 0; i < [self getRulerLayerCount]; i++)
-//            {
-//                RulerScaleLayer* rsl = [self getRulerLayerAtIndex:i];
-//                values[i] = rsl.position.y;
-//            }
-//        };
-//        
-//        prop.writeBlock = ^(id obj, const CGFloat values[]) {
-//            for (NSInteger i = 0; i < [self getRulerLayerCount]; i++)
-//            {
-//                RulerScaleLayer* rsl = [self getRulerLayerAtIndex:i];
-//                [rsl setPosition: CGPointMake(rsl.position.x, values[i])];
-//            }
-//        };
-//        // dynamics threshold
-//        prop.threshold = 0.005;
-//    }];
-//    
-//    decayAnimation.property = prop;
-//    decayAnimation.velocity = [NSValue valueWithCGPoint:v];
-//    [self pop_addAnimation:decayAnimation forKey:@"momentum"];
-    
+    __block float vTemp = v * 0.1;
     POPCustomAnimation *customAnimation = [POPCustomAnimation animationWithBlock:^BOOL(id obj, POPCustomAnimation *animation) {
         for (NSInteger i = 0; i < [self getRulerLayerCount]; i++)
         {
             RulerScaleLayer* rsl = [self getRulerLayerAtIndex:i];
-            [rsl setPosition: CGPointMake(rsl.position.x, rsl.position.y + (v * 0.01))];
+            [rsl setPosition: CGPointMake(rsl.position.x, rsl.position.y + vTemp)];
         }
-        __block float v = v-100;
-        
-        if (v > 0) {
-            return YES;
-        } else {
+        [self manageLayersOnScreen];
+        vTemp = vTemp + 5;
+        NSLog(@"%f", vTemp);
+        if (vTemp > 0) {
             return NO;
+        } else {
+            return YES;
         }
     }];
     
