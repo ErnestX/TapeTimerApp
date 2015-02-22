@@ -14,6 +14,9 @@
 {
     NSInteger timerViewDefaultSubLayerNumber;
     float FRICTION;
+    NSInteger currentTailTo;
+    NSInteger currentHeadFrom;
+    NSInteger NUM_PER_LAYER;
 }
 
 // custom initializer. use this inistead of init
@@ -28,6 +31,9 @@
         [self addNewTailRulerLayer];
         
         FRICTION = 5;
+        currentTailTo = -1;
+        currentHeadFrom = 0;
+        NUM_PER_LAYER = 10;
     }
     return self;
 }
@@ -85,9 +91,11 @@
     }
     
     // TODO: calculate initial range and scale
-    NSInteger from = floor(-1*self.currentAbsoluteRulerLocation/10);
+    NSInteger from = currentTailTo + 1;
+    NSInteger to = from + NUM_PER_LAYER - 1;
     RulerScaleLayer* rsl = [RulerScaleLayer newWithYPosition:positionY WithHeight:self.timerView.frame.size.height
-                            WithWidth:self.timerView.frame.size.width WithRangeFrom:from To:from + 10 WithScaleFactor:1];
+                            WithWidth:self.timerView.frame.size.width WithRangeFrom: from To: to WithScaleFactor:1];
+    currentTailTo = to; // update currentTailTo
     rsl.absoluteRulerLocation = absRulerLoc;
     rsl.contentsScale = [[UIScreen mainScreen]scale];
     [self.timerView.layer addSublayer:rsl];
@@ -98,6 +106,7 @@
 - (void) removeHeadRulerLayer
 {
     [[self getHeadLayer] removeFromSuperlayer];
+    currentHeadFrom += NUM_PER_LAYER; // increase currentHeadFrom by one layer
     NSLog(@"head layer removed");
 }
 
@@ -121,8 +130,11 @@
     }
     
     // TODO: calculate initial range and scale
+    NSInteger to = currentHeadFrom - 1;
+    NSInteger from = to - NUM_PER_LAYER + 1;
     RulerScaleLayer* rsl = [RulerScaleLayer newWithYPosition:positionY WithHeight:self.timerView.frame.size.height
-                                                   WithWidth:self.timerView.frame.size.width WithRangeFrom:0 To:10 WithScaleFactor:1];
+                                                   WithWidth:self.timerView.frame.size.width WithRangeFrom:from To:to WithScaleFactor:1];
+    currentHeadFrom = from; // update currentHeadFrom
     rsl.absoluteRulerLocation = absRulerLoc;
     rsl.contentsScale = [[UIScreen mainScreen]scale];
     // important: need to make sure the new layer is at back instead of front
@@ -135,6 +147,7 @@
 - (void) removeTailRulerLayer
 {
     [[self getTailLayer] removeFromSuperlayer];
+    currentTailTo -= NUM_PER_LAYER; // decrease currentTailTo by one layer
     NSLog(@"tail layer removed");
 }
 
