@@ -85,8 +85,9 @@
     }
     
     // TODO: calculate initial range and scale
+    NSInteger from = floor(-1*self.currentAbsoluteRulerLocation/10);
     RulerScaleLayer* rsl = [RulerScaleLayer newWithYPosition:positionY WithHeight:self.timerView.frame.size.height
-                            WithWidth:self.timerView.frame.size.width WithRangeFrom:0 To:10 WithScaleFactor:1];
+                            WithWidth:self.timerView.frame.size.width WithRangeFrom:from To:from + 10 WithScaleFactor:1];
     rsl.absoluteRulerLocation = absRulerLoc;
     rsl.contentsScale = [[UIScreen mainScreen]scale];
     [self.timerView.layer addSublayer:rsl];

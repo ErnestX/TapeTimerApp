@@ -28,14 +28,14 @@
 {
     UIGraphicsPushContext(ctx);
     
-    NSString* string = @"Hello World";
+    NSString* string = [NSString stringWithFormat: @"from %ld to %ld", self.rangeFrom, self.rangeTo];
 //  UIFont* font = [UIFont fontWithName:@"Futura" size:32.0f];
     
     UIFont* font = [UIFont systemFontOfSize:32.0f];
     NSDictionary* attributes = @{NSFontAttributeName: font,
                                  NSForegroundColorAttributeName: [UIColor blackColor]};
     
-    [string drawAtPoint:CGPointMake(100, 100) withAttributes:attributes];
+    [string drawAtPoint:CGPointMake(50, 100) withAttributes:attributes];
     
     [self drawRulerLines:ctx];
     [self drawNumbers:ctx];
