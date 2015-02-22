@@ -24,16 +24,17 @@
 {
     self = [super init];
     if (self) {
+        // init fields
         self.timerView = tv;
         self.currentAbsoluteRulerLocation = 0;
         timerViewDefaultSubLayerNumber = [self getTimerViewSubLayers].count;
         NSLog(@"layer number: %ld", (long)timerViewDefaultSubLayerNumber);
-        [self addNewTailRulerLayer];
-        
         FRICTION = 5;
         currentTailTo = -1;
         currentHeadFrom = 0;
         NUM_PER_LAYER = 10;
+        
+        [self addNewTailRulerLayer];
     }
     return self;
 }
@@ -91,6 +92,7 @@
     }
     
     // TODO: calculate initial range and scale
+    NSLog(@"currentTailTo = %ld", (long)currentTailTo);
     NSInteger from = currentTailTo + 1;
     NSInteger to = from + NUM_PER_LAYER - 1;
     RulerScaleLayer* rsl = [RulerScaleLayer newWithYPosition:positionY WithHeight:self.timerView.frame.size.height
@@ -100,7 +102,7 @@
     rsl.contentsScale = [[UIScreen mainScreen]scale];
     [self.timerView.layer addSublayer:rsl];
     [rsl setNeedsDisplay];
-    NSLog(@"tail layer added");
+    NSLog(@"tail layer added from %ld to %ld", (long)from, (long)to);
 }
 
 - (void) removeHeadRulerLayer
