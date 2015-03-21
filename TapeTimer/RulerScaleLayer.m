@@ -20,6 +20,9 @@
         rsl.rangeFrom = f;
         rsl.rangeTo = t;
         rsl.scaleFactor = s;
+        
+//        // scale stub
+//        rsl.transform = CATransform3DMakeScale(0.5, 0.5, 0.5);
     }
     return rsl;
 }

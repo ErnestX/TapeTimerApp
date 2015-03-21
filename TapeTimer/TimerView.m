@@ -62,7 +62,7 @@
         {
             lastScrollSpeed = [uigr velocityInView:self];
             CGPoint translation = [uigr translationInView:self]; // pan up or scroll down = negative
-            [self.rulerScrollController scrollToAbsoluteRulerLocationNotAnimated:(translation.y + previousLocation)];
+            [self.rulerScrollController scrollToAbsoluteRulerLocationNotAnimated:(translation.y + previousLocation) yScrollSpeed:lastScrollSpeed.y];
         }
         break;
         

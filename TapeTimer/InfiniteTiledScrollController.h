@@ -20,7 +20,7 @@
 - (InfiniteTiledScrollController*) initWithTimerView: (TimerView*) tv;
 
 - (float) getCurrentAbsoluteRulerLocation;
-- (void) scrollToAbsoluteRulerLocationNotAnimated: (float) location;
+- (void) scrollToAbsoluteRulerLocationNotAnimated: (float) location yScrollSpeed:(float)v;
 - (void) scrollWithFricAndEdgeBounceAtInitialSpeed:(float)v;
 
 @end

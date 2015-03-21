@@ -17,6 +17,7 @@
     NSInteger currentTailTo;
     NSInteger currentHeadFrom;
     NSInteger NUM_PER_LAYER;
+    float scale;
 }
 
 // custom initializer. use this inistead of init
@@ -204,11 +205,22 @@
  scroll with implicit animation disabled
  Cannot scroll more than one screen at a time
  */
-- (void) scrollToAbsoluteRulerLocationNotAnimated:(float)rulerLocation
+- (void) scrollToAbsoluteRulerLocationNotAnimated:(float)rulerLocation yScrollSpeed:(float)v
 {
     // use CATransaction to disable transactions
     [CATransaction begin];
     [CATransaction setDisableActions:YES];
+    
+    //scale all layers
+    float absV = abs(v);
+    
+    if (absV < 5) {
+        scale = 1.0;
+    } else {
+        scale = 1.0/(absV - 20.0);
+    }
+
+    //self.timerView.layer.transform = CATransform3DMakeScale(scale, scale, scale); // need bug fix
     
     [self scrollToAbsoluteRulerLocation:rulerLocation];
     
