@@ -48,16 +48,16 @@
 {
     UIGraphicsPushContext(ctx);
     
-    float drawPos = 16.0f; // the position of the first number from the top = font size / 2 ???
+    float drawPos = 16.0f; // the position of the first number from the top
     
     for (NSInteger num = self.rangeFrom; num <= self.rangeTo; num++) {
         UIFont* font = [UIFont fontWithName:@"Futura" size:32.0f];
         NSDictionary* attributes = @{NSFontAttributeName: font,
                                      NSForegroundColorAttributeName: [UIColor blackColor]};
         NSString* numS = [NSString stringWithFormat:@"- %ld -", num];
-        [numS drawAtPoint:CGPointMake(120, drawPos) withAttributes:attributes];
+        [numS drawAtPoint:CGPointMake(115, drawPos) withAttributes:attributes];
         
-        drawPos += 50.0;
+        drawPos += 50.0; // TODO: extract a method to calculate this based on layer size.
     }
 }
 

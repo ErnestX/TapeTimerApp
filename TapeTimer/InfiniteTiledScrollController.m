@@ -12,7 +12,7 @@
 
 @implementation InfiniteTiledScrollController
 {
-    NSInteger timerViewDefaultSubLayerNumber;
+    NSInteger defaultSubLayerNumber;
     float FRICTION;
     NSInteger currentTailTo;
     NSInteger currentHeadFrom;
@@ -29,9 +29,9 @@
         // init fields
         self.timerView = tv;
         self.currentAbsoluteRulerLocation = 0;
-        timerViewDefaultSubLayerNumber = [self getTimerViewSubLayers].count;
-        NSLog(@"layer number: %ld", (long)timerViewDefaultSubLayerNumber);
-        FRICTION = 5;
+        defaultSubLayerNumber = [self getTimerViewSubLayers].count;
+        NSLog(@"layer number: %ld", (long)defaultSubLayerNumber);
+        FRICTION = 5.0;
         currentTailTo = -1;
         currentHeadFrom = 0;
         NUM_PER_LAYER = 10;
@@ -39,8 +39,7 @@
         backgroundLayer = [CALayer layer];
         backgroundLayer.backgroundColor = [UIColor blueColor].CGColor;
         backgroundLayer.frame = CGRectMake(0, 0, [self getScreenWidth], [self getScreenHeight]);
-        
-        [self.timerView.layer addSublayer:backgroundLayer]; // add background layer used for zooming
+        [self.timerView.layer addSublayer:backgroundLayer];
         
         [self addNewTailRulerLayer];
     }
@@ -148,8 +147,8 @@
     rsl.absoluteRulerLocation = absRulerLoc;
     rsl.contentsScale = [[UIScreen mainScreen]scale];
     // important: need to make sure the new layer is at back instead of front
-    // bug caused by the layer inserted at 0. Not all the sublayers are ruler layers!!! Thus, the non-ruler layers are pushed over the default layer numbers, and considered ruler layer, but they are merely CALayer.
-    [backgroundLayer insertSublayer:rsl atIndex:(int)timerViewDefaultSubLayerNumber];
+    // bug caused by the layer inserted at 0. Not all the sublayers are ruler layers!!! Thus, the non-ruler layers are pushed over the default layer numbers, and considered ruler layer, but they are merely CALayer. (this mechanism is no longer needed since I added a new background layer whose default sub layer number is 0)
+    [backgroundLayer insertSublayer:rsl atIndex:(int)defaultSubLayerNumber];
     [rsl setNeedsDisplay];
     NSLog(@"head layer added");
 }
@@ -285,7 +284,7 @@
  */
 - (RulerScaleLayer*) getRulerLayerAtIndex:(NSInteger) index
 {
-    return [[self getTimerViewSubLayers] objectAtIndex:(index + timerViewDefaultSubLayerNumber)];
+    return [[self getTimerViewSubLayers] objectAtIndex:(index + defaultSubLayerNumber)];
 }
 
 /*
@@ -299,7 +298,7 @@
 
 - (NSInteger) getRulerLayerCount
 {
-    return [self getTimerViewSubLayers].count - timerViewDefaultSubLayerNumber;
+    return [self getTimerViewSubLayers].count - defaultSubLayerNumber;
 }
 
 - (float) getCurrentAbsoluteRulerLocation
@@ -310,12 +309,12 @@
 - (float) getLayerHeight
 {
     // should I use presentation layer?
-    return ((CALayer*)[[self getTimerViewSubLayers] objectAtIndex:timerViewDefaultSubLayerNumber]).frame.size.height;
+    return ((CALayer*)[[self getTimerViewSubLayers] objectAtIndex:defaultSubLayerNumber]).frame.size.height;
 }
 
 - (RulerScaleLayer*) getHeadLayer
 {
-    return [[self getTimerViewSubLayers] objectAtIndex:timerViewDefaultSubLayerNumber];
+    return [[self getTimerViewSubLayers] objectAtIndex:defaultSubLayerNumber];
 }
 
 - (RulerScaleLayer*) getTailLayer

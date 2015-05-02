@@ -30,7 +30,7 @@
     }
 }
 
-- (id) initWithCoder:(NSCoder *)aDecoder
+- (id) initWithCoder:(NSCoder *)aDecoder // designated initializer
 {
     NSLog(@"initWithCoderCalled");
     self = [super initWithCoder:aDecoder];

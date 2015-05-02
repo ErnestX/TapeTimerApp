@@ -11,7 +11,9 @@
 
 @class TimerView;
 
-// this is a wrapper for the ruler layers
+/* 
+ this is a wrapper for the ruler layers
+ */
 @interface InfiniteTiledScrollController : NSObject
 
 @property TimerView* timerView;

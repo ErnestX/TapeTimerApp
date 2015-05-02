@@ -16,7 +16,6 @@
 @property NSInteger rangeTo;
 @property float scaleFactor;
 
-//+ (id) newTailForTimerView: (TimerView*) tv WithRangeFrom:(NSInteger)f to:(NSInteger)t withScaleFactor:(float)s;
 + (id) newWithYPosition:(float)py WithHeight:(float)h WithWidth:(float)w WithRangeFrom:(NSInteger)f To:(NSInteger)t WithScaleFactor:(float)s;
 
 @end
