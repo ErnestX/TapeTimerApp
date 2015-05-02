@@ -27,17 +27,6 @@
 
 - (void) drawInContext:(CGContextRef)ctx
 {
-    UIGraphicsPushContext(ctx);
-    
-    NSString* string = [NSString stringWithFormat: @"from %ld to %ld sec", self.rangeFrom, self.rangeTo];
-//  UIFont* font = [UIFont fontWithName:@"Futura" size:32.0f];
-    
-    UIFont* font = [UIFont systemFontOfSize:32.0f];
-    NSDictionary* attributes = @{NSFontAttributeName: font,
-                                 NSForegroundColorAttributeName: [UIColor blackColor]};
-    
-    [string drawAtPoint:CGPointMake(20, 100) withAttributes:attributes];
-    
     [self drawRulerLines:ctx];
     [self drawNumbers:ctx];
     
@@ -59,7 +48,17 @@
 
 - (void) drawNumbers:(CGContextRef)ctx
 {
-   // stub
+    // stub
+    UIGraphicsPushContext(ctx);
+    
+    NSString* string = [NSString stringWithFormat: @"from %ld to %ld sec", self.rangeFrom, self.rangeTo];
+    UIFont* font = [UIFont fontWithName:@"Futura" size:32.0f];
+    
+    //UIFont* font = [UIFont systemFontOfSize:32.0f];
+    NSDictionary* attributes = @{NSFontAttributeName: font,
+                                 NSForegroundColorAttributeName: [UIColor blackColor]};
+    
+    [string drawAtPoint:CGPointMake(20, 100) withAttributes:attributes];
 }
 
 @end

@@ -267,10 +267,10 @@
 {
     float absV = abs(v);
     
-    if (absV < 5)
+    if (absV < 5.0)
         return 1.0;
     else
-        return 1 - absV * 0.0002;
+        return MAX(0.001, 1.0 - absV * 0.0002); // make sure scale factor is not too small (turn upside down if < 0)
 }
 
 /*
