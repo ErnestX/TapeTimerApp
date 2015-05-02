@@ -263,11 +263,16 @@
 
 #pragma mark - Getters
 
+/*
+ Calculate the scale factor given the scrolling speed.
+ Output: scale factor used in transform matrix
+ */
+
 - (float) calcScaleWithSpeed: (float) v
 {
     float absV = abs(v);
     
-    if (absV < 5.0)
+    if (absV < 5.0) // don't bother to zoom if speed is too low???
         return 1.0;
     else
         return MAX(0.001, 1.0 - absV * 0.0002); // make sure scale factor is not too small (turn upside down if < 0)

@@ -27,7 +27,7 @@
 
 - (void) drawInContext:(CGContextRef)ctx
 {
-    [self drawRulerLines:ctx];
+    //[self drawRulerLines:ctx];
     [self drawNumbers:ctx];
     
     UIGraphicsPopContext();
@@ -35,8 +35,6 @@
 
 - (void) drawRulerLines:(CGContextRef)ctx
 {
-    // stub
-    
     CGContextSetStrokeColorWithColor(ctx, [UIColor redColor].CGColor);
     
     CGPoint arr[2];
@@ -48,17 +46,19 @@
 
 - (void) drawNumbers:(CGContextRef)ctx
 {
-    // stub
     UIGraphicsPushContext(ctx);
     
-    NSString* string = [NSString stringWithFormat: @"from %ld to %ld sec", self.rangeFrom, self.rangeTo];
-    UIFont* font = [UIFont fontWithName:@"Futura" size:32.0f];
+    float drawPos = 16.0f; // the position of the first number from the top = font size / 2 ???
     
-    //UIFont* font = [UIFont systemFontOfSize:32.0f];
-    NSDictionary* attributes = @{NSFontAttributeName: font,
-                                 NSForegroundColorAttributeName: [UIColor blackColor]};
-    
-    [string drawAtPoint:CGPointMake(20, 100) withAttributes:attributes];
+    for (NSInteger num = self.rangeFrom; num <= self.rangeTo; num++) {
+        UIFont* font = [UIFont fontWithName:@"Futura" size:32.0f];
+        NSDictionary* attributes = @{NSFontAttributeName: font,
+                                     NSForegroundColorAttributeName: [UIColor blackColor]};
+        NSString* numS = [NSString stringWithFormat:@"- %ld -", num];
+        [numS drawAtPoint:CGPointMake(120, drawPos) withAttributes:attributes];
+        
+        drawPos += 50.0;
+    }
 }
 
 @end
