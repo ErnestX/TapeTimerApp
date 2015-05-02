@@ -215,12 +215,14 @@
     float absV = abs(v);
     
     if (absV < 5) {
-        scale = 1.0;
+        scale = 0.0;
     } else {
-        scale = 1.0/(absV - 20.0);
+        //scale = 1.0/(absV - 20.0);
+        scale = absV * 0.001;
     }
 
-    //self.timerView.layer.transform = CATransform3DMakeScale(scale, scale, scale); // need bug fix
+    self.timerView.layer.transform = CATransform3DMakeScale(1 + scale, 1 + scale, 1); // need bug fix
+    //self.timerView.layer.transform = CATransform3DMakeScale(previousTransform.m11 + scrollSpeed.y * 0.001, previousTransform.m22 + scrollSpeed.y * 0.001, previousTransform.m33);
     
     [self scrollToAbsoluteRulerLocation:rulerLocation];
     

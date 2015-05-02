@@ -844,10 +844,10 @@
 			children = (
 				CA7A24311A4D397700697A86 /* TimerView.h */,
 				CA7A24321A4D397700697A86 /* TimerView.m */,
-				CA7A24341A4D42A100697A86 /* RulerScaleLayer.h */,
-				CA7A24351A4D42A100697A86 /* RulerScaleLayer.m */,
 				CA4BCB191A5535DB007B5E94 /* InfiniteTiledScrollController.h */,
 				CA4BCB1A1A5535DB007B5E94 /* InfiniteTiledScrollController.m */,
+				CA7A24341A4D42A100697A86 /* RulerScaleLayer.h */,
+				CA7A24351A4D42A100697A86 /* RulerScaleLayer.m */,
 			);
 			name = tapeTimer;
 			sourceTree = "<group>";
