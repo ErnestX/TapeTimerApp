@@ -17,7 +17,9 @@
     NSInteger currentTailTo;
     NSInteger currentHeadFrom;
     NSInteger NUM_PER_LAYER;
-    float scale;
+    //float scale;
+    
+    CALayer* backgroundLayer;
 }
 
 // custom initializer. use this inistead of init
@@ -34,6 +36,12 @@
         currentTailTo = -1;
         currentHeadFrom = 0;
         NUM_PER_LAYER = 10;
+        
+        backgroundLayer = [CALayer layer];
+        backgroundLayer.backgroundColor = [UIColor blueColor].CGColor;
+        backgroundLayer.frame = CGRectMake(0, 0, [self getScreenWidth], [self getScreenHeight]);
+        
+        [self.timerView.layer addSublayer:backgroundLayer]; // add background layer used for zooming
         
         [self addNewTailRulerLayer];
     }
@@ -97,11 +105,12 @@
     NSInteger from = currentTailTo + 1;
     NSInteger to = from + NUM_PER_LAYER - 1;
     RulerScaleLayer* rsl = [RulerScaleLayer newWithYPosition:positionY WithHeight:self.timerView.frame.size.height
-                            WithWidth:self.timerView.frame.size.width WithRangeFrom: from To: to WithScaleFactor:1];
+                                                   WithWidth:self.timerView.frame.size.width WithRangeFrom: from To: to WithScaleFactor:1];
     currentTailTo = to; // update currentTailTo
     rsl.absoluteRulerLocation = absRulerLoc;
     rsl.contentsScale = [[UIScreen mainScreen]scale];
-    [self.timerView.layer addSublayer:rsl];
+    //[self.timerView.layer addSublayer:rsl];
+    [backgroundLayer addSublayer:rsl];
     [rsl setNeedsDisplay];
     NSLog(@"tail layer added from %ld to %ld", (long)from, (long)to);
 }
@@ -141,8 +150,9 @@
     rsl.absoluteRulerLocation = absRulerLoc;
     rsl.contentsScale = [[UIScreen mainScreen]scale];
     // important: need to make sure the new layer is at back instead of front
-    [self.timerView.layer insertSublayer:rsl atIndex:(int)timerViewDefaultSubLayerNumber]; // not plus one because this is the count, and when treated as index, is the index plus one.
+    //[self.timerView.layer insertSublayer:rsl atIndex:(int)timerViewDefaultSubLayerNumber]; // not plus one because this is the count, and when treated as index, is the index plus one.
     // bug caused by the layer inserted at 0. Not all the sublayers are ruler layers!!! Thus, the non-ruler layers are pushed over the default layer numbers, and considered ruler layer, but they are merely CALayer.
+    [backgroundLayer insertSublayer:rsl atIndex:(int)timerViewDefaultSubLayerNumber];
     [rsl setNeedsDisplay];
     NSLog(@"head layer added");
 }
@@ -211,22 +221,14 @@
     [CATransaction begin];
     [CATransaction setDisableActions:YES];
     
-    //scale all layers
-    float absV = abs(v);
-    
-    if (absV < 5) {
-        scale = 0.0;
-    } else {
-        //scale = 1.0/(absV - 20.0);
-        scale = absV * 0.001;
-    }
-
-    self.timerView.layer.transform = CATransform3DMakeScale(1 + scale, 1 + scale, 1); // need bug fix
-    //self.timerView.layer.transform = CATransform3DMakeScale(previousTransform.m11 + scrollSpeed.y * 0.001, previousTransform.m22 + scrollSpeed.y * 0.001, previousTransform.m33);
-    
     [self scrollToAbsoluteRulerLocation:rulerLocation];
     
     [CATransaction commit];
+    
+    // scale the back layer of timerView with implicit animaiton
+    float scale = [self calcScaleWithSpeed:v];
+    //self.timerView.layer.transform = CATransform3DMakeScale(scale, scale, 1);
+    backgroundLayer.transform = CATransform3DMakeScale(scale, scale, 1);
 }
 
 /*
@@ -242,6 +244,9 @@
             RulerScaleLayer* rsl = [self getRulerLayerAtIndex:i];
             [rsl setPosition: CGPointMake(rsl.position.x, rsl.position.y + vTemp)];
         }
+        
+        float scale = [self calcScaleWithSpeed:vTemp*10];
+        backgroundLayer.transform = CATransform3DMakeScale(scale, scale, 1);
         
         [self manageLayersOnScreen]; // add and remove layers as needed
         
@@ -263,6 +268,16 @@
 
 #pragma mark - Getters
 
+- (float) calcScaleWithSpeed: (float) v
+{
+    float absV = abs(v);
+    
+    if (absV < 5)
+        return 1.0;
+    else
+        return 1 - absV * 0.0002;
+}
+
 /*
  index = 0: return the first ruler layer
  index = 1: return the ruler layer after the first one
@@ -278,7 +293,8 @@
  */
 - (NSArray*) getTimerViewSubLayers
 {
-    return self.timerView.layer.sublayers;
+    //return self.timerView.layer.sublayers;
+    return backgroundLayer.sublayers;
 }
 
 - (NSInteger) getRulerLayerCount
@@ -295,7 +311,8 @@
 {
     // should I use presentation layer?
     // 2 instead of 0 b/c backing layer
-    return ((CALayer*)[[self getTimerViewSubLayers] objectAtIndex:2]).frame.size.height;
+    //return ((CALayer*)[[self getTimerViewSubLayers] objectAtIndex:2]).frame.size.height;
+    return ((CALayer*)[[self getTimerViewSubLayers] objectAtIndex:timerViewDefaultSubLayerNumber]).frame.size.height;
 }
 
 - (RulerScaleLayer*) getHeadLayer
@@ -311,6 +328,11 @@
 - (float) getScreenHeight
 {
     return [[UIScreen mainScreen] bounds].size.height;
+}
+
+- (float) getScreenWidth
+{
+    return [[UIScreen mainScreen] bounds].size.width;
 }
 
 @end

@@ -14,15 +14,14 @@
 {
     RulerScaleLayer* rsl = [RulerScaleLayer layer];
     if (rsl) {
-        rsl.anchorPoint = CGPointMake(0.5, 0); // set the anchor point to the top middle
+        //rsl.anchorPoint = CGPointMake(0.5, 0); // set the anchor point to the top middle
         rsl.frame = CGRectMake(0, 0, w, h);
         rsl.position = CGPointMake(rsl.position.x, py);
         rsl.rangeFrom = f;
         rsl.rangeTo = t;
         rsl.scaleFactor = s;
         
-//        // scale stub
-//        rsl.transform = CATransform3DMakeScale(0.5, 0.5, 0.5);
+        rsl.backgroundColor = [UIColor whiteColor].CGColor;
     }
     return rsl;
 }
@@ -53,8 +52,8 @@
     CGContextSetStrokeColorWithColor(ctx, [UIColor redColor].CGColor);
     
     CGPoint arr[2];
-    arr[0] = CGPointMake(10, 10);
-    arr[1] = CGPointMake(100, 500);
+    arr[0] = CGPointMake(50, 0);
+    arr[1] = CGPointMake(100, 600);
     
     CGContextStrokeLineSegments(ctx, arr, 2);
 }
