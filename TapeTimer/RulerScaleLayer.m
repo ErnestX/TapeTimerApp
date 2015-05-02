@@ -14,7 +14,6 @@
 {
     RulerScaleLayer* rsl = [RulerScaleLayer layer];
     if (rsl) {
-        //rsl.anchorPoint = CGPointMake(0.5, 0); // set the anchor point to the top middle
         rsl.frame = CGRectMake(0, 0, w, h);
         rsl.position = CGPointMake(rsl.position.x, py);
         rsl.rangeFrom = f;

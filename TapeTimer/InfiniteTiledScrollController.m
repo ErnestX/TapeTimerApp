@@ -17,7 +17,6 @@
     NSInteger currentTailTo;
     NSInteger currentHeadFrom;
     NSInteger NUM_PER_LAYER;
-    //float scale;
     
     CALayer* backgroundLayer;
 }
@@ -109,7 +108,6 @@
     currentTailTo = to; // update currentTailTo
     rsl.absoluteRulerLocation = absRulerLoc;
     rsl.contentsScale = [[UIScreen mainScreen]scale];
-    //[self.timerView.layer addSublayer:rsl];
     [backgroundLayer addSublayer:rsl];
     [rsl setNeedsDisplay];
     NSLog(@"tail layer added from %ld to %ld", (long)from, (long)to);
@@ -150,7 +148,6 @@
     rsl.absoluteRulerLocation = absRulerLoc;
     rsl.contentsScale = [[UIScreen mainScreen]scale];
     // important: need to make sure the new layer is at back instead of front
-    //[self.timerView.layer insertSublayer:rsl atIndex:(int)timerViewDefaultSubLayerNumber]; // not plus one because this is the count, and when treated as index, is the index plus one.
     // bug caused by the layer inserted at 0. Not all the sublayers are ruler layers!!! Thus, the non-ruler layers are pushed over the default layer numbers, and considered ruler layer, but they are merely CALayer.
     [backgroundLayer insertSublayer:rsl atIndex:(int)timerViewDefaultSubLayerNumber];
     [rsl setNeedsDisplay];
@@ -197,7 +194,6 @@
         float distance = rulerLocation - self.currentAbsoluteRulerLocation; // positive: scroll down or pan up
         
         // TODO: add condition. simply scroll all layers if distance is small
-        // for (RulerScaleLayer* rsl in [self getTimerViewSubLayers])
         for (NSInteger i = 0; i < [self getRulerLayerCount]; i++)
         {
             RulerScaleLayer* rsl = [self getRulerLayerAtIndex:i];
@@ -227,7 +223,6 @@
     
     // scale the back layer of timerView with implicit animaiton
     float scale = [self calcScaleWithSpeed:v];
-    //self.timerView.layer.transform = CATransform3DMakeScale(scale, scale, 1);
     backgroundLayer.transform = CATransform3DMakeScale(scale, scale, 1);
 }
 
@@ -245,7 +240,7 @@
             [rsl setPosition: CGPointMake(rsl.position.x, rsl.position.y + vTemp)];
         }
         
-        float scale = [self calcScaleWithSpeed:vTemp*10];
+        float scale = [self calcScaleWithSpeed:vTemp*10]; // multiply by 10 to convert back to speed
         backgroundLayer.transform = CATransform3DMakeScale(scale, scale, 1);
         
         [self manageLayersOnScreen]; // add and remove layers as needed
@@ -310,8 +305,6 @@
 - (float) getLayerHeight
 {
     // should I use presentation layer?
-    // 2 instead of 0 b/c backing layer
-    //return ((CALayer*)[[self getTimerViewSubLayers] objectAtIndex:2]).frame.size.height;
     return ((CALayer*)[[self getTimerViewSubLayers] objectAtIndex:timerViewDefaultSubLayerNumber]).frame.size.height;
 }
 

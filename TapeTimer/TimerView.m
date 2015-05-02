@@ -53,7 +53,6 @@
         case UIGestureRecognizerStateBegan:
         {
             NSLog(@"touch began");
-            //[super touchesBegan:touches withEvent:event];
             // Remember original location
             previousLocation = self.rulerScrollController.getCurrentAbsoluteRulerLocation;
         }
