@@ -26,7 +26,7 @@
 
 - (void) drawInContext:(CGContextRef)ctx
 {
-    //[self drawRulerLines:ctx];
+    [self drawRulerLines:ctx];
     [self drawNumbers:ctx];
     
     UIGraphicsPopContext();
@@ -47,7 +47,7 @@
 {
     UIGraphicsPushContext(ctx);
     
-    float drawPos = 16.0f; // the position of the first number from the top
+    float drawPos = 0.0f; // the position of the first number from the top
     
     for (NSInteger num = self.rangeFrom; num <= self.rangeTo; num++) {
         UIFont* font = [UIFont fontWithName:@"Futura" size:32.0f];
@@ -56,7 +56,7 @@
         NSString* numS = [NSString stringWithFormat:@"- %ld -", num];
         [numS drawAtPoint:CGPointMake(115, drawPos) withAttributes:attributes];
         
-        drawPos += 50.0; // TODO: extract a method to calculate this based on layer size.
+        drawPos += 57.0; // TODO: extract a method to calculate this based on layer size.
     }
 }
 

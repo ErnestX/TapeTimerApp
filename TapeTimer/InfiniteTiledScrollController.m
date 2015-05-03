@@ -268,8 +268,13 @@
     }];
     
     [customAnimation setCompletionBlock:^(POPAnimation *anim, BOOL finished) {
+        [CATransaction begin];
+        [CATransaction setCompletionBlock:^(void) {
+            [self setTimer];
+        }];
         [self checkBoundAndSnapToInt];
-        [self setTimer];
+        [CATransaction commit];
+
     }];
     
     [self pop_addAnimation:customAnimation forKey:@"momentum_scrolling"];
@@ -344,8 +349,8 @@
 - (void) setTimer
 {
     NSLog(@"setting timer...");
-    NSLog(@"Timer Set To: %f", [self getCurrentTime]);
     // TODO: call TimerView
+    NSLog(@"Timer Set To: %f", [self getCurrentTime]);
 }
 
 #pragma mark - Getters
@@ -359,7 +364,7 @@
     float distanceFromLayerTop = [self getScreenHeight]/2 - (rsl.position.y - TIMER_LAYER_HEIGHT/2.0);
     float distancePerMinute = (TIMER_LAYER_HEIGHT / MINUITES_PER_LAYER);
     
-    return rsl.rangeFrom + (distanceFromLayerTop / distancePerMinute);
+    return rsl.rangeFrom + (distanceFromLayerTop / distancePerMinute) - 0.37; // minus the height of a number / 2 = 0.37
 }
 
 /*
@@ -367,7 +372,8 @@
  */
 - (RulerScaleLayer*) getCurrentLayerOnScreen
 {
-//    return ((RulerScaleLayer*)[backgroundLayer hitTest:CGPointMake([self getScreenWidth]/2, [self getScreenHeight]/2)]); // the heisen bug may be caused by hitTesting when no ruler layer is on center and the background returned as a result. When debugging, the layer have enough time to snap back.
+    //  return ((RulerScaleLayer*)[backgroundLayer hitTest:CGPointMake([self getScreenWidth]/2, [self getScreenHeight]/2)]);
+    // the heisen bug is caused by hitTesting when no ruler layer is on center and as a result the background layer is returned. When debugging, the bug disappear b/c the layer have enough time to snap back.
     
     CGPoint redLineCenter = CGPointMake([self getScreenWidth]/2, [self getScreenHeight]/2);
     RulerScaleLayer* candidate = NULL;
@@ -384,7 +390,7 @@
     }
     
     if (candidate == NULL) {
-        NSLog(@"getCurrentLayerOnScreen: no ruler layer currently on screen");
+        NSLog(@"getCurrentLayerOnScreen: no ruler layer currently on screen, returning NULL");
         return NULL;
     } else {
         return candidate;
