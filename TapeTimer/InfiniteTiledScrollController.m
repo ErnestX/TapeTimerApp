@@ -83,19 +83,16 @@
 - (void) addNewTailRulerLayer
 {
     float positionY;
-    //float absRulerLoc;
     if ([self getRulerLayerCount] > 0) {
         // set the layer right after the current tail layer
         RulerScaleLayer* currentTail = [self getTailLayer];
         // calculate new tail position
         positionY = currentTail.position.y + [self getLayerHeight];
         // calculate absolute position based on current tail
-        //absRulerLoc = currentTail.absoluteRulerLocation + [self getLayerHeight];
     } else {
         // the new layer must be the only layer
         // position and abs location is just 0
         positionY = 0;
-        //absRulerLoc = 0;
     }
     
     // TODO: calculate initial range and scale
@@ -105,7 +102,6 @@
     RulerScaleLayer* rsl = [RulerScaleLayer newWithYPosition:positionY WithHeight:self.timerView.frame.size.height
                                                    WithWidth:self.timerView.frame.size.width WithRangeFrom: from To: to WithScaleFactor:1];
     currentTailTo = to; // update currentTailTo
-    //rsl.absoluteRulerLocation = absRulerLoc;
     rsl.contentsScale = [[UIScreen mainScreen]scale];
     [backgroundLayer addSublayer:rsl];
     [rsl setNeedsDisplay];
@@ -130,7 +126,6 @@
         // calculate new head position
         positionY = currentHead.position.y - [self getLayerHeight];
         // calculate absolute position based on current tail
-        //absRulerLoc = currentHead.absoluteRulerLocation - [self getLayerHeight];
     } else {
         // the new layer must be the only layer
         // position and abs location is just 0
@@ -144,7 +139,6 @@
     RulerScaleLayer* rsl = [RulerScaleLayer newWithYPosition:positionY WithHeight:self.timerView.frame.size.height
                                                    WithWidth:self.timerView.frame.size.width WithRangeFrom:from To:to WithScaleFactor:1];
     currentHeadFrom = from; // update currentHeadFrom
-    //rsl.absoluteRulerLocation = absRulerLoc;
     rsl.contentsScale = [[UIScreen mainScreen]scale];
     // important: need to make sure the new layer is at back instead of front
     // bug caused by the layer inserted at 0. Not all the sublayers are ruler layers!!! Thus, the non-ruler layers are pushed over the default layer numbers, and considered ruler layer, but they are merely CALayer. (this mechanism is no longer needed since I added a new background layer whose default sub layer number is 0)
@@ -287,7 +281,6 @@
  */
 - (NSArray*) getTimerViewSubLayers
 {
-    //return self.timerView.layer.sublayers;
     return backgroundLayer.sublayers;
 }
 
