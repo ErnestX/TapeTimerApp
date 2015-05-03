@@ -34,7 +34,7 @@
     if (self) {
         // init fields
         self.timerView = tv;
-        self.currentAbsoluteRulerLocation = 0;
+        //self.currentAbsoluteRulerLocation = 0;
         defaultSubLayerNumber = [self getTimerViewSubLayers].count;
         NSLog(@"layer number: %ld", (long)defaultSubLayerNumber);
         MOMENTUM_FRICTION = 5.0;
@@ -180,7 +180,7 @@
 #pragma mark - Scrolling
 
 /*
- scroll with implicit animation. Don't call directly
+ Barebone scroll with implicit animation.
  Cannot scroll more than one screen at a time
  */
 - (void)scrollByTranslation:(float)translation
@@ -203,14 +203,14 @@
 }
 
 /*
- scroll with implicit animation disabled
- Cannot scroll more than one screen at a time
+ Scroll with implicit animation disabled, with bound checking
+ Cannot scroll more than one screen at a time.
  */
 - (void) scrollByTranslationNotAnimated:(float)translation yScrollSpeed:(float)v
 {
     float scale = [self calcScaleWithSpeed:v];
     
-    // use CATransaction to disable transactions
+    // disable transactions
     [CATransaction begin];
     [CATransaction setDisableActions:YES];
     
@@ -287,7 +287,8 @@
 }
 
 /*
- Increase the friction applied to scrolling (both manual and animation) by how off the 0min layer is out of position
+ Increase the friction applied to scrolling (both manual and animation) 
+ by how much the 0 min layer is out of position
  */
 - (void) slowDownHeadOutOfBound
 {
@@ -318,6 +319,8 @@
     }
     
     // TODO: snap to integer minutes
+    
+    [self setTimer]; // stub for testing
 }
 
 /*
@@ -329,6 +332,16 @@
     backgroundLayer.transform = CATransform3DMakeScale(1.0, 1.0, 1.0);
 }
 
+#pragma makr - Timer
+/*
+ set the timer using the number currently under the red line
+ */
+- (void) setTimer
+{
+    NSLog(@"Timer Set To: %f", [self getCurrentTime]);
+    // TODO: call TimerView
+}
+
 #pragma mark - Getters
 
 /*
@@ -336,15 +349,19 @@
  */
 - (float) getCurrentTime
 {
-    return 0;
+    RulerScaleLayer* rsl = [self getCurrentLayerOnScreen];
+    float distanceFromLayerTop = [self getScreenHeight]/2 - (rsl.position.y - TIMER_LAYER_HEIGHT/2.0);
+    float distancePerMinute = (TIMER_LAYER_HEIGHT / MINUITES_PER_LAYER);
+    
+    return rsl.rangeFrom + (distanceFromLayerTop / distancePerMinute);
 }
 
 /*
- Return the y position of the layer currently below the red line
+ Return the layer currently below the red line
  */
-- (float) getCurrentLayerPositionOnScreen
+- (RulerScaleLayer*) getCurrentLayerOnScreen
 {
-    return 0;
+    return ((RulerScaleLayer*)[backgroundLayer hitTest:CGPointMake([self getScreenWidth]/2, [self getScreenHeight]/2)]);
 }
 
 /*
@@ -385,10 +402,10 @@
     return [self getTimerViewSubLayers].count - defaultSubLayerNumber;
 }
 
-- (float) getCurrentAbsoluteRulerLocation
-{
-    return self.currentAbsoluteRulerLocation;
-}
+//- (float) getCurrentAbsoluteRulerLocation
+//{
+//    return self.currentAbsoluteRulerLocation;
+//}
 
 - (float) getLayerHeight
 {
