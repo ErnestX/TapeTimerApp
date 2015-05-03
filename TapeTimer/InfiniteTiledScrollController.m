@@ -203,7 +203,7 @@
  */
 - (void) scrollByTranslationNotAnimated:(float)translation yScrollSpeed:(float)v
 {
-    [self checkEdgeAndBounceBack];
+    [self checkEdgeAndSlowDown];
     float scale = [self calcScaleWithSpeed:v];
     
     // use CATransaction to disable transactions
@@ -228,9 +228,10 @@
  */
 - (void) scrollWithFricAndEdgeBounceAtInitialSpeed:(float)v
 {
-    __block float vTemp = (v * 0.1) * scrollUpFriction; // convert velocity to moving distance
+    __block float vTemp = v * 0.1; // convert velocity to moving distance
     
     POPCustomAnimation *customAnimation = [POPCustomAnimation animationWithBlock:^BOOL(id obj, POPCustomAnimation *animation) {
+        vTemp *= scrollUpFriction;
         for (NSInteger i = 0; i < [self getRulerLayerCount]; i++)
         {
             RulerScaleLayer* rsl = [self getRulerLayerAtIndex:i];
@@ -242,16 +243,16 @@
         
         [self manageLayersOnScreen]; // add and remove layers as needed
         
-        if (vTemp > 0) {
+        if (vTemp > MOMENTUM_FRICTION) {
             vTemp -= MOMENTUM_FRICTION; // scrolling up
-        } else {
+        } else if (vTemp < -1 * MOMENTUM_FRICTION) {
             vTemp += MOMENTUM_FRICTION; // scrolling down
         }
         NSLog(@"velocity = %f", vTemp);
         if (fabsf(vTemp) < MOMENTUM_FRICTION) {
             return NO; // animation stop
         } else { // add condition here can interrupt animation
-            [self checkEdgeAndBounceBack];
+            [self checkEdgeAndSlowDown];
             return YES; // not there yet
         }
     }];
@@ -262,7 +263,7 @@
 /*
  Call this at any moment when the ruler may go out of bound
  */
-- (void) checkEdgeAndBounceBack
+- (void) checkEdgeAndSlowDown
 {
     if ([self getHeadLayer].rangeFrom < 2 && [self getHeadLayer].position.y >= [self getScreenHeight]) {
         NSLog(@"out of bound");
@@ -271,12 +272,16 @@
         // stop any momentum animation
         //[self interruptAndReset];
         // add spring effect if scrolling up
-        scrollUpFriction = MAX(1 - ([self getHeadLayer].position.y - [self getScreenHeight])*0.008, 0);
-        // bounce back if not touched.
-        [self scrollByTranslation:[self getScreenHeight] - [self getHeadLayer].position.y];
+        scrollUpFriction = MAX(1 - ([self getHeadLayer].position.y - [self getScreenHeight])*0.01, 0);
     } else {
         scrollUpFriction = 1.0; // no friction
     }
+}
+
+- (void) bounceBack
+{
+    // bounce back if not touched.
+    [self scrollByTranslation:[self getScreenHeight] - [self getHeadLayer].position.y];
 }
 
 - (void) interruptAndReset
