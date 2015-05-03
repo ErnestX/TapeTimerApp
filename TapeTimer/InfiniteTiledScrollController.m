@@ -17,7 +17,7 @@
     float MOMENTUM_FRICTION;
     NSInteger MINUITES_PER_LAYER;
     float TIMER_LAYER_HEIGHT;
-    float TIMER_LAYER_WEIDTH;
+    float TIMER_LAYER_WIDTH;
     float DISTANCE_PER_MINUTE;
     
     NSInteger currentTailTo;
@@ -45,7 +45,7 @@
         MINUITES_PER_LAYER = 10;
         scrollUpFriction = 1.0;
         TIMER_LAYER_HEIGHT = [self getScreenHeight];
-        TIMER_LAYER_WEIDTH = [self getScreenWidth];
+        TIMER_LAYER_WIDTH = [self getScreenWidth];
         LETTER_HEIGHT = 37.0;
         DISTANCE_PER_MINUTE = [self getScreenHeight] / MINUITES_PER_LAYER;
         
@@ -112,7 +112,7 @@
     NSLog(@"currentTailTo = %ld", (long)currentTailTo);
     NSInteger from = currentTailTo + 1;
     NSInteger to = from + MINUITES_PER_LAYER - 1;
-    RulerScaleLayer* rsl = [RulerScaleLayer newWithYPosition:positionY WithHeight:TIMER_LAYER_HEIGHT WithWidth:TIMER_LAYER_WEIDTH WithRangeFrom: from To: to];
+    RulerScaleLayer* rsl = [RulerScaleLayer newWithYPosition:positionY WithHeight:TIMER_LAYER_HEIGHT WithWidth:TIMER_LAYER_WIDTH WithRangeFrom: from To: to];
     currentTailTo = to; // update currentTailTo
     rsl.contentsScale = [[UIScreen mainScreen]scale];
     [backgroundLayer addSublayer:rsl];
@@ -148,7 +148,7 @@
     // TODO: calculate initial range and scale
     NSInteger to = currentHeadFrom - 1;
     NSInteger from = to - MINUITES_PER_LAYER + 1;
-    RulerScaleLayer* rsl = [RulerScaleLayer newWithYPosition:positionY WithHeight:TIMER_LAYER_HEIGHT WithWidth:TIMER_LAYER_WEIDTH WithRangeFrom:from To:to];
+    RulerScaleLayer* rsl = [RulerScaleLayer newWithYPosition:positionY WithHeight:TIMER_LAYER_HEIGHT WithWidth:TIMER_LAYER_WIDTH WithRangeFrom:from To:to];
     currentHeadFrom = from; // update currentHeadFrom
     rsl.contentsScale = [[UIScreen mainScreen]scale];
     // important: need to make sure the new layer is at back instead of front

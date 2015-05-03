@@ -26,14 +26,17 @@
 
 - (void) drawInContext:(CGContextRef)ctx
 {
+    UIGraphicsPushContext(ctx);
     //[self drawRulerLines:ctx];
     [self drawNumbers:ctx];
+    [self drawLargeNumbers:ctx];
     
     UIGraphicsPopContext();
 }
 
 - (void) drawRulerLines:(CGContextRef)ctx
 {
+    // stub
     CGContextSetStrokeColorWithColor(ctx, [UIColor redColor].CGColor);
     
     CGPoint arr[2];
@@ -45,7 +48,7 @@
 
 - (void) drawNumbers:(CGContextRef)ctx
 {
-    UIGraphicsPushContext(ctx);
+    //UIGraphicsPushContext(ctx);
     
     float drawPos = 0.0f; // the position of the first number from the top
     
@@ -58,6 +61,19 @@
         
         drawPos += 57.0; // TODO: extract a method to calculate this based on layer size.
     }
+}
+
+- (void) drawLargeNumbers:(CGContextRef)ctx
+{
+    //UIGraphicsPushContext(ctx);
+    
+    UIFont* font = [UIFont fontWithName:@"Futura" size:100.0f];
+    NSDictionary* attributes = @{NSFontAttributeName: font,
+                                 NSForegroundColorAttributeName: [UIColor blackColor]};
+    NSString* numS = [NSString stringWithFormat:@"%ld", self.rangeFrom / 60];
+    [numS drawAtPoint:CGPointMake(0, 200) withAttributes:attributes];
+
+    
 }
 
 @end
