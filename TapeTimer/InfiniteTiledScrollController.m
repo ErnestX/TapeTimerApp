@@ -13,12 +13,13 @@
 @implementation InfiniteTiledScrollController
 {
     NSInteger defaultSubLayerNumber;
-    float FRICTION;
+    float MOMENTUM_FRICTION;
     NSInteger currentTailTo;
     NSInteger currentHeadFrom;
     NSInteger NUM_PER_LAYER;
     
     CALayer* backgroundLayer;
+    float scrollUpFriction;
 }
 
 // custom initializer. use this inistead of init
@@ -31,10 +32,11 @@
         self.currentAbsoluteRulerLocation = 0;
         defaultSubLayerNumber = [self getTimerViewSubLayers].count;
         NSLog(@"layer number: %ld", (long)defaultSubLayerNumber);
-        FRICTION = 5.0;
+        MOMENTUM_FRICTION = 5.0;
         currentTailTo = -1;
         currentHeadFrom = 0;
         NUM_PER_LAYER = 10;
+        scrollUpFriction = 1.0;
         
         backgroundLayer = [CALayer layer];
         backgroundLayer.backgroundColor = [UIColor blueColor].CGColor;
@@ -91,8 +93,7 @@
         // calculate absolute position based on current tail
     } else {
         // the new layer must be the only layer
-        // position and abs location is just 0
-        positionY = 0;
+        positionY = [self getScreenHeight];
     }
     
     // TODO: calculate initial range and scale
@@ -192,6 +193,7 @@
         }
         
         //TODO: otherwise, do nothing, and throw error
+        
     }
 }
 
@@ -201,16 +203,23 @@
  */
 - (void) scrollByTranslationNotAnimated:(float)translation yScrollSpeed:(float)v
 {
+    [self checkEdgeAndBounceBack];
+    float scale = [self calcScaleWithSpeed:v];
+    
     // use CATransaction to disable transactions
     [CATransaction begin];
     [CATransaction setDisableActions:YES];
     
-    [self scrollByTranslation:translation];
+    if (translation > 0) {
+        scale = 1.0; // no scale if out of bound.
+        [self scrollByTranslation:translation * scrollUpFriction];
+    } else {
+        [self scrollByTranslation:translation];
+    }
     
     [CATransaction commit];
     
     // scale the back layer of timerView with implicit animaiton
-    float scale = [self calcScaleWithSpeed:v];
     backgroundLayer.transform = CATransform3DMakeScale(scale, scale, 1);
 }
 
@@ -219,7 +228,7 @@
  */
 - (void) scrollWithFricAndEdgeBounceAtInitialSpeed:(float)v
 {
-    __block float vTemp = v * 0.1; // convert velocity to moving distance
+    __block float vTemp = (v * 0.1) * scrollUpFriction; // convert velocity to moving distance
     
     POPCustomAnimation *customAnimation = [POPCustomAnimation animationWithBlock:^BOOL(id obj, POPCustomAnimation *animation) {
         for (NSInteger i = 0; i < [self getRulerLayerCount]; i++)
@@ -234,24 +243,45 @@
         [self manageLayersOnScreen]; // add and remove layers as needed
         
         if (vTemp > 0) {
-            vTemp -= FRICTION; // scrolling up
+            vTemp -= MOMENTUM_FRICTION; // scrolling up
         } else {
-            vTemp += FRICTION; // scrolling down
+            vTemp += MOMENTUM_FRICTION; // scrolling down
         }
         NSLog(@"velocity = %f", vTemp);
-        if (fabsf(vTemp) < FRICTION) {
+        if (fabsf(vTemp) < MOMENTUM_FRICTION) {
             return NO; // animation stop
         } else { // add condition here can interrupt animation
+            [self checkEdgeAndBounceBack];
             return YES; // not there yet
         }
     }];
     
-    [self pop_addAnimation:customAnimation forKey:@"custom_animation"];
+    [self pop_addAnimation:customAnimation forKey:@"momentum_scrolling"];
+}
+
+/*
+ Call this at any moment when the ruler may go out of bound
+ */
+- (void) checkEdgeAndBounceBack
+{
+    if ([self getHeadLayer].rangeFrom < 2 && [self getHeadLayer].position.y >= [self getScreenHeight]) {
+        NSLog(@"out of bound");
+        // the head layer is the first layer and is already on screen.
+        
+        // stop any momentum animation
+        //[self interruptAndReset];
+        // add spring effect if scrolling up
+        scrollUpFriction = MAX(1 - ([self getHeadLayer].position.y - [self getScreenHeight])*0.008, 0);
+        // bounce back if not touched.
+        [self scrollByTranslation:[self getScreenHeight] - [self getHeadLayer].position.y];
+    } else {
+        scrollUpFriction = 1.0; // no friction
+    }
 }
 
 - (void) interruptAndReset
 {
-    [self pop_removeAnimationForKey:@"custom_animation"];
+    [self pop_removeAnimationForKey:@"momentum_scrolling"];
     backgroundLayer.transform = CATransform3DMakeScale(1.0, 1.0, 1.0);
 }
 
