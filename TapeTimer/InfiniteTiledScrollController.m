@@ -269,6 +269,7 @@
     
     [customAnimation setCompletionBlock:^(POPAnimation *anim, BOOL finished) {
         [self checkBoundAndSnapToInt];
+        [self setTimer];
     }];
     
     [self pop_addAnimation:customAnimation forKey:@"momentum_scrolling"];
@@ -324,7 +325,7 @@
     
     // TODO: snap to integer minutes
     
-    //[self setTimer]; // stub for testing. CAUSES HEISEN BUG
+    //[self setTimer]; // stub for testing. BEWARE OF HEISEN BUG
 }
 
 /*
@@ -336,12 +337,13 @@
     backgroundLayer.transform = CATransform3DMakeScale(1.0, 1.0, 1.0);
 }
 
-#pragma makr - Timer
+#pragma mark - Timer
 /*
  set the timer using the number currently under the red line
  */
 - (void) setTimer
 {
+    NSLog(@"setting timer...");
     NSLog(@"Timer Set To: %f", [self getCurrentTime]);
     // TODO: call TimerView
 }
@@ -365,7 +367,28 @@
  */
 - (RulerScaleLayer*) getCurrentLayerOnScreen
 {
-    return ((RulerScaleLayer*)[backgroundLayer hitTest:CGPointMake([self getScreenWidth]/2, [self getScreenHeight]/2)]);
+//    return ((RulerScaleLayer*)[backgroundLayer hitTest:CGPointMake([self getScreenWidth]/2, [self getScreenHeight]/2)]); // the heisen bug may be caused by hitTesting when no ruler layer is on center and the background returned as a result. When debugging, the layer have enough time to snap back.
+    
+    CGPoint redLineCenter = CGPointMake([self getScreenWidth]/2, [self getScreenHeight]/2);
+    RulerScaleLayer* candidate = NULL;
+    float currentMinDistance = INFINITY;
+    
+    // return the layer whose centural point is closet to the red line
+    for (NSInteger i = 0; i < [self getRulerLayerCount]; i++) {
+        RulerScaleLayer* rsl = [self getRulerLayerAtIndex:i];
+        float distance = fabsf(rsl.position.y - redLineCenter.y);
+        if (distance < currentMinDistance) {
+            currentMinDistance = distance;
+            candidate = rsl;
+        }
+    }
+    
+    if (candidate == NULL) {
+        NSLog(@"getCurrentLayerOnScreen: no ruler layer currently on screen");
+        return NULL;
+    } else {
+        return candidate;
+    }
 }
 
 /*
