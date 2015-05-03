@@ -14,14 +14,15 @@
 {
     NSInteger defaultSubLayerNumber;
     float MOMENTUM_FRICTION;
+    NSInteger NUM_PER_LAYER;
+    float TIMER_LAYER_HEIGHT;
+    float TIMER_LAYER_WEIDTH;
+    
     NSInteger currentTailTo;
     NSInteger currentHeadFrom;
-    NSInteger NUM_PER_LAYER;
     
     CALayer* backgroundLayer;
     float scrollUpFriction;
-    
-    //BOOL outOfBound;
 }
 
 // custom initializer. use this inistead of init
@@ -42,7 +43,7 @@
         //outOfBound = NO;
         
         backgroundLayer = [CALayer layer];
-        backgroundLayer.backgroundColor = [UIColor blueColor].CGColor;
+        backgroundLayer.backgroundColor = [UIColor whiteColor].CGColor;
         backgroundLayer.frame = CGRectMake(0, 0, [self getScreenWidth], [self getScreenHeight]);
         [self.timerView.layer addSublayer:backgroundLayer];
         
@@ -103,8 +104,7 @@
     NSLog(@"currentTailTo = %ld", (long)currentTailTo);
     NSInteger from = currentTailTo + 1;
     NSInteger to = from + NUM_PER_LAYER - 1;
-    RulerScaleLayer* rsl = [RulerScaleLayer newWithYPosition:positionY WithHeight:self.timerView.frame.size.height
-                                                   WithWidth:self.timerView.frame.size.width WithRangeFrom: from To: to WithScaleFactor:1];
+    RulerScaleLayer* rsl = [RulerScaleLayer newWithYPosition:positionY WithHeight:self.timerView.frame.size.height WithWidth:self.timerView.frame.size.width WithRangeFrom: from To: to];
     currentTailTo = to; // update currentTailTo
     rsl.contentsScale = [[UIScreen mainScreen]scale];
     [backgroundLayer addSublayer:rsl];
@@ -140,8 +140,7 @@
     // TODO: calculate initial range and scale
     NSInteger to = currentHeadFrom - 1;
     NSInteger from = to - NUM_PER_LAYER + 1;
-    RulerScaleLayer* rsl = [RulerScaleLayer newWithYPosition:positionY WithHeight:self.timerView.frame.size.height
-                                                   WithWidth:self.timerView.frame.size.width WithRangeFrom:from To:to WithScaleFactor:1];
+    RulerScaleLayer* rsl = [RulerScaleLayer newWithYPosition:positionY WithHeight:self.timerView.frame.size.height WithWidth:self.timerView.frame.size.width WithRangeFrom:from To:to];
     currentHeadFrom = from; // update currentHeadFrom
     rsl.contentsScale = [[UIScreen mainScreen]scale];
     // important: need to make sure the new layer is at back instead of front
@@ -281,18 +280,16 @@
 - (void) slowDown
 {
     scrollUpFriction = MAX(1 - ([self getHeadLayer].position.y - [self getScreenHeight])*0.01, 0);
-    //outOfBound = YES;
 }
 
 - (void) reverseSlowDown
 {
     scrollUpFriction = 1.0; // no friction
-    //outOfBound = NO;
 }
 
 - (void) bounceBackResetTransformAndReverseSlowDown
 {
-    [self pop_removeAnimationForKey:@"momentum_scrolling"];
+    //[self pop_removeAnimationForKey:@"momentum_scrolling"];
     backgroundLayer.transform = CATransform3DMakeScale(1.0, 1.0, 1.0);
     [self scrollByTranslation:[self getScreenHeight] - [self getHeadLayer].position.y];
     [self reverseSlowDown];

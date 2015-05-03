@@ -13,8 +13,8 @@
 
 @property NSInteger rangeFrom;
 @property NSInteger rangeTo;
-@property float scaleFactor;
+//@property float scaleFactor;
 
-+ (id) newWithYPosition:(float)py WithHeight:(float)h WithWidth:(float)w WithRangeFrom:(NSInteger)f To:(NSInteger)t WithScaleFactor:(float)s;
++ (id) newWithYPosition:(float)py WithHeight:(float)h WithWidth:(float)w WithRangeFrom:(NSInteger)f To:(NSInteger)t;// WithScaleFactor:(float)s;
 
 @end
