@@ -14,7 +14,7 @@
 {
     NSInteger defaultSubLayerNumber;
     float MOMENTUM_FRICTION;
-    NSInteger NUM_PER_LAYER;
+    NSInteger MINUITES_PER_LAYER;
     float TIMER_LAYER_HEIGHT;
     float TIMER_LAYER_WEIDTH;
     
@@ -38,7 +38,7 @@
         MOMENTUM_FRICTION = 5.0;
         currentTailTo = -1;
         currentHeadFrom = 0;
-        NUM_PER_LAYER = 10;
+        MINUITES_PER_LAYER = 10;
         scrollUpFriction = 1.0;
         TIMER_LAYER_HEIGHT = [self getScreenHeight];
         TIMER_LAYER_WEIDTH = [self getScreenWidth];
@@ -104,7 +104,7 @@
     // TODO: calculate initial range and scale
     NSLog(@"currentTailTo = %ld", (long)currentTailTo);
     NSInteger from = currentTailTo + 1;
-    NSInteger to = from + NUM_PER_LAYER - 1;
+    NSInteger to = from + MINUITES_PER_LAYER - 1;
     RulerScaleLayer* rsl = [RulerScaleLayer newWithYPosition:positionY WithHeight:TIMER_LAYER_HEIGHT WithWidth:TIMER_LAYER_WEIDTH WithRangeFrom: from To: to];
     currentTailTo = to; // update currentTailTo
     rsl.contentsScale = [[UIScreen mainScreen]scale];
@@ -116,7 +116,7 @@
 - (void) removeHeadRulerLayer
 {
     [[self getHeadLayer] removeFromSuperlayer];
-    currentHeadFrom += NUM_PER_LAYER; // increase currentHeadFrom by one layer
+    currentHeadFrom += MINUITES_PER_LAYER; // increase currentHeadFrom by one layer
     NSLog(@"head layer removed");
 }
 
@@ -140,7 +140,7 @@
     
     // TODO: calculate initial range and scale
     NSInteger to = currentHeadFrom - 1;
-    NSInteger from = to - NUM_PER_LAYER + 1;
+    NSInteger from = to - MINUITES_PER_LAYER + 1;
     RulerScaleLayer* rsl = [RulerScaleLayer newWithYPosition:positionY WithHeight:TIMER_LAYER_HEIGHT WithWidth:TIMER_LAYER_WEIDTH WithRangeFrom:from To:to];
     currentHeadFrom = from; // update currentHeadFrom
     rsl.contentsScale = [[UIScreen mainScreen]scale];
@@ -154,7 +154,7 @@
 - (void) removeTailRulerLayer
 {
     [[self getTailLayer] removeFromSuperlayer];
-    currentTailTo -= NUM_PER_LAYER; // decrease currentTailTo by one layer
+    currentTailTo -= MINUITES_PER_LAYER; // decrease currentTailTo by one layer
     NSLog(@"tail layer removed");
 }
 
@@ -266,7 +266,7 @@
     }];
     
     [customAnimation setCompletionBlock:^(POPAnimation *anim, BOOL finished) {
-        [self checkBoundAndFix];
+        [self checkBoundAndSnapToInt];
     }];
     
     [self pop_addAnimation:customAnimation forKey:@"momentum_scrolling"];
@@ -276,6 +276,8 @@
 {
     // the head layer is the first layer and is already on screen.
     return [self getHeadLayer].rangeFrom < 2 && [self getHeadLayer].position.y >= [self getScreenHeight];
+    
+    // TODO: maybe add another bound at the end
 }
 
 - (void) slowDown
@@ -296,11 +298,13 @@
     [self reverseSlowDown];
 }
 
-- (void) checkBoundAndFix
+- (void) checkBoundAndSnapToInt
 {
     if ([self checkOutOfBound]) {
         [self bounceBackResetTransformAndReverseSlowDown];
     }
+    
+    // TODO: snap to integer minutes
 }
 
 - (void) interruptAndReset
@@ -310,6 +314,14 @@
 }
 
 #pragma mark - Getters
+
+/*
+ Return the time the red line is currently pointing at
+ */
+- (float) getCurrentTime
+{
+    return 0;
+}
 
 /*
  Calculate the scale factor given the scrolling speed.

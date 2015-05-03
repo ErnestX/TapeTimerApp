@@ -21,10 +21,11 @@
 
 - (InfiniteTiledScrollController*) initWithTimerView: (TimerView*) tv;
 
-- (float) getCurrentAbsoluteRulerLocation;
+//- (float) getCurrentAbsoluteRulerLocation;
 - (void) scrollByTranslationNotAnimated: (float) location yScrollSpeed:(float)v;
 - (void) scrollWithFricAndEdgeBounceAtInitialSpeed:(float)v;
 - (void) interruptAndReset;
-- (void) checkBoundAndFix;
+- (void) checkBoundAndSnapToInt;
+- (float) getCurrentTime;
 
 @end
