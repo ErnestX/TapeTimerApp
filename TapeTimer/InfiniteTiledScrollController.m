@@ -12,6 +12,7 @@
 
 @implementation InfiniteTiledScrollController
 {
+    float LETTER_HEIGHT;
     NSInteger defaultSubLayerNumber;
     float MOMENTUM_FRICTION;
     NSInteger MINUITES_PER_LAYER;
@@ -44,6 +45,7 @@
         scrollUpFriction = 1.0;
         TIMER_LAYER_HEIGHT = [self getScreenHeight];
         TIMER_LAYER_WEIDTH = [self getScreenWidth];
+        LETTER_HEIGHT = 37.0;
         
         backgroundLayer = [CALayer layer];
         backgroundLayer.backgroundColor = [UIColor whiteColor].CGColor;
@@ -100,7 +102,8 @@
         // calculate absolute position based on current tail
     } else {
         // the new layer must be the only layer
-        positionY = [self getScreenHeight];
+        NSLog(@"setting the first layer");
+        positionY = [self getScreenHeight] - LETTER_HEIGHT/2;
     }
     
     // TODO: calculate initial range and scale
@@ -329,8 +332,6 @@
     }
     
     // TODO: snap to integer minutes
-    
-    //[self setTimer]; // stub for testing. BEWARE OF HEISEN BUG
 }
 
 /*
@@ -364,7 +365,7 @@
     float distanceFromLayerTop = [self getScreenHeight]/2 - (rsl.position.y - TIMER_LAYER_HEIGHT/2.0);
     float distancePerMinute = (TIMER_LAYER_HEIGHT / MINUITES_PER_LAYER);
     
-    return rsl.rangeFrom + (distanceFromLayerTop / distancePerMinute) - 0.37; // minus the height of a number / 2 = 0.37
+    return rsl.rangeFrom + ((distanceFromLayerTop - LETTER_HEIGHT/2) / distancePerMinute);
 }
 
 /*

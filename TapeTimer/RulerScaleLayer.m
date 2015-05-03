@@ -26,7 +26,7 @@
 
 - (void) drawInContext:(CGContextRef)ctx
 {
-    [self drawRulerLines:ctx];
+    //[self drawRulerLines:ctx];
     [self drawNumbers:ctx];
     
     UIGraphicsPopContext();
