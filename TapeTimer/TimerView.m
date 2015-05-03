@@ -47,13 +47,21 @@
 
 #pragma mark - Touch Events
 
+- (void) touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event
+{
+    NSLog(@"touch began");
+    [super touchesBegan:touches withEvent:event];
+    
+    [self.rulerScrollController interruptAndReset]; // interrupt any animation when touched
+}
+
 - (void) handlePan: (UIPanGestureRecognizer*) uigr
 {
     switch (uigr.state) {
         case UIGestureRecognizerStateBegan:
         {
-            NSLog(@"touch began");
-            // translation is still 0
+            NSLog(@"pan began");
+            // translation is 0 at the beginning
             previousTranslation = 0.0;
             break;
         }
@@ -70,7 +78,7 @@
         
         case UIGestureRecognizerStateEnded:
         {
-            NSLog(@"touch ended");
+            NSLog(@"pan ended");
             // start animation with lastScrollSpeed as initial speed
             [self.rulerScrollController scrollWithFricAndEdgeBounceAtInitialSpeed:lastScrollSpeed.y];
             break;

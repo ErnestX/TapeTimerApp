@@ -241,12 +241,18 @@
         NSLog(@"velocity = %f", vTemp);
         if (fabsf(vTemp) < FRICTION) {
             return NO; // animation stop
-        } else { // TODO: add condition here to check interruptions
+        } else { // add condition here can interrupt animation
             return YES; // not there yet
         }
     }];
     
     [self pop_addAnimation:customAnimation forKey:@"custom_animation"];
+}
+
+- (void) interruptAndReset
+{
+    [self pop_removeAnimationForKey:@"custom_animation"];
+    backgroundLayer.transform = CATransform3DMakeScale(1.0, 1.0, 1.0);
 }
 
 #pragma mark - Getters
