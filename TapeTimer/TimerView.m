@@ -11,7 +11,6 @@
 
 @implementation TimerView
 {
-    float previousLocation;
     float previousTranslation;
     CGPoint lastScrollSpeed;
 }
@@ -54,27 +53,27 @@
         case UIGestureRecognizerStateBegan:
         {
             NSLog(@"touch began");
-            // Remember original location
-            //previousLocation = self.rulerScrollController.getCurrentAbsoluteRulerLocation;
+            // translation is still 0
             previousTranslation = 0.0;
+            break;
         }
         
         case UIGestureRecognizerStateChanged:
         {
             lastScrollSpeed = [uigr velocityInView:self];
             CGPoint translation = [uigr translationInView:self]; // pan up or scroll down = negative
-            //[self.rulerScrollController scrollByTranslationNotAnimated:(translation.y + previousLocation) yScrollSpeed:lastScrollSpeed.y]
             
-            [self.rulerScrollController scrollByTranslationNotAnimated:(translation.y - previousTranslation) yScrollSpeed:lastScrollSpeed.y];
-            previousTranslation = translation.y;
+            [self.rulerScrollController scrollByTranslationNotAnimated:(translation.y - previousTranslation) yScrollSpeed:lastScrollSpeed.y]; // substract the translation already done = the new translation amount
+            previousTranslation = translation.y; // translation.y = the distance already translated
+            break;
         }
-        break;
         
         case UIGestureRecognizerStateEnded:
         {
             NSLog(@"touch ended");
             // start animation with lastScrollSpeed as initial speed
             [self.rulerScrollController scrollWithFricAndEdgeBounceAtInitialSpeed:lastScrollSpeed.y];
+            break;
         }
     }
     

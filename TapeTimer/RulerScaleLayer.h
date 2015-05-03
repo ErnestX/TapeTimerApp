@@ -11,7 +11,7 @@
 
 @interface RulerScaleLayer : CALayer
 
-@property float absoluteRulerLocation;
+//@property float absoluteRulerLocation;
 @property NSInteger rangeFrom;
 @property NSInteger rangeTo;
 @property float scaleFactor;
