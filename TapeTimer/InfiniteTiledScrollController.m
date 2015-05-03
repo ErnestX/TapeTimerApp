@@ -40,7 +40,8 @@
         currentHeadFrom = 0;
         NUM_PER_LAYER = 10;
         scrollUpFriction = 1.0;
-        //outOfBound = NO;
+        TIMER_LAYER_HEIGHT = [self getScreenHeight];
+        TIMER_LAYER_WEIDTH = [self getScreenWidth];
         
         backgroundLayer = [CALayer layer];
         backgroundLayer.backgroundColor = [UIColor whiteColor].CGColor;
@@ -104,7 +105,7 @@
     NSLog(@"currentTailTo = %ld", (long)currentTailTo);
     NSInteger from = currentTailTo + 1;
     NSInteger to = from + NUM_PER_LAYER - 1;
-    RulerScaleLayer* rsl = [RulerScaleLayer newWithYPosition:positionY WithHeight:self.timerView.frame.size.height WithWidth:self.timerView.frame.size.width WithRangeFrom: from To: to];
+    RulerScaleLayer* rsl = [RulerScaleLayer newWithYPosition:positionY WithHeight:TIMER_LAYER_HEIGHT WithWidth:TIMER_LAYER_WEIDTH WithRangeFrom: from To: to];
     currentTailTo = to; // update currentTailTo
     rsl.contentsScale = [[UIScreen mainScreen]scale];
     [backgroundLayer addSublayer:rsl];
@@ -140,7 +141,7 @@
     // TODO: calculate initial range and scale
     NSInteger to = currentHeadFrom - 1;
     NSInteger from = to - NUM_PER_LAYER + 1;
-    RulerScaleLayer* rsl = [RulerScaleLayer newWithYPosition:positionY WithHeight:self.timerView.frame.size.height WithWidth:self.timerView.frame.size.width WithRangeFrom:from To:to];
+    RulerScaleLayer* rsl = [RulerScaleLayer newWithYPosition:positionY WithHeight:TIMER_LAYER_HEIGHT WithWidth:TIMER_LAYER_WEIDTH WithRangeFrom:from To:to];
     currentHeadFrom = from; // update currentHeadFrom
     rsl.contentsScale = [[UIScreen mainScreen]scale];
     // important: need to make sure the new layer is at back instead of front

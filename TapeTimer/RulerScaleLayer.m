@@ -10,7 +10,7 @@
 
 @implementation RulerScaleLayer
 
-+ (id) newWithYPosition:(float)py WithHeight:(float)h WithWidth:(float)w WithRangeFrom:(NSInteger)f To:(NSInteger)t// WithScaleFactor:(float)s
++ (id) newWithYPosition:(float)py WithHeight:(float)h WithWidth:(float)w WithRangeFrom:(NSInteger)f To:(NSInteger)t
 {
     RulerScaleLayer* rsl = [RulerScaleLayer layer];
     if (rsl) {
@@ -18,7 +18,6 @@
         rsl.position = CGPointMake(rsl.position.x, py);
         rsl.rangeFrom = f;
         rsl.rangeTo = t;
-        //rsl.scaleFactor = s;
         
         rsl.backgroundColor = [UIColor whiteColor].CGColor;
     }
