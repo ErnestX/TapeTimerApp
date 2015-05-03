@@ -183,26 +183,27 @@
  scroll with implicit animation. Don't call directly
  Cannot scroll more than one screen at a time
  */
-- (void)scrollToAbsoluteRulerLocation:(float)rulerLocation
+- (void)scrollByTranslation:(float)translation
 {
     if ([self getRulerLayerCount] > 0) {
         // step1: add and remove layer if necessary
         [self manageLayersOnScreen];
         
         // step2: scroll
-        float distance = rulerLocation - self.currentAbsoluteRulerLocation; // positive: scroll down or pan up
+        //float distance = translation - self.currentAbsoluteRulerLocation; // positive: scroll down or pan up
         
         // TODO: add condition. simply scroll all layers if distance is small
         for (NSInteger i = 0; i < [self getRulerLayerCount]; i++)
         {
             RulerScaleLayer* rsl = [self getRulerLayerAtIndex:i];
-            rsl.position = CGPointMake(rsl.position.x, rsl.position.y + distance);
+            //rsl.position = CGPointMake(rsl.position.x, rsl.position.y + distance);
+            rsl.position = CGPointMake(rsl.position.x, rsl.position.y + translation);
         }
         
         //TODO: otherwise, do nothing, and throw error
     
-        // update absolute location
-        self.currentAbsoluteRulerLocation = rulerLocation;
+        // update absolute location (absolute location mechanism discarded)
+        //self.currentAbsoluteRulerLocation = translation;
     }
 }
 
@@ -210,13 +211,13 @@
  scroll with implicit animation disabled
  Cannot scroll more than one screen at a time
  */
-- (void) scrollToAbsoluteRulerLocationNotAnimated:(float)rulerLocation yScrollSpeed:(float)v
+- (void) scrollByTranslationNotAnimated:(float)translation yScrollSpeed:(float)v
 {
     // use CATransaction to disable transactions
     [CATransaction begin];
     [CATransaction setDisableActions:YES];
     
-    [self scrollToAbsoluteRulerLocation:rulerLocation];
+    [self scrollByTranslation:translation];
     
     [CATransaction commit];
     
@@ -252,7 +253,7 @@
         NSLog(@"velocity = %f", vTemp);
         if (fabsf(vTemp) < FRICTION) {
             return NO; // animation stop
-        } else {
+        } else { // TODO: add condition here to check interruptions
             return YES; // not there yet
         }
     }];

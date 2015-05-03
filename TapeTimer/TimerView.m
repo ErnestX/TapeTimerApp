@@ -12,6 +12,7 @@
 @implementation TimerView
 {
     float previousLocation;
+    float previousTranslation;
     CGPoint lastScrollSpeed;
 }
 
@@ -54,14 +55,18 @@
         {
             NSLog(@"touch began");
             // Remember original location
-            previousLocation = self.rulerScrollController.getCurrentAbsoluteRulerLocation;
+            //previousLocation = self.rulerScrollController.getCurrentAbsoluteRulerLocation;
+            previousTranslation = 0.0;
         }
         
         case UIGestureRecognizerStateChanged:
         {
             lastScrollSpeed = [uigr velocityInView:self];
             CGPoint translation = [uigr translationInView:self]; // pan up or scroll down = negative
-            [self.rulerScrollController scrollToAbsoluteRulerLocationNotAnimated:(translation.y + previousLocation) yScrollSpeed:lastScrollSpeed.y];
+            //[self.rulerScrollController scrollByTranslationNotAnimated:(translation.y + previousLocation) yScrollSpeed:lastScrollSpeed.y]
+            
+            [self.rulerScrollController scrollByTranslationNotAnimated:(translation.y - previousTranslation) yScrollSpeed:lastScrollSpeed.y];
+            previousTranslation = translation.y;
         }
         break;
         
