@@ -256,9 +256,6 @@
         }
         NSLog(@"velocity = %f", vTemp);
         if (fabsf(vTemp) < MOMENTUM_FRICTION) {
-            if ([self checkOutOfBound]) {
-                [self bounceBackAndReverseSlowDown];
-            }
             return NO; // animation stop
         } else { // add condition here can interrupt animation
             if ([self checkOutOfBound]) {
@@ -266,6 +263,10 @@
             }
             return YES; // not there yet
         }
+    }];
+    
+    [customAnimation setCompletionBlock:^(POPAnimation *anim, BOOL finished) {
+        [self checkBoundAndFix];
     }];
     
     [self pop_addAnimation:customAnimation forKey:@"momentum_scrolling"];
@@ -289,9 +290,10 @@
     //outOfBound = NO;
 }
 
-- (void) bounceBackAndReverseSlowDown
+- (void) bounceBackResetTransformAndReverseSlowDown
 {
-    // bounce back if not touched.
+    [self pop_removeAnimationForKey:@"momentum_scrolling"];
+    backgroundLayer.transform = CATransform3DMakeScale(1.0, 1.0, 1.0);
     [self scrollByTranslation:[self getScreenHeight] - [self getHeadLayer].position.y];
     [self reverseSlowDown];
 }
@@ -299,7 +301,7 @@
 - (void) checkBoundAndFix
 {
     if ([self checkOutOfBound]) {
-        [self bounceBackAndReverseSlowDown];
+        [self bounceBackResetTransformAndReverseSlowDown];
     }
 }
 
