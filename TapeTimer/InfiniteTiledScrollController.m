@@ -215,7 +215,7 @@
     [CATransaction setDisableActions:YES];
     
     if (translation > 0) {
-        if ([self checkOutOfBound]) {
+        if ([self checkOutOfBoundIfLayerExist]) {
             [self slowDownHeadOutOfBound];
         } else {
             [self reverseSlowDown];
@@ -260,7 +260,7 @@
         if (fabsf(vTemp) < MOMENTUM_FRICTION) {
             return NO; // animation stop
         } else { // add condition here can interrupt animation
-            if ([self checkOutOfBound]) {
+            if ([self checkOutOfBoundIfLayerExist]) {
                 [self slowDownHeadOutOfBound];
             }
             return YES; // not there yet
@@ -275,13 +275,17 @@
 }
 
 /*
- Check if the 0 min layer (and maybe the 10 hour layer in the future) is scrolled below the center of the screen
- Used to activate rubber band effect
+ Check if the 0 min layer (and maybe the 10 hour layer in the future) is scrolled below the center of the screen. Used to activate rubber band effect. 
+ Returns NO if there's no ruler layer on the screen
  */
-- (BOOL) checkOutOfBound
+- (BOOL) checkOutOfBoundIfLayerExist
 {
-    // the head layer is the first layer and is already on screen.
-    return [self getHeadLayer].rangeFrom < 2 && [self getHeadLayer].position.y >= [self getScreenHeight];
+    if ([self getRulerLayerCount] > 0) {
+        // the head layer is the first layer and is already on screen.
+        return [self getHeadLayer].rangeFrom < 2 && [self getHeadLayer].position.y >= [self getScreenHeight];
+    } else {
+        return NO;
+    }
     
     // TODO: maybe add another bound at the end
 }
@@ -314,13 +318,13 @@
 
 - (void) checkBoundAndSnapToInt
 {
-    if ([self checkOutOfBound]) {
+    if ([self checkOutOfBoundIfLayerExist]) {
         [self bounceBackResetTransformAndReverseSlowDown];
     }
     
     // TODO: snap to integer minutes
     
-    [self setTimer]; // stub for testing
+    //[self setTimer]; // stub for testing. CAUSES HEISEN BUG
 }
 
 /*

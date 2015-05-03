@@ -58,7 +58,7 @@
 - (void) touchesEnded:(NSSet *)touches withEvent:(UIEvent *)event
 {
     NSLog(@"touch ended");
-    [self.rulerScrollController checkBoundAndSnapToInt];
+    //[self.rulerScrollController checkBoundAndSnapToInt];
 }
 
 - (void) handlePan: (UIPanGestureRecognizer*) uigr
