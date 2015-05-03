@@ -25,7 +25,9 @@
     float scrollUpFriction;
 }
 
-// custom initializer. use this inistead of init
+/* 
+ custom initializer. use this inistead of init
+ */
 - (InfiniteTiledScrollController*) initWithTimerView:(TimerView *)tv
 {
     self = [super init];
@@ -72,7 +74,7 @@
 }
 
 /*
- add head when: the head view is on screen or further down, unless the absLoc is 0 (at the beginning)
+ add head when: the head view is on screen or further down, unless the rangeFrom of the head > 0 (at the beginning)
  */
 - (BOOL) shouldAddNewHead
 {
@@ -214,7 +216,7 @@
     
     if (translation > 0) {
         if ([self checkOutOfBound]) {
-            [self slowDown];
+            [self slowDownHeadOutOfBound];
         } else {
             [self reverseSlowDown];
         }
@@ -259,7 +261,7 @@
             return NO; // animation stop
         } else { // add condition here can interrupt animation
             if ([self checkOutOfBound]) {
-                [self slowDown];
+                [self slowDownHeadOutOfBound];
             }
             return YES; // not there yet
         }
@@ -272,6 +274,10 @@
     [self pop_addAnimation:customAnimation forKey:@"momentum_scrolling"];
 }
 
+/*
+ Check if the 0 min layer (and maybe the 10 hour layer in the future) is scrolled below the center of the screen
+ Used to activate rubber band effect
+ */
 - (BOOL) checkOutOfBound
 {
     // the head layer is the first layer and is already on screen.
@@ -280,11 +286,18 @@
     // TODO: maybe add another bound at the end
 }
 
-- (void) slowDown
+/*
+ Increase the friction applied to scrolling (both manual and animation) by how off the 0min layer is out of position
+ */
+- (void) slowDownHeadOutOfBound
 {
+    // calc the new friction based on how much the position is off
     scrollUpFriction = MAX(1 - ([self getHeadLayer].position.y - [self getScreenHeight])*0.01, 0);
 }
 
+/*
+ Reverse the friction factor to 1.0
+ */
 - (void) reverseSlowDown
 {
     scrollUpFriction = 1.0; // no friction
@@ -307,6 +320,9 @@
     // TODO: snap to integer minutes
 }
 
+/*
+ Remove any scrolling animation playing, and reset the transform scale
+ */
 - (void) interruptAndReset
 {
     [self pop_removeAnimationForKey:@"momentum_scrolling"];
@@ -319,6 +335,14 @@
  Return the time the red line is currently pointing at
  */
 - (float) getCurrentTime
+{
+    return 0;
+}
+
+/*
+ Return the y position of the layer currently below the red line
+ */
+- (float) getCurrentLayerPositionOnScreen
 {
     return 0;
 }
