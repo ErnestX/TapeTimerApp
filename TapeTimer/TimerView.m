@@ -25,7 +25,7 @@
         self.userInteractionEnabled = YES;
         
         UIPanGestureRecognizer* panRecognizer = [[UIPanGestureRecognizer alloc] initWithTarget:self action:@selector(handlePan:)];
-        //panRecognizer.cancelsTouchesInView = NO; // so that touch event won't be cancelled (no longer needed after switched to gesturerecognizer's built-in states)
+        panRecognizer.cancelsTouchesInView = NO; // so that touch event won't be cancelled
         [self addGestureRecognizer:panRecognizer];
     }
 }
@@ -53,6 +53,12 @@
     [super touchesBegan:touches withEvent:event];
     
     [self.rulerScrollController interruptAndReset]; // interrupt any animation when touched
+}
+
+- (void) touchesEnded:(NSSet *)touches withEvent:(UIEvent *)event
+{
+    NSLog(@"touch ended");
+    [self.rulerScrollController checkBoundAndFix];
 }
 
 - (void) handlePan: (UIPanGestureRecognizer*) uigr

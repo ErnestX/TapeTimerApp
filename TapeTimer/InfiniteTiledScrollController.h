@@ -25,5 +25,6 @@
 - (void) scrollByTranslationNotAnimated: (float) location yScrollSpeed:(float)v;
 - (void) scrollWithFricAndEdgeBounceAtInitialSpeed:(float)v;
 - (void) interruptAndReset;
+- (void) checkBoundAndFix;
 
 @end

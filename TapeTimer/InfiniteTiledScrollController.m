@@ -20,6 +20,8 @@
     
     CALayer* backgroundLayer;
     float scrollUpFriction;
+    
+    //BOOL outOfBound;
 }
 
 // custom initializer. use this inistead of init
@@ -37,6 +39,7 @@
         currentHeadFrom = 0;
         NUM_PER_LAYER = 10;
         scrollUpFriction = 1.0;
+        //outOfBound = NO;
         
         backgroundLayer = [CALayer layer];
         backgroundLayer.backgroundColor = [UIColor blueColor].CGColor;
@@ -203,7 +206,6 @@
  */
 - (void) scrollByTranslationNotAnimated:(float)translation yScrollSpeed:(float)v
 {
-    [self checkEdgeAndSlowDown];
     float scale = [self calcScaleWithSpeed:v];
     
     // use CATransaction to disable transactions
@@ -211,7 +213,11 @@
     [CATransaction setDisableActions:YES];
     
     if (translation > 0) {
-        scale = 1.0; // no scale if out of bound.
+        if ([self checkOutOfBound]) {
+            [self slowDown];
+        } else {
+            [self reverseSlowDown];
+        }
         [self scrollByTranslation:translation * scrollUpFriction];
     } else {
         [self scrollByTranslation:translation];
@@ -250,9 +256,14 @@
         }
         NSLog(@"velocity = %f", vTemp);
         if (fabsf(vTemp) < MOMENTUM_FRICTION) {
+            if ([self checkOutOfBound]) {
+                [self bounceBackAndReverseSlowDown];
+            }
             return NO; // animation stop
         } else { // add condition here can interrupt animation
-            [self checkEdgeAndSlowDown];
+            if ([self checkOutOfBound]) {
+                [self slowDown];
+            }
             return YES; // not there yet
         }
     }];
@@ -260,28 +271,36 @@
     [self pop_addAnimation:customAnimation forKey:@"momentum_scrolling"];
 }
 
-/*
- Call this at any moment when the ruler may go out of bound
- */
-- (void) checkEdgeAndSlowDown
+- (BOOL) checkOutOfBound
 {
-    if ([self getHeadLayer].rangeFrom < 2 && [self getHeadLayer].position.y >= [self getScreenHeight]) {
-        NSLog(@"out of bound");
-        // the head layer is the first layer and is already on screen.
-        
-        // stop any momentum animation
-        //[self interruptAndReset];
-        // add spring effect if scrolling up
-        scrollUpFriction = MAX(1 - ([self getHeadLayer].position.y - [self getScreenHeight])*0.01, 0);
-    } else {
-        scrollUpFriction = 1.0; // no friction
-    }
+    // the head layer is the first layer and is already on screen.
+    return [self getHeadLayer].rangeFrom < 2 && [self getHeadLayer].position.y >= [self getScreenHeight];
 }
 
-- (void) bounceBack
+- (void) slowDown
+{
+    scrollUpFriction = MAX(1 - ([self getHeadLayer].position.y - [self getScreenHeight])*0.01, 0);
+    //outOfBound = YES;
+}
+
+- (void) reverseSlowDown
+{
+    scrollUpFriction = 1.0; // no friction
+    //outOfBound = NO;
+}
+
+- (void) bounceBackAndReverseSlowDown
 {
     // bounce back if not touched.
     [self scrollByTranslation:[self getScreenHeight] - [self getHeadLayer].position.y];
+    [self reverseSlowDown];
+}
+
+- (void) checkBoundAndFix
+{
+    if ([self checkOutOfBound]) {
+        [self bounceBackAndReverseSlowDown];
+    }
 }
 
 - (void) interruptAndReset
