@@ -18,6 +18,7 @@
     NSInteger MINUITES_PER_LAYER;
     float TIMER_LAYER_HEIGHT;
     float TIMER_LAYER_WEIDTH;
+    float DISTANCE_PER_MINUTE;
     
     NSInteger currentTailTo;
     NSInteger currentHeadFrom;
@@ -46,6 +47,7 @@
         TIMER_LAYER_HEIGHT = [self getScreenHeight];
         TIMER_LAYER_WEIDTH = [self getScreenWidth];
         LETTER_HEIGHT = 37.0;
+        DISTANCE_PER_MINUTE = [self getScreenHeight] / MINUITES_PER_LAYER;
         
         backgroundLayer = [CALayer layer];
         backgroundLayer.backgroundColor = [UIColor whiteColor].CGColor;
@@ -350,8 +352,19 @@
 - (void) setTimer
 {
     NSLog(@"setting timer...");
-    // TODO: call TimerView
+    [self.timerView setTimer:[self getCurrentTime]];
     NSLog(@"Timer Set To: %f", [self getCurrentTime]);
+}
+
+/*
+ Tick the timer by second
+ Intended to be called by timer component in TimerView
+ */
+- (void) tickByOneSec:(NSTimer*)t
+{
+    NSLog(@"Tick");
+    // tick animation
+    [self scrollByTranslation:DISTANCE_PER_MINUTE/60];
 }
 
 #pragma mark - Getters
@@ -363,9 +376,9 @@
 {
     RulerScaleLayer* rsl = [self getCurrentLayerOnScreen];
     float distanceFromLayerTop = [self getScreenHeight]/2 - (rsl.position.y - TIMER_LAYER_HEIGHT/2.0);
-    float distancePerMinute = (TIMER_LAYER_HEIGHT / MINUITES_PER_LAYER);
+    //float distancePerMinute = (TIMER_LAYER_HEIGHT / MINUITES_PER_LAYER);
     
-    return rsl.rangeFrom + ((distanceFromLayerTop - LETTER_HEIGHT/2) / distancePerMinute);
+    return rsl.rangeFrom + ((distanceFromLayerTop - LETTER_HEIGHT/2) / DISTANCE_PER_MINUTE);
 }
 
 /*
@@ -377,7 +390,7 @@
     // the heisen bug is caused by hitTesting when no ruler layer is on center and as a result the background layer is returned. When debugging, the bug disappear b/c the layer have enough time to snap back.
     
     CGPoint redLineCenter = CGPointMake([self getScreenWidth]/2, [self getScreenHeight]/2);
-    RulerScaleLayer* candidate = NULL;
+    RulerScaleLayer* candidate = nil;
     float currentMinDistance = INFINITY;
     
     // return the layer whose centural point is closet to the red line
@@ -390,9 +403,9 @@
         }
     }
     
-    if (candidate == NULL) {
-        NSLog(@"getCurrentLayerOnScreen: no ruler layer currently on screen, returning NULL");
-        return NULL;
+    if (candidate == nil) {
+        NSLog(@"getCurrentLayerOnScreen: no ruler layer currently on screen, returning nil");
+        return nil;
     } else {
         return candidate;
     }

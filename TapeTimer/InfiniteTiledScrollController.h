@@ -27,5 +27,6 @@
 - (void) interruptAndReset;
 - (void) checkBoundAndSnapToInt;
 - (float) getCurrentTime;
+- (void) tickByOneSec:(NSTimer*)t;
 
 @end

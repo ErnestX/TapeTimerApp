@@ -13,6 +13,8 @@
 {
     float previousTranslation;
     CGPoint lastScrollSpeed;
+    NSTimer* timer;
+    NSTimer* ticker;
 }
 
 - (void)myInit
@@ -90,7 +92,25 @@
             break;
         }
     }
-    
 }
 
+#pragma mark - Timer
+- (void) setTimer: (float) min
+{
+    // remove previous timer
+    [timer invalidate];
+    [ticker invalidate];
+    // set new timer
+    timer = [NSTimer scheduledTimerWithTimeInterval:min * 60 target:self selector:@selector(timesUp:) userInfo:nil repeats:NO];
+    // set ticker
+    ticker = [NSTimer scheduledTimerWithTimeInterval:1 target:self.rulerScrollController selector:@selector(tickByOneSec:) userInfo:nil repeats:YES];
+}
+
+- (void)timesUp:(NSTimer *)t
+    {
+        NSLog(@"time's up!");
+        // play sound, etc
+        [ticker invalidate];
+    }
+             
 @end

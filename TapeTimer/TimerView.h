@@ -14,5 +14,6 @@
 @interface TimerView : UIView
 
 @property InfiniteTiledScrollController* rulerScrollController;
+- (void) setTimer: (float) min;
 
 @end
