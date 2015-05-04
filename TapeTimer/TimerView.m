@@ -57,12 +57,6 @@
     [self.rulerScrollController interruptAndReset]; // interrupt any animation when touched
 }
 
-- (void) touchesEnded:(NSSet *)touches withEvent:(UIEvent *)event
-{
-    NSLog(@"touch ended");
-    //[self.rulerScrollController checkBoundAndSnapToInt];
-}
-
 - (void) handlePan: (UIPanGestureRecognizer*) uigr
 {
     switch (uigr.state) {

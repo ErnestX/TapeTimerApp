@@ -17,11 +17,9 @@
 @interface InfiniteTiledScrollController : NSObject
 
 @property TimerView* timerView;
-//@property float currentAbsoluteRulerLocation;
 
 - (InfiniteTiledScrollController*) initWithTimerView: (TimerView*) tv;
 
-//- (float) getCurrentAbsoluteRulerLocation;
 - (void) scrollByTranslationNotAnimated: (float) location yScrollSpeed:(float)v;
 - (void) scrollWithFricAndEdgeBounceAtInitialSpeed:(float)v;
 - (void) interruptAndReset;

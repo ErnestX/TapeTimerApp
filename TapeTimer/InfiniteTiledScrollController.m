@@ -195,7 +195,7 @@ typedef enum {
 
 /*
  Barebone scroll with implicit animation.
- Cannot scroll more than one screen at a time
+ Cannot scroll more than one screen within one call. (this may cause bug when speed is too high, b/c new layer won't be alloced in time) 
  */
 - (void)scrollByTranslation:(float)translation
 {
@@ -217,7 +217,7 @@ typedef enum {
 
 /*
  Scroll with implicit animation disabled, with bound checking
- Cannot scroll more than one screen at a time.
+ Cannot scroll more than one screen within one call
  */
 - (void) scrollByTranslationNotAnimated:(float)translation yScrollSpeed:(float)v
 {
@@ -255,7 +255,6 @@ typedef enum {
         } else {
             vTemp *= scrollDownFriction;
         }
-        //vTemp *= scrollUpFriction;
         for (NSInteger i = 0; i < [self getRulerLayerCount]; i++)
         {
             RulerScaleLayer* rsl = [self getRulerLayerAtIndex:i];
@@ -404,7 +403,7 @@ typedef enum {
  */
 - (void) setTimer
 {
-    NSLog(@"setting timer...");
+    //NSLog(@"setting timer...");
     [self.timerView setTimer:[self getCurrentTime]];
     NSLog(@"Timer Set To: %f", [self getCurrentTime]);
 }
@@ -415,7 +414,7 @@ typedef enum {
  */
 - (void) tickByOneSec:(NSTimer*)t
 {
-    NSLog(@"Tick");
+    //NSLog(@"Tick");
     // tick animation
     [self scrollByTranslation:DISTANCE_PER_MINUTE/60];
 }
@@ -475,7 +474,7 @@ typedef enum {
     if (absV < 5.0) // don't bother to zoom if speed is too low???
         return 1.0;
     else
-        return MAX(0.001, 1.0 - absV * 0.0002); // make sure scale factor is not too small (turn upside down if < 0)
+        return MAX(0.1, 1.0 - absV * 0.0001); // make sure scale factor is not too small (turn upside down if < 0)
 }
 
 /*
