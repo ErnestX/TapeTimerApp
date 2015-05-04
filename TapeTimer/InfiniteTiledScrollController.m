@@ -48,8 +48,8 @@ typedef enum {
         defaultSubLayerNumber = [self getTimerViewSubLayers].count;
         NSLog(@"layer number: %ld", (long)defaultSubLayerNumber);
         MOMENTUM_FRICTION = 5.0;
-        currentTailTo = -1;
-        currentHeadFrom = 0;
+        currentTailTo = 589; //-1;
+        currentHeadFrom = 590; //0;
         MINUITES_PER_LAYER = 10;
         scrollUpFriction = 1.0;
         scrollDownFriction = 1.0;
@@ -243,7 +243,8 @@ typedef enum {
 //        }
         [self scrollByTranslation:translation * scrollUpFriction];
     } else {
-        [self scrollByTranslation:translation];
+        [self scrollByTranslation:translation * scrollDownFriction];
+         NSLog(@"scroll down friction applied");
     }
     
     [CATransaction commit];
@@ -260,7 +261,12 @@ typedef enum {
     __block float vTemp = v * 0.1; // convert velocity to moving distance
     
     POPCustomAnimation *customAnimation = [POPCustomAnimation animationWithBlock:^BOOL(id obj, POPCustomAnimation *animation) {
-        vTemp *= scrollUpFriction;
+        if (vTemp > 0) { // scrolling up
+            vTemp *= scrollUpFriction;
+        } else {
+            vTemp *= scrollDownFriction;
+        }
+        //vTemp *= scrollUpFriction;
         for (NSInteger i = 0; i < [self getRulerLayerCount]; i++)
         {
             RulerScaleLayer* rsl = [self getRulerLayerAtIndex:i];
@@ -328,11 +334,12 @@ typedef enum {
 - (CheckBoundResult) checkOutOfBound
 {
     if ([self getRulerLayerCount] > 0) {
-        if ([self getHeadLayer].rangeFrom < 2 && [self getHeadLayer].position.y >= [self getScreenHeight]) {
+        if ([self getHeadLayer].rangeFrom < 2 && [self getHeadLayer].position.y > [self getScreenHeight]) {
             // the head layer is the first layer and is already half out of screen.
             return head;
-        } else if ([self getTailLayer].rangeTo > 597 && [self getTailLayer].position.y >= 0) {
+        } else if ([self getTailLayer].rangeTo > 597 && [self getTailLayer].position.y < 0) {
             // the tail layer is the last layer and is already half out of screen.
+            NSLog(@"tail out of bound");
             return tail;
         } else {
             return inBound;
@@ -350,12 +357,15 @@ typedef enum {
 {
     // calc the new friction based on how much the position is off
     scrollUpFriction = MAX(1 - ([self getHeadLayer].position.y - [self getScreenHeight])*0.01, 0);
+    NSLog(@"scrollUpFriction = %f", scrollUpFriction);
 }
 
 - (void) slowDownTailOutOfBound
 {
+    NSLog(@"tail trying to slow down");
     // calc the new friction based on how much the position is off
     scrollDownFriction = MAX(1 - (0 - [self getTailLayer].position.y)*0.01, 0);
+    NSLog(@"scrollDownFriction = %f", scrollDownFriction);
 }
 
 /*
@@ -393,6 +403,7 @@ typedef enum {
 
 - (void) tailBounceBackResetTransformAndReverseSlowDown
 {
+    NSLog(@"tail bouncing back");
     backgroundLayer.transform = CATransform3DMakeScale(1.0, 1.0, 1.0);
     [self scrollByTranslation:0 - [self getTailLayer].position.y + LETTER_HEIGHT/2];
     [self reverseSlowDownBothDirections];
