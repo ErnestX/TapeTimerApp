@@ -44,7 +44,6 @@ typedef enum {
     if (self) {
         // init fields
         self.timerView = tv;
-        //self.currentAbsoluteRulerLocation = 0;
         defaultSubLayerNumber = [self getTimerViewSubLayers].count;
         NSLog(@"layer number: %ld", (long)defaultSubLayerNumber);
         MOMENTUM_FRICTION = 5.0;
@@ -227,20 +226,10 @@ typedef enum {
     // disable transactions
     [CATransaction begin];
     [CATransaction setDisableActions:YES];
-
-//    if ([self checkOutOfBound] == head) {
-//        [self slowDownHeadOutOfBound];
-//    } else {
-//        [self reverseSlowDownBothDirections];
-//    }
+    
     [self checkBoundAndSlowDownOrReverse];
     
     if (translation > 0) {
-//        if ([self checkOutOfBoundIfLayerExist]) {
-//            [self slowDownHeadOutOfBound];
-//        } else {
-//            [self reverseSlowDown];
-//        }
         [self scrollByTranslation:translation * scrollUpFriction];
     } else {
         [self scrollByTranslation:translation * scrollDownFriction];
@@ -287,14 +276,6 @@ typedef enum {
         if (fabsf(vTemp) < MOMENTUM_FRICTION) {
             return NO; // animation stop
         } else { // add condition here can interrupt animation
-//            if ([self checkOutOfBoundIfLayerExist]) {
-//                [self slowDownHeadOutOfBound];
-//            }
-//            if ([self checkOutOfBound] == head) {
-//                [self slowDownHeadOutOfBound];
-//            } else {
-//                [self reverseSlowDownBothDirections];
-//            }
             [self checkBoundAndSlowDownOrReverse];
             return YES; // not there yet
         }
@@ -345,15 +326,12 @@ typedef enum {
 {
     // calc the new friction based on how much the position is off
     scrollUpFriction = MAX(1 - ([self getHeadLayer].position.y - [self getScreenHeight])*0.01, 0);
-    //NSLog(@"scrollUpFriction = %f", scrollUpFriction);
 }
 
 - (void) slowDownTailOutOfBound
 {
-    //NSLog(@"tail trying to slow down");
     // calc the new friction based on how much the position is off
     scrollDownFriction = MAX(1 - (0 - [self getTailLayer].position.y)*0.01, 0);
-    //NSLog(@"scrollDownFriction = %f", scrollDownFriction);
 }
 
 /*
@@ -524,11 +502,6 @@ typedef enum {
 {
     return [self getTimerViewSubLayers].count - defaultSubLayerNumber;
 }
-
-//- (float) getCurrentAbsoluteRulerLocation
-//{
-//    return self.currentAbsoluteRulerLocation;
-//}
 
 - (float) getLayerHeight
 {
