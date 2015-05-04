@@ -227,13 +227,19 @@ typedef enum {
     // disable transactions
     [CATransaction begin];
     [CATransaction setDisableActions:YES];
+
+    if ([self checkOutOfBound] == head) {
+        [self slowDownHeadOutOfBound];
+    } else {
+        [self reverseSlowDown];
+    }
     
     if (translation > 0) {
-        if ([self checkOutOfBoundIfLayerExist]) {
-            [self slowDownHeadOutOfBound];
-        } else {
-            [self reverseSlowDown];
-        }
+//        if ([self checkOutOfBoundIfLayerExist]) {
+//            [self slowDownHeadOutOfBound];
+//        } else {
+//            [self reverseSlowDown];
+//        }
         [self scrollByTranslation:translation * scrollUpFriction];
     } else {
         [self scrollByTranslation:translation];
@@ -274,7 +280,10 @@ typedef enum {
         if (fabsf(vTemp) < MOMENTUM_FRICTION) {
             return NO; // animation stop
         } else { // add condition here can interrupt animation
-            if ([self checkOutOfBoundIfLayerExist]) {
+//            if ([self checkOutOfBoundIfLayerExist]) {
+//                [self slowDownHeadOutOfBound];
+//            }
+            if ([self checkOutOfBound] == head) {
                 [self slowDownHeadOutOfBound];
             }
             return YES; // not there yet
