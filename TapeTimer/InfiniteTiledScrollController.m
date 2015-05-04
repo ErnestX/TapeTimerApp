@@ -383,7 +383,7 @@ typedef enum {
     }
 }
 
-- (void) bounceBackResetTransformAndReverseSlowDown
+- (void) headBounceBackResetTransformAndReverseSlowDown
 {
     //[self pop_removeAnimationForKey:@"momentum_scrolling"];
     backgroundLayer.transform = CATransform3DMakeScale(1.0, 1.0, 1.0);
@@ -391,10 +391,26 @@ typedef enum {
     [self reverseSlowDownBothDirections];
 }
 
+- (void) tailBounceBackResetTransformAndReverseSlowDown
+{
+    backgroundLayer.transform = CATransform3DMakeScale(1.0, 1.0, 1.0);
+    [self scrollByTranslation:0 - [self getTailLayer].position.y + LETTER_HEIGHT/2];
+    [self reverseSlowDownBothDirections];
+}
+
 - (void) checkBoundAndSnapBack
 {
-    if ([self checkOutOfBoundIfLayerExist]) {
-        [self bounceBackResetTransformAndReverseSlowDown];
+    CheckBoundResult result = [self checkOutOfBound];
+    switch (result) {
+        case head:
+            [self headBounceBackResetTransformAndReverseSlowDown];
+            break;
+        case tail:
+            [self tailBounceBackResetTransformAndReverseSlowDown];
+            break;
+        case inBound:
+            [self reverseSlowDownBothDirections];
+            break;
     }
     
     // TODO: snap to integer minutes
