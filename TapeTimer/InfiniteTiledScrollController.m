@@ -10,6 +10,12 @@
 #import "RulerScaleLayer.h"
 #import "POP.h"
 
+typedef enum {
+    head,
+    tail,
+    inBound
+}CheckBoundResult;
+
 @implementation InfiniteTiledScrollController
 {
     float LETTER_HEIGHT;
@@ -26,6 +32,7 @@
     
     CALayer* backgroundLayer;
     float scrollUpFriction;
+    float scrollDownFriction;
 }
 
 /* 
@@ -45,6 +52,7 @@
         currentHeadFrom = 0;
         MINUITES_PER_LAYER = 10;
         scrollUpFriction = 1.0;
+        scrollDownFriction = 1.0;
         TIMER_LAYER_HEIGHT = [self getScreenHeight];
         TIMER_LAYER_WIDTH = [self getScreenWidth];
         LETTER_HEIGHT = 37.0;
@@ -279,13 +287,15 @@
         [CATransaction setCompletionBlock:^(void) {
             [self setTimer];
         }];
-        [self checkBoundAndSnapToInt];
+        [self checkBoundAndSnapBack];
         [CATransaction commit];
 
     }];
     
     [self pop_addAnimation:customAnimation forKey:@"momentum_scrolling"];
 }
+
+#pragma mark - Scroll Helpers
 
 /*
  Check if the 0 min layer (and maybe the 10 hour layer in the future) is scrolled below the center of the screen. Used to activate rubber band effect. 
@@ -302,6 +312,8 @@
     
     // TODO: maybe add another bound at the end
 }
+
+
 
 /*
  Increase the friction applied to scrolling (both manual and animation) 
@@ -329,7 +341,7 @@
     [self reverseSlowDown];
 }
 
-- (void) checkBoundAndSnapToInt
+- (void) checkBoundAndSnapBack
 {
     if ([self checkOutOfBoundIfLayerExist]) {
         [self bounceBackResetTransformAndReverseSlowDown];

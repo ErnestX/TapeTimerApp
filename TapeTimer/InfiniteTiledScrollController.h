@@ -25,7 +25,7 @@
 - (void) scrollByTranslationNotAnimated: (float) location yScrollSpeed:(float)v;
 - (void) scrollWithFricAndEdgeBounceAtInitialSpeed:(float)v;
 - (void) interruptAndReset;
-- (void) checkBoundAndSnapToInt;
+- (void) checkBoundAndSnapBack;
 - (float) getCurrentTime;
 - (void) tickByOneSec:(NSTimer*)t;
 
