@@ -358,6 +358,15 @@ typedef enum {
     scrollDownFriction = MAX(1 - (0 - [self getTailLayer].position.y)*0.01, 0);
 }
 
+/*
+ Reverse the friction factor to 1.0
+ */
+- (void) reverseSlowDownBothDirections
+{
+    scrollUpFriction = 1.0; // no friction
+    scrollDownFriction = 1.0;
+}
+
 - (void)checkBoundAndSlowDownOrReverse
 {
     CheckBoundResult result = [self checkOutOfBound];
@@ -374,20 +383,11 @@ typedef enum {
     }
 }
 
-/*
- Reverse the friction factor to 1.0
- */
-- (void) reverseSlowDownBothDirections
-{
-    scrollUpFriction = 1.0; // no friction
-    scrollDownFriction = 1.0;
-}
-
 - (void) bounceBackResetTransformAndReverseSlowDown
 {
     //[self pop_removeAnimationForKey:@"momentum_scrolling"];
     backgroundLayer.transform = CATransform3DMakeScale(1.0, 1.0, 1.0);
-    [self scrollByTranslation:[self getScreenHeight] - [self getHeadLayer].position.y];
+    [self scrollByTranslation:[self getScreenHeight] - [self getHeadLayer].position.y - LETTER_HEIGHT/2];
     [self reverseSlowDownBothDirections];
 }
 
