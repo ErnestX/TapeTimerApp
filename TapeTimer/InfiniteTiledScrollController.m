@@ -48,8 +48,8 @@ typedef enum {
         defaultSubLayerNumber = [self getTimerViewSubLayers].count;
         NSLog(@"layer number: %ld", (long)defaultSubLayerNumber);
         MOMENTUM_FRICTION = 5.0;
-        currentTailTo = 589; //-1;
-        currentHeadFrom = 590; //0;
+        currentTailTo = -1;
+        currentHeadFrom = 0;
         MINUITES_PER_LAYER = 10;
         scrollUpFriction = 1.0;
         scrollDownFriction = 1.0;
@@ -316,21 +316,9 @@ typedef enum {
 #pragma mark - Scroll Helpers
 
 /*
- Check if the 0 min layer (and maybe the 10 hour layer in the future) is scrolled below the center of the screen. Used to activate rubber band effect. 
- Returns NO if there's no ruler layer on the screen
+ Check if the 0 min layer or the 10 hour layer is scrolled below or above the center of the screen. Used to activate rubber band effect.
+ Returns inBound if there's no ruler layer on the screen
  */
-- (BOOL) checkOutOfBoundIfLayerExist
-{
-    if ([self getRulerLayerCount] > 0) {
-        // the head layer is the first layer and is already on screen.
-        return [self getHeadLayer].rangeFrom < 2 && [self getHeadLayer].position.y >= [self getScreenHeight];
-    } else {
-        return NO;
-    }
-    
-    // TODO: maybe add another bound at the end
-}
-
 - (CheckBoundResult) checkOutOfBound
 {
     if ([self getRulerLayerCount] > 0) {
@@ -357,15 +345,15 @@ typedef enum {
 {
     // calc the new friction based on how much the position is off
     scrollUpFriction = MAX(1 - ([self getHeadLayer].position.y - [self getScreenHeight])*0.01, 0);
-    NSLog(@"scrollUpFriction = %f", scrollUpFriction);
+    //NSLog(@"scrollUpFriction = %f", scrollUpFriction);
 }
 
 - (void) slowDownTailOutOfBound
 {
-    NSLog(@"tail trying to slow down");
+    //NSLog(@"tail trying to slow down");
     // calc the new friction based on how much the position is off
     scrollDownFriction = MAX(1 - (0 - [self getTailLayer].position.y)*0.01, 0);
-    NSLog(@"scrollDownFriction = %f", scrollDownFriction);
+    //NSLog(@"scrollDownFriction = %f", scrollDownFriction);
 }
 
 /*
@@ -393,19 +381,16 @@ typedef enum {
     }
 }
 
-- (void) headBounceBackResetTransformAndReverseSlowDown
+- (void) bounceBackResetTransformAndReverseSlowDownWithDirection: (BOOL)isHead
 {
-    //[self pop_removeAnimationForKey:@"momentum_scrolling"];
     backgroundLayer.transform = CATransform3DMakeScale(1.0, 1.0, 1.0);
-    [self scrollByTranslation:[self getScreenHeight] - [self getHeadLayer].position.y - LETTER_HEIGHT/2];
-    [self reverseSlowDownBothDirections];
-}
-
-- (void) tailBounceBackResetTransformAndReverseSlowDown
-{
-    NSLog(@"tail bouncing back");
-    backgroundLayer.transform = CATransform3DMakeScale(1.0, 1.0, 1.0);
-    [self scrollByTranslation:0 - [self getTailLayer].position.y + LETTER_HEIGHT/2];
+    
+    if (isHead) {
+        [self scrollByTranslation:[self getScreenHeight] - [self getHeadLayer].position.y - LETTER_HEIGHT/2];
+    } else {
+        [self scrollByTranslation:0 - [self getTailLayer].position.y + LETTER_HEIGHT/2];
+    }
+    
     [self reverseSlowDownBothDirections];
 }
 
@@ -414,10 +399,10 @@ typedef enum {
     CheckBoundResult result = [self checkOutOfBound];
     switch (result) {
         case head:
-            [self headBounceBackResetTransformAndReverseSlowDown];
+            [self bounceBackResetTransformAndReverseSlowDownWithDirection:YES];
             break;
         case tail:
-            [self tailBounceBackResetTransformAndReverseSlowDown];
+            [self bounceBackResetTransformAndReverseSlowDownWithDirection:NO];
             break;
         case inBound:
             [self reverseSlowDownBothDirections];
