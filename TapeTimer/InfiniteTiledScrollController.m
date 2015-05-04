@@ -19,6 +19,7 @@
     float TIMER_LAYER_HEIGHT;
     float TIMER_LAYER_WIDTH;
     float DISTANCE_PER_MINUTE;
+    NSInteger TAPE_LENGTH;
     
     NSInteger currentTailTo;
     NSInteger currentHeadFrom;
@@ -48,6 +49,7 @@
         TIMER_LAYER_WIDTH = [self getScreenWidth];
         LETTER_HEIGHT = 37.0;
         DISTANCE_PER_MINUTE = [self getScreenHeight] / MINUITES_PER_LAYER;
+        TAPE_LENGTH = 10 * 60 - 1; // 9 hours 59 min
         
         backgroundLayer = [CALayer layer];
         backgroundLayer.backgroundColor = [UIColor whiteColor].CGColor;
@@ -62,15 +64,15 @@
 #pragma mark - Layer Management
 
 /*
- add tail when: the tail view is on screen or further up
+ add tail when: the tail view is on screen or further up, unless it is the end
  */
 - (BOOL) shouldAddNewTail
 {
-    return [self getTailLayer].position.y < [self getScreenHeight];
+    return [self getTailLayer].position.y < [self getScreenHeight] && [self getTailLayer].rangeTo + 1 < TAPE_LENGTH;
 }
 
 /*
- remove tail when it is off screen by height *2 (position off by height)
+ remove tail when it is off screen by height *2 (position off by height).
  */
 - (BOOL) shouldRemoveTail
 {
@@ -78,7 +80,7 @@
 }
 
 /*
- add head when: the head view is on screen or further down, unless the rangeFrom of the head > 0 (at the beginning)
+ add head when: the head view is half on screen or further down, unless the rangeFrom of the head > 0 (at the beginning)
  */
 - (BOOL) shouldAddNewHead
 {

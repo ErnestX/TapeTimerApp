@@ -48,8 +48,6 @@
 
 - (void) drawNumbers:(CGContextRef)ctx
 {
-    //UIGraphicsPushContext(ctx);
-    
     float drawPos = 0.0f; // the position of the first number from the top
     
     for (NSInteger num = self.rangeFrom; num <= self.rangeTo; num++) {
@@ -65,8 +63,6 @@
 
 - (void) drawLargeNumbers:(CGContextRef)ctx
 {
-    //UIGraphicsPushContext(ctx);
-    
     UIFont* font = [UIFont fontWithName:@"Futura" size:100.0f];
     NSDictionary* attributes = @{NSFontAttributeName: font,
                                  NSForegroundColorAttributeName: [UIColor blackColor]};
