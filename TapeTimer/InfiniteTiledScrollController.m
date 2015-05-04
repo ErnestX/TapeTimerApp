@@ -231,7 +231,7 @@ typedef enum {
     if ([self checkOutOfBound] == head) {
         [self slowDownHeadOutOfBound];
     } else {
-        [self reverseSlowDown];
+        [self reverseSlowDownBothDirections];
     }
     
     if (translation > 0) {
@@ -286,7 +286,7 @@ typedef enum {
             if ([self checkOutOfBound] == head) {
                 [self slowDownHeadOutOfBound];
             } else {
-                [self reverseSlowDown];
+                [self reverseSlowDownBothDirections];
             }
             return YES; // not there yet
         }
@@ -350,17 +350,35 @@ typedef enum {
     scrollUpFriction = MAX(1 - ([self getHeadLayer].position.y - [self getScreenHeight])*0.01, 0);
 }
 
+- (void) slowDownTailOutOfBound
+{
+    // calc the new friction based on how much the position is off
+    scrollDownFriction = MAX(1 - (0 - [self getTailLayer].position.y)*0.01, 0);
+}
+
 - (void)checkBoundAndSlowDownOrReverse
 {
-    
+    CheckBoundResult result = [self checkOutOfBound];
+    switch (result) {
+        case head:
+            [self slowDownHeadOutOfBound];
+            break;
+        case tail:
+            [self slowDownTailOutOfBound];
+            break;
+        case inBound:
+            [self reverseSlowDownBothDirections];
+            break;
+    }
 }
 
 /*
  Reverse the friction factor to 1.0
  */
-- (void) reverseSlowDown
+- (void) reverseSlowDownBothDirections
 {
     scrollUpFriction = 1.0; // no friction
+    scrollDownFriction = 1.0;
 }
 
 - (void) bounceBackResetTransformAndReverseSlowDown
@@ -368,7 +386,7 @@ typedef enum {
     //[self pop_removeAnimationForKey:@"momentum_scrolling"];
     backgroundLayer.transform = CATransform3DMakeScale(1.0, 1.0, 1.0);
     [self scrollByTranslation:[self getScreenHeight] - [self getHeadLayer].position.y];
-    [self reverseSlowDown];
+    [self reverseSlowDownBothDirections];
 }
 
 - (void) checkBoundAndSnapBack
