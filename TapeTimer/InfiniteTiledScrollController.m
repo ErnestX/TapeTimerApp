@@ -213,7 +213,6 @@ typedef enum {
         }
         
         //TODO: otherwise, do nothing, and throw error
-        
     }
 }
 
@@ -313,7 +312,22 @@ typedef enum {
     // TODO: maybe add another bound at the end
 }
 
-
+- (CheckBoundResult) checkOutOfBound
+{
+    if ([self getRulerLayerCount] > 0) {
+        if ([self getHeadLayer].rangeFrom < 2 && [self getHeadLayer].position.y >= [self getScreenHeight]) {
+            // the head layer is the first layer and is already half out of screen.
+            return head;
+        } else if ([self getTailLayer].rangeTo > 597 && [self getTailLayer].position.y >= 0) {
+            // the tail layer is the last layer and is already half out of screen.
+            return tail;
+        } else {
+            return inBound;
+        }
+    } else {
+        return inBound; // return inBound if there's no layer
+    }
+}
 
 /*
  Increase the friction applied to scrolling (both manual and animation) 
