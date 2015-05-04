@@ -285,6 +285,8 @@ typedef enum {
 //            }
             if ([self checkOutOfBound] == head) {
                 [self slowDownHeadOutOfBound];
+            } else {
+                [self reverseSlowDown];
             }
             return YES; // not there yet
         }
@@ -346,6 +348,11 @@ typedef enum {
 {
     // calc the new friction based on how much the position is off
     scrollUpFriction = MAX(1 - ([self getHeadLayer].position.y - [self getScreenHeight])*0.01, 0);
+}
+
+- (void)checkBoundAndSlowDownOrReverse
+{
+    
 }
 
 /*
