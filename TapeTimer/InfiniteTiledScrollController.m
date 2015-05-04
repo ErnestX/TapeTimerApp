@@ -308,7 +308,6 @@ typedef enum {
             return head;
         } else if ([self getTailLayer].rangeTo > 597 && [self getTailLayer].position.y < 0) {
             // the tail layer is the last layer and is already half out of screen.
-            NSLog(@"tail out of bound");
             return tail;
         } else {
             return inBound;
@@ -366,7 +365,7 @@ typedef enum {
     if (isHead) {
         [self scrollByTranslation:[self getScreenHeight] - [self getHeadLayer].position.y - LETTER_HEIGHT/2];
     } else {
-        [self scrollByTranslation:0 - [self getTailLayer].position.y + LETTER_HEIGHT/2];
+        [self scrollByTranslation:0 - [self getTailLayer].position.y + DISTANCE_PER_MINUTE - LETTER_HEIGHT/2];
     }
     
     [self reverseSlowDownBothDirections];
@@ -430,7 +429,6 @@ typedef enum {
 {
     RulerScaleLayer* rsl = [self getCurrentLayerOnScreen];
     float distanceFromLayerTop = [self getScreenHeight]/2 - (rsl.position.y - TIMER_LAYER_HEIGHT/2.0);
-    //float distancePerMinute = (TIMER_LAYER_HEIGHT / MINUITES_PER_LAYER);
     
     return rsl.rangeFrom + ((distanceFromLayerTop - LETTER_HEIGHT/2) / DISTANCE_PER_MINUTE);
 }
