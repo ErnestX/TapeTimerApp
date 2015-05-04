@@ -228,11 +228,12 @@ typedef enum {
     [CATransaction begin];
     [CATransaction setDisableActions:YES];
 
-    if ([self checkOutOfBound] == head) {
-        [self slowDownHeadOutOfBound];
-    } else {
-        [self reverseSlowDownBothDirections];
-    }
+//    if ([self checkOutOfBound] == head) {
+//        [self slowDownHeadOutOfBound];
+//    } else {
+//        [self reverseSlowDownBothDirections];
+//    }
+    [self checkBoundAndSlowDownOrReverse];
     
     if (translation > 0) {
 //        if ([self checkOutOfBoundIfLayerExist]) {
@@ -283,11 +284,12 @@ typedef enum {
 //            if ([self checkOutOfBoundIfLayerExist]) {
 //                [self slowDownHeadOutOfBound];
 //            }
-            if ([self checkOutOfBound] == head) {
-                [self slowDownHeadOutOfBound];
-            } else {
-                [self reverseSlowDownBothDirections];
-            }
+//            if ([self checkOutOfBound] == head) {
+//                [self slowDownHeadOutOfBound];
+//            } else {
+//                [self reverseSlowDownBothDirections];
+//            }
+            [self checkBoundAndSlowDownOrReverse];
             return YES; // not there yet
         }
     }];
