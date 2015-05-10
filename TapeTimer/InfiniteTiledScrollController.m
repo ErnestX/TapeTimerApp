@@ -482,7 +482,8 @@ typedef enum {
         return 1.0; // don't scale if out of bound or too slow
     else {
         float a = 2;
-        return MAX(0.2, 1.0 - (powf(absV*0.0005,a)/(powf(absV*0.0005, a)+powf((1-absV*0.0005),a)))); //2.0 - powf(1.0004, absV));//1.0 - absV * 0.0005); // make sure scale factor is not too small (turn upside down if < 0)
+        float velocityFactor = 0.00035;
+        return MAX(0.2, 1.0 - (powf(absV*velocityFactor,a)/(powf(absV*velocityFactor, a)+powf((1-absV*velocityFactor),a)))); //2.0 - powf(1.0004, absV));//1.0 - absV * 0.0005); // make sure scale factor is not too small (turn upside down if < 0)
     }
 }
 
