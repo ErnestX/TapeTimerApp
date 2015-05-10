@@ -20,7 +20,6 @@ typedef enum {
 {
     float LETTER_HEIGHT;
     NSInteger defaultSubLayerNumber;
-    float MOMENTUM_FRICTION;
     float MIN_SCROLL_SPEED;
     NSInteger MINUITES_PER_LAYER;
     float TIMER_LAYER_HEIGHT;
@@ -51,8 +50,7 @@ typedef enum {
         self.timerView = tv;
         defaultSubLayerNumber = [self getTimerViewSubLayers].count;
         NSLog(@"layer number: %ld", (long)defaultSubLayerNumber);
-        MOMENTUM_FRICTION = 5.0;
-        MIN_SCROLL_SPEED = 0.0;
+        MIN_SCROLL_SPEED = 0.05;
         currentTailTo = -1;
         currentHeadFrom = 0;
         MINUITES_PER_LAYER = 10;
@@ -79,7 +77,7 @@ typedef enum {
 #pragma mark - Layer Management
 
 /*
- add tail when: the tail view is on screen or further up, unless it is the end
+ add tail when: the tail view is on screen + another screen or further up, unless it is the end
  */
 - (BOOL) shouldAddNewTail
 {
@@ -87,7 +85,7 @@ typedef enum {
 }
 
 /*
- remove tail when it is off screen by height *2 (position off by height).
+ remove tail when it is off screen by height *3 (position off by height).
  */
 - (BOOL) shouldRemoveTail
 {
@@ -95,7 +93,7 @@ typedef enum {
 }
 
 /*
- add head when: the head view is half on screen or further down, unless the rangeFrom of the head > 0 (at the beginning)
+ add head when: the head view is half on screen + another screen or further down, unless the rangeFrom of the head > 0 (at the beginning)
  */
 - (BOOL) shouldAddNewHead
 {
@@ -103,7 +101,7 @@ typedef enum {
 }
 
 /*
- remove head when it is off screen by height *2 (position off by height*2)
+ remove head when it is off screen by height *3 (position off by height*2)
  */
 - (BOOL) shouldRemoveHead
 {
@@ -281,7 +279,7 @@ typedef enum {
         vTemp *= 0.95; // EXPONENTIAL DECAY
         
         NSLog(@"velocity = %f", vTemp);
-        if (fabsf(vTemp) < MOMENTUM_FRICTION) {
+        if (fabsf(vTemp) <= MIN_SCROLL_SPEED) {
             return NO; // animation stop
         } else { // add condition here can interrupt animation
             [self checkBoundAndSlowDownOrReverse];
@@ -487,7 +485,7 @@ typedef enum {
     else {
         float a = 1.3;
         float velocityFactor = 0.007;
-        return MAX(0.2, 1.0 - (powf(absV*velocityFactor,a)/(powf(absV*velocityFactor, a)+powf((1-absV*velocityFactor),a)))); //2.0 - powf(1.0004, absV));//1.0 - absV * 0.0005); // make sure scale factor is not too small (turn upside down if < 0)
+        return MAX(0.3, 1.0 - (powf(absV*velocityFactor,a)/(powf(absV*velocityFactor, a)+powf((1-absV*velocityFactor),a)))); //2.0 - powf(1.0004, absV));//1.0 - absV * 0.0005); // make sure scale factor is not too small (turn upside down if < 0)
         //http://math.stackexchange.com/questions/121720/ease-in-out-function
     }
 }
