@@ -303,16 +303,34 @@ typedef enum {
 #pragma mark - Scroll Helpers
 
 /*
+ returns positive float indicating how much the head layer's center, taking paddings into consideration, is below the screen.
+ returns negative float if it is above the bottom of the screen
+ */
+- (float) headBelowScreenBottomAmount
+{
+    return ([self getHeadLayer].position.y + LETTER_HEIGHT/2 + RULER_LINE_PADDING) - [self getScreenHeight];
+}
+
+/*
+ returns positive float indicating how much the tail layer's center, taking paddings into consideration, is above the screen.
+ returns negative float if it is below the top of the screen
+ */
+- (float) tailAboveScreenTopAmount
+{
+    return 0 - ([self getTailLayer].position.y - LETTER_HEIGHT/2 - RULER_LINE_PADDING);
+}
+
+/*
  Check if the 0 min layer or the 10 hour layer is scrolled below or above the center of the screen. Used to activate rubber band effect.
  Returns inBound if there's no ruler layer on the screen
  */
 - (CheckBoundResult) checkOutOfBound
 {
     if ([self getRulerLayerCount] > 0) {
-        if ([self getHeadLayer].rangeFrom < 2 && [self getHeadLayer].position.y > [self getScreenHeight]) {
+        if ([self getHeadLayer].rangeFrom < 2 && [self headBelowScreenBottomAmount] > 0) {
             // the head layer is the first layer and is already half out of screen.
             return head;
-        } else if ([self getTailLayer].rangeTo > 597 && [self getTailLayer].position.y < 0) {
+        } else if ([self getTailLayer].rangeTo > 597 && [self tailAboveScreenTopAmount] > 0) {
             // the tail layer is the last layer and is already half out of screen.
             return tail;
         } else {
@@ -330,15 +348,13 @@ typedef enum {
 - (void) slowDownHeadOutOfBound
 {
     // calc the new friction based on how much the position is off
-    scrollUpFriction = MAX(1 - ([self getHeadLayer].position.y - [self getScreenHeight])*0.01, 0);
-    //scrollUpFriction = MAX(powf(0.95, (-1*[self getHeadLayer].position.y)), 0);
+    scrollUpFriction = MAX(powf(0.99, [self headBelowScreenBottomAmount]), 0);
 }
 
 - (void) slowDownTailOutOfBound
 {
     // calc the new friction based on how much the position is off
-    scrollDownFriction = MAX(1 - (0 - [self getTailLayer].position.y)*0.01, 0);
-    //scrollDownFriction = MAX(-1 * powf(0.95, [self getTailLayer].position.y), 0);
+    scrollDownFriction = MAX(powf(0.99, [self tailAboveScreenTopAmount]), 0);
 }
 
 /*
