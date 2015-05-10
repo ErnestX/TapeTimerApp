@@ -36,6 +36,8 @@ typedef enum {
     float scrollDownFriction;
     
     float RULER_LINE_PADDING;
+
+    float VELOCITY_FACTOR;
 }
 
 /* 
@@ -62,6 +64,7 @@ typedef enum {
         DISTANCE_PER_MINUTE = [self getScreenHeight] / MINUITES_PER_LAYER;
         TAPE_LENGTH = 10 * 60 - 1; // 9 hours 59 min
         RULER_LINE_PADDING = 7.0;
+        VELOCITY_FACTOR = 0.05;
         
         backgroundLayer = [CALayer layer];
         backgroundLayer.backgroundColor = [UIColor whiteColor].CGColor;
@@ -226,7 +229,7 @@ typedef enum {
  */
 - (void) scrollByTranslationNotAnimated:(float)translation yScrollSpeed:(float)v
 {
-    float scale = [self calcScaleWithSpeed:v];
+    float scale = [self calcScaleWithSpeed:v * VELOCITY_FACTOR];
     
     // disable transactions
     [CATransaction begin];
@@ -252,7 +255,7 @@ typedef enum {
 - (void) scrollWithFricAndEdgeBounceAtInitialSpeed:(float)v
 {
     NSLog(@"v = %f", v);
-    __block float vTemp = v * 0.05; // convert gesture velocity to moving distance (need to slow down for some reason)
+    __block float vTemp = v * VELOCITY_FACTOR;
     
     POPCustomAnimation *customAnimation = [POPCustomAnimation animationWithBlock:^BOOL(id obj, POPCustomAnimation *animation) {
         
@@ -269,7 +272,7 @@ typedef enum {
             [rsl setPosition: CGPointMake(rsl.position.x, rsl.position.y + vTemp)];
         }
         
-        float scale = [self calcScaleWithSpeed:vTemp*10]; // multiply by 10 to convert back to speed
+        float scale = [self calcScaleWithSpeed:vTemp];
         backgroundLayer.transform = CATransform3DMakeScale(scale, scale, 1);
         
         [self manageLayersOnScreen]; // add and remove layers as needed
@@ -478,12 +481,13 @@ typedef enum {
 {
     float absV = fabsf(v);
     
-    if (scrollDownFriction < 1.0 || scrollUpFriction < 1.0)// || absV < 700)
+    if (scrollDownFriction < 1.0 || scrollUpFriction < 1.0)// || absV < 500)
         return 1.0; // don't scale if out of bound or too slow
     else {
         float a = 2;
-        float velocityFactor = 0.00035;
+        float velocityFactor = 0.0045;
         return MAX(0.2, 1.0 - (powf(absV*velocityFactor,a)/(powf(absV*velocityFactor, a)+powf((1-absV*velocityFactor),a)))); //2.0 - powf(1.0004, absV));//1.0 - absV * 0.0005); // make sure scale factor is not too small (turn upside down if < 0)
+        //http://math.stackexchange.com/questions/121720/ease-in-out-function
     }
 }
 
