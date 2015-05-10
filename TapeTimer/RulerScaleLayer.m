@@ -27,23 +27,68 @@
 - (void) drawInContext:(CGContextRef)ctx
 {
     UIGraphicsPushContext(ctx);
-    //[self drawRulerLines:ctx];
+
+    [self drawDecorationPattern:ctx];
     [self drawNumbers:ctx];
     [self drawLargeNumbers:ctx];
     
     UIGraphicsPopContext();
 }
 
-- (void) drawRulerLines:(CGContextRef)ctx
+- (void) drawDecorationPattern:(CGContextRef)ctx
 {
-    // stub
-    CGContextSetStrokeColorWithColor(ctx, [UIColor redColor].CGColor);
+    CGContextSetStrokeColorWithColor(ctx, [UIColor lightGrayColor].CGColor);
+    CGContextSetLineWidth(ctx, 0.5);
     
-    CGPoint arr[2];
-    arr[0] = CGPointMake(50, 0);
-    arr[1] = CGPointMake(100, 600);
+    //float distanceFromCenter = 80;
+    float patternWidth = 10;
     
-    CGContextStrokeLineSegments(ctx, arr, 2);
+    [self drawPatternInContext:ctx BaseXPosition:self.frame.size.width/2 - 70 - patternWidth/2 BaseYPosition:-3 Width:patternWidth];
+    [self drawPatternInContext:ctx BaseXPosition:self.frame.size.width/2 + 70 - patternWidth/2 BaseYPosition:-3 Width:patternWidth];
+    
+    [self drawPatternInContext:ctx BaseXPosition:self.frame.size.width/2 - 130 - patternWidth/2 BaseYPosition:-3 Width:patternWidth];
+    [self drawPatternInContext:ctx BaseXPosition:self.frame.size.width/2 + 130 - patternWidth/2 BaseYPosition:-3 Width:patternWidth];
+    
+    [self drawPatternInContext:ctx BaseXPosition:self.frame.size.width/2 - 190 - patternWidth/2 BaseYPosition:-3 Width:patternWidth];
+    [self drawPatternInContext:ctx BaseXPosition:self.frame.size.width/2 + 190 - patternWidth/2 BaseYPosition:-3 Width:patternWidth];
+    
+    [self drawPatternInContext:ctx BaseXPosition:self.frame.size.width/2 - 250 - patternWidth/2 BaseYPosition:-3 Width:patternWidth];
+    [self drawPatternInContext:ctx BaseXPosition:self.frame.size.width/2 + 250 - patternWidth/2 BaseYPosition:-3 Width:patternWidth];
+}
+
+- (void) drawPatternInContext:(CGContextRef)ctx BaseXPosition:(float)baseXPos BaseYPosition:(float)baseYPos Width:(float)width
+{
+    float xPos = baseXPos;
+    float yPos = baseYPos;
+    NSInteger numOfSegments = self.rangeTo - self.rangeFrom + 1;
+    
+    CGContextMoveToPoint(ctx, xPos, yPos);
+    for (NSInteger i = 0; i < numOfSegments + 1; i++) { // add one more to make sure fill the whole page even with initial y padding
+        if (i % 2 == 1) {
+            xPos -= width;
+        } else {
+            xPos += width;
+        }
+        yPos += [self getDistanceBetweenTwoNumbers];
+        
+        CGContextAddLineToPoint(ctx, xPos, yPos);
+    }
+    
+    xPos = baseXPos + width;
+    yPos = baseYPos;
+    CGContextMoveToPoint(ctx, xPos, yPos);
+    for (NSInteger i = 0; i < numOfSegments + 1; i++) {
+        if (i % 2 == 1) {
+            xPos += width;
+        } else {
+            xPos -= width;
+        }
+        yPos += [self getDistanceBetweenTwoNumbers];
+        
+        CGContextAddLineToPoint(ctx, xPos, yPos);
+    }
+    
+    CGContextStrokePath(ctx);
 }
 
 - (void) drawNumbers:(CGContextRef)ctx
@@ -56,7 +101,7 @@
                                      NSForegroundColorAttributeName: [UIColor blackColor]};
         NSString* numS = [NSString stringWithFormat:@"- %02ld -", num % 60]; //number only goes from 0-60
         [numS drawAtPoint:CGPointMake(self.frame.size.width/2 - 40, drawPos) withAttributes:attributes];
-        drawPos += self.frame.size.height/10;
+        drawPos += [self getDistanceBetweenTwoNumbers];
     }
 }
 
@@ -67,8 +112,14 @@
     NSDictionary* attributes = @{NSFontAttributeName: font,
                                  NSForegroundColorAttributeName: [UIColor blackColor]};
     NSString* numS = [NSString stringWithFormat:@"%ld", self.rangeFrom / 60];
-    [numS drawAtPoint:CGPointMake(0, self.frame.size.height/2 - fontSize/2) withAttributes:attributes];
-    [numS drawAtPoint:CGPointMake(self.frame.size.width - 155, self.frame.size.height/2 - fontSize/2) withAttributes:attributes];
+    
+    [numS drawAtPoint:CGPointMake(self.frame.size.width/2 - 243, self.frame.size.height/2 - fontSize/2) withAttributes:attributes];
+    [numS drawAtPoint:CGPointMake(self.frame.size.width/2 + 88, self.frame.size.height/2 - fontSize/2) withAttributes:attributes];
+}
+
+- (float) getDistanceBetweenTwoNumbers
+{
+    return self.frame.size.height/(self.rangeTo - self.rangeFrom + 1);
 }
 
 @end

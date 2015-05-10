@@ -57,7 +57,7 @@ typedef enum {
         scrollUpFriction = 1.0;
         scrollDownFriction = 1.0;
         TIMER_LAYER_HEIGHT = [self getScreenHeight];
-        TIMER_LAYER_WIDTH = [self getScreenWidth] + 170;
+        TIMER_LAYER_WIDTH = [self getScreenWidth] + 200;
         LETTER_HEIGHT = 37.0;
         DISTANCE_PER_MINUTE = [self getScreenHeight] / MINUITES_PER_LAYER;
         TAPE_LENGTH = 10 * 60 - 1; // 9 hours 59 min
@@ -330,12 +330,14 @@ typedef enum {
 {
     // calc the new friction based on how much the position is off
     scrollUpFriction = MAX(1 - ([self getHeadLayer].position.y - [self getScreenHeight])*0.01, 0);
+    //scrollUpFriction = MAX(powf(0.95, (-1*[self getHeadLayer].position.y)), 0);
 }
 
 - (void) slowDownTailOutOfBound
 {
     // calc the new friction based on how much the position is off
     scrollDownFriction = MAX(1 - (0 - [self getTailLayer].position.y)*0.01, 0);
+    //scrollDownFriction = MAX(-1 * powf(0.95, [self getTailLayer].position.y), 0);
 }
 
 /*
