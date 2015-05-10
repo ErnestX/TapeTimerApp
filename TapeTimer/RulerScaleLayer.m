@@ -15,7 +15,6 @@
     RulerScaleLayer* rsl = [RulerScaleLayer layer];
     if (rsl) {
         rsl.frame = CGRectMake(0, 0, w, h);
-//        rsl.position = CGPointMake(rsl.position.x, py);
         rsl.position = CGPointMake([UIScreen mainScreen].bounds.size.width/2 , py);
         rsl.rangeFrom = f;
         rsl.rangeTo = t;
@@ -57,8 +56,7 @@
                                      NSForegroundColorAttributeName: [UIColor blackColor]};
         NSString* numS = [NSString stringWithFormat:@"- %02ld -", num % 60]; //number only goes from 0-60
         [numS drawAtPoint:CGPointMake(self.frame.size.width/2 - 40, drawPos) withAttributes:attributes];
-        
-        drawPos += 57.0; // TODO: extract a method to calculate this based on layer size.
+        drawPos += self.frame.size.height/10;
     }
 }
 
@@ -70,7 +68,7 @@
                                  NSForegroundColorAttributeName: [UIColor blackColor]};
     NSString* numS = [NSString stringWithFormat:@"%ld", self.rangeFrom / 60];
     [numS drawAtPoint:CGPointMake(0, self.frame.size.height/2 - fontSize/2) withAttributes:attributes];
-    [numS drawAtPoint:CGPointMake(self.frame.size.width - 150, self.frame.size.height/2 - fontSize/2) withAttributes:attributes];
+    [numS drawAtPoint:CGPointMake(self.frame.size.width - 155, self.frame.size.height/2 - fontSize/2) withAttributes:attributes];
 }
 
 @end

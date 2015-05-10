@@ -21,6 +21,7 @@ typedef enum {
     float LETTER_HEIGHT;
     NSInteger defaultSubLayerNumber;
     float MOMENTUM_FRICTION;
+    float MIN_SCROLL_SPEED;
     NSInteger MINUITES_PER_LAYER;
     float TIMER_LAYER_HEIGHT;
     float TIMER_LAYER_WIDTH;
@@ -33,6 +34,8 @@ typedef enum {
     CALayer* backgroundLayer;
     float scrollUpFriction;
     float scrollDownFriction;
+    
+    float RULER_LINE_PADDING;
 }
 
 /* 
@@ -47,16 +50,18 @@ typedef enum {
         defaultSubLayerNumber = [self getTimerViewSubLayers].count;
         NSLog(@"layer number: %ld", (long)defaultSubLayerNumber);
         MOMENTUM_FRICTION = 5.0;
+        MIN_SCROLL_SPEED = 0.1;
         currentTailTo = -1;
         currentHeadFrom = 0;
         MINUITES_PER_LAYER = 10;
         scrollUpFriction = 1.0;
         scrollDownFriction = 1.0;
         TIMER_LAYER_HEIGHT = [self getScreenHeight];
-        TIMER_LAYER_WIDTH = [self getScreenWidth] + 180;
+        TIMER_LAYER_WIDTH = [self getScreenWidth] + 170;
         LETTER_HEIGHT = 37.0;
         DISTANCE_PER_MINUTE = [self getScreenHeight] / MINUITES_PER_LAYER;
         TAPE_LENGTH = 10 * 60 - 1; // 9 hours 59 min
+        RULER_LINE_PADDING = 7.0;
         
         backgroundLayer = [CALayer layer];
         backgroundLayer.backgroundColor = [UIColor whiteColor].CGColor;
@@ -114,7 +119,7 @@ typedef enum {
     } else {
         // the new layer must be the only layer
         NSLog(@"setting the first layer");
-        positionY = [self getScreenHeight] - LETTER_HEIGHT/2;
+        positionY = [self getScreenHeight] - LETTER_HEIGHT/2 - RULER_LINE_PADDING;
     }
     
     // TODO: calculate initial range and scale
@@ -247,9 +252,21 @@ typedef enum {
  */
 - (void) scrollWithFricAndEdgeBounceAtInitialSpeed:(float)v
 {
-    __block float vTemp = v * 0.1; // convert velocity to moving distance
+    __block float vInit = v * 0.05;
+        NSLog(@"v = %f", v);
+    //__block float vTemp = v * 0.1; // convert velocity to moving distance
+    __block float vTemp = vInit;
+    __block NSInteger iteration = 0;
     
     POPCustomAnimation *customAnimation = [POPCustomAnimation animationWithBlock:^BOOL(id obj, POPCustomAnimation *animation) {
+        
+        if (vTemp > MIN_SCROLL_SPEED) {
+            vTemp = vInit - MOMENTUM_FRICTION*iteration; // scrolling up
+        } else if (vTemp < -1 * MIN_SCROLL_SPEED) {
+            vTemp = vInit + MOMENTUM_FRICTION*iteration; // scrolling down
+        }
+        iteration ++;
+        
         if (vTemp > 0) { // scrolling up
             vTemp *= scrollUpFriction;
         } else {
@@ -266,11 +283,11 @@ typedef enum {
         
         [self manageLayersOnScreen]; // add and remove layers as needed
         
-        if (vTemp > MOMENTUM_FRICTION) {
-            vTemp -= MOMENTUM_FRICTION; // scrolling up
-        } else if (vTemp < -1 * MOMENTUM_FRICTION) {
-            vTemp += MOMENTUM_FRICTION; // scrolling down
-        }
+//        if (vTemp > MOMENTUM_FRICTION) {
+//            vTemp -= MOMENTUM_FRICTION; // scrolling up
+//        } else if (vTemp < -1 * MOMENTUM_FRICTION) {
+//            vTemp += MOMENTUM_FRICTION; // scrolling down
+//        }
         NSLog(@"velocity = %f", vTemp);
         if (fabsf(vTemp) < MOMENTUM_FRICTION) {
             return NO; // animation stop
@@ -362,9 +379,9 @@ typedef enum {
     backgroundLayer.transform = CATransform3DMakeScale(1.0, 1.0, 1.0);
     
     if (isHead) {
-        [self scrollByTranslation:[self getScreenHeight] - [self getHeadLayer].position.y - LETTER_HEIGHT/2];
+        [self scrollByTranslation:[self getScreenHeight] - [self getHeadLayer].position.y - LETTER_HEIGHT/2 - RULER_LINE_PADDING];
     } else {
-        [self scrollByTranslation:0 - [self getTailLayer].position.y + DISTANCE_PER_MINUTE - LETTER_HEIGHT/2];
+        [self scrollByTranslation:0 - [self getTailLayer].position.y + DISTANCE_PER_MINUTE - LETTER_HEIGHT/2 - RULER_LINE_PADDING];
     }
     
     [self reverseSlowDownBothDirections];
@@ -429,7 +446,7 @@ typedef enum {
     RulerScaleLayer* rsl = [self getCurrentLayerOnScreen];
     float distanceFromLayerTop = [self getScreenHeight]/2 - (rsl.position.y - TIMER_LAYER_HEIGHT/2.0);
     
-    return rsl.rangeFrom + ((distanceFromLayerTop - LETTER_HEIGHT/2) / DISTANCE_PER_MINUTE);
+    return rsl.rangeFrom + ((distanceFromLayerTop - LETTER_HEIGHT/2 - RULER_LINE_PADDING) / DISTANCE_PER_MINUTE);
 }
 
 /*
@@ -447,7 +464,7 @@ typedef enum {
     // return the layer whose centural point is closet to the red line
     for (NSInteger i = 0; i < [self getRulerLayerCount]; i++) {
         RulerScaleLayer* rsl = [self getRulerLayerAtIndex:i];
-        float distance = fabsf(rsl.position.y - redLineCenter.y);
+        float distance = fabs(rsl.position.y - redLineCenter.y);
         if (distance < currentMinDistance) {
             currentMinDistance = distance;
             candidate = rsl;
@@ -469,12 +486,12 @@ typedef enum {
 
 - (float) calcScaleWithSpeed: (float) v
 {
-    float absV = abs(v);
+    float absV = fabsf(v);
     
-    if (absV < 5.0) // don't bother to zoom if speed is too low???
+    if (absV < 100.0) // don't bother to zoom if speed is too low???
         return 1.0;
     else
-        return MAX(0.1, 1.0 - absV * 0.0001); // make sure scale factor is not too small (turn upside down if < 0)
+        return MAX(0.1, 1.0 - absV * 0.0005); // make sure scale factor is not too small (turn upside down if < 0)
 }
 
 /*
