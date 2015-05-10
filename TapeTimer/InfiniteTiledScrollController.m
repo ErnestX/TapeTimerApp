@@ -252,28 +252,18 @@ typedef enum {
  */
 - (void) scrollWithFricAndEdgeBounceAtInitialSpeed:(float)v
 {
-    __block float vInit = v * 0.05;
-        NSLog(@"v = %f", v);
-    //__block float vTemp = v * 0.1; // convert velocity to moving distance
-    __block float vTemp = vInit;
-    __block NSInteger iteration = 0;
+    NSLog(@"v = %f", v);
+    __block float vTemp = v * 0.05; // convert gesture velocity to moving distance (need to slow down for some reason)
     
     POPCustomAnimation *customAnimation = [POPCustomAnimation animationWithBlock:^BOOL(id obj, POPCustomAnimation *animation) {
         
-        if (vTemp > MIN_SCROLL_SPEED) {
-            //vTemp = vInit - MOMENTUM_FRICTION*iteration; // scrolling up
-            vTemp *= 0.95;
-        } else if (vTemp < -1 * MIN_SCROLL_SPEED) {
-            //vTemp = vInit + MOMENTUM_FRICTION*iteration; // scrolling down
-            vTemp *= 0.95;
-        }
-        iteration ++;
-        
+        // increase friction when out of bound
         if (vTemp > 0) { // scrolling up
             vTemp *= scrollUpFriction;
         } else {
             vTemp *= scrollDownFriction;
         }
+        
         for (NSInteger i = 0; i < [self getRulerLayerCount]; i++)
         {
             RulerScaleLayer* rsl = [self getRulerLayerAtIndex:i];
@@ -284,12 +274,9 @@ typedef enum {
         backgroundLayer.transform = CATransform3DMakeScale(scale, scale, 1);
         
         [self manageLayersOnScreen]; // add and remove layers as needed
+ 
+        vTemp *= 0.95; // EXPONENTIAL DECAY
         
-//        if (vTemp > MOMENTUM_FRICTION) {
-//            vTemp -= MOMENTUM_FRICTION; // scrolling up
-//        } else if (vTemp < -1 * MOMENTUM_FRICTION) {
-//            vTemp += MOMENTUM_FRICTION; // scrolling down
-//        }
         NSLog(@"velocity = %f", vTemp);
         if (fabsf(vTemp) < MOMENTUM_FRICTION) {
             return NO; // animation stop
@@ -490,9 +477,9 @@ typedef enum {
 {
     float absV = fabsf(v);
     
-//    if (absV < 100.0) // don't bother to zoom if speed is too low???
-//        return 1.0;
-//    else
+    if (scrollDownFriction < 1.0 || scrollUpFriction < 1.0)
+        return 1.0; // don't scale if out of bound
+    else
         return MAX(0.1, 1.0 - absV * 0.0005); // make sure scale factor is not too small (turn upside down if < 0)
 }
 
