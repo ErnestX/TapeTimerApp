@@ -92,11 +92,13 @@
     float drawPos = 0.0f; // the position of the first number from the top
     
     for (NSInteger num = self.rangeFrom; num <= self.rangeTo; num++) {
+        
         UIFont* font = [UIFont fontWithName:@"Futura" size:32.0f];
         NSDictionary* attributes = @{NSFontAttributeName: font,
                                      NSForegroundColorAttributeName: [UIColor blackColor]};
         NSString* numS = [NSString stringWithFormat:@"- %02ld -", num % 60]; //number only goes from 0-60
-        [numS drawAtPoint:CGPointMake(self.frame.size.width/2 - 40, drawPos) withAttributes:attributes];
+        [numS drawAtPoint:CGPointMake(self.frame.size.width/2 - 36, drawPos) withAttributes:attributes];
+        
         drawPos += [self getDistanceBetweenTwoNumbers];
     }
 }

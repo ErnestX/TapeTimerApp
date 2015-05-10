@@ -57,7 +57,7 @@ typedef enum {
         scrollUpFriction = 1.0;
         scrollDownFriction = 1.0;
         TIMER_LAYER_HEIGHT = [self getScreenHeight];
-        TIMER_LAYER_WIDTH = [self getScreenWidth] + 300;
+        TIMER_LAYER_WIDTH = [self getScreenWidth] + 350;
         LETTER_HEIGHT = 37.0;
         DISTANCE_PER_MINUTE = [self getScreenHeight] / MINUITES_PER_LAYER;
         TAPE_LENGTH = 10 * 60 - 1; // 9 hours 59 min
@@ -238,7 +238,6 @@ typedef enum {
         [self scrollByTranslation:translation * scrollUpFriction];
     } else {
         [self scrollByTranslation:translation * scrollDownFriction];
-         NSLog(@"scroll down friction applied");
     }
     
     [CATransaction commit];
@@ -479,10 +478,12 @@ typedef enum {
 {
     float absV = fabsf(v);
     
-    if (scrollDownFriction < 1.0 || scrollUpFriction < 1.0)
-        return 1.0; // don't scale if out of bound
-    else
-        return MAX(0.3, 1.0 - absV * 0.0005); // make sure scale factor is not too small (turn upside down if < 0)
+    if (scrollDownFriction < 1.0 || scrollUpFriction < 1.0)// || absV < 700)
+        return 1.0; // don't scale if out of bound or too slow
+    else {
+        float a = 2;
+        return MAX(0.2, 1.0 - (powf(absV*0.0005,a)/(powf(absV*0.0005, a)+powf((1-absV*0.0005),a)))); //2.0 - powf(1.0004, absV));//1.0 - absV * 0.0005); // make sure scale factor is not too small (turn upside down if < 0)
+    }
 }
 
 /*
