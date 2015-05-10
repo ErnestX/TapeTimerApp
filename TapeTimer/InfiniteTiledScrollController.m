@@ -50,7 +50,7 @@ typedef enum {
         self.timerView = tv;
         defaultSubLayerNumber = [self getTimerViewSubLayers].count;
         NSLog(@"layer number: %ld", (long)defaultSubLayerNumber);
-        MIN_SCROLL_SPEED = 0.05;
+        MIN_SCROLL_SPEED = 0.5;
         currentTailTo = -1;
         currentHeadFrom = 0;
         MINUITES_PER_LAYER = 10;
@@ -410,13 +410,13 @@ typedef enum {
             break;
     }
     
-    // TODO: snap to integer minutes
+    //snap to integer minutes
     float minuteOff = fmodf([self getCurrentTime], 1); // since minute cannot be negative, minuteOff is always positive, except for -0.0
     NSLog(@"minuteOff = %f", minuteOff);
     if (minuteOff > 0.5) {
-        [self scrollByTranslation:-1 * ((1 - minuteOff) * DISTANCE_PER_MINUTE)]; //ceiling
+        [self scrollByTranslation: -1 * ((1 - minuteOff) * DISTANCE_PER_MINUTE)]; //ceiling
     } else {
-        [self scrollByTranslation: minuteOff * DISTANCE_PER_MINUTE];
+        [self scrollByTranslation: minuteOff * DISTANCE_PER_MINUTE]; //floor
     }
 }
 
