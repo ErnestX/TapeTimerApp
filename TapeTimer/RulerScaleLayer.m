@@ -37,23 +37,19 @@
 
 - (void) drawDecorationPattern:(CGContextRef)ctx
 {
-    CGContextSetStrokeColorWithColor(ctx, [UIColor lightGrayColor].CGColor);
+    CGContextSetStrokeColorWithColor(ctx, [UIColor colorWithRed:64.0/255.0 green:146.0/255.0 blue:153.0/255.0 alpha:1].CGColor);
     CGContextSetLineWidth(ctx, 0.5);
     
     //float distanceFromCenter = 80;
     float patternWidth = 10;
     
-    [self drawPatternInContext:ctx BaseXPosition:self.frame.size.width/2 - 70 - patternWidth/2 BaseYPosition:-3 Width:patternWidth];
-    [self drawPatternInContext:ctx BaseXPosition:self.frame.size.width/2 + 70 - patternWidth/2 BaseYPosition:-3 Width:patternWidth];
-    
-    [self drawPatternInContext:ctx BaseXPosition:self.frame.size.width/2 - 130 - patternWidth/2 BaseYPosition:-3 Width:patternWidth];
-    [self drawPatternInContext:ctx BaseXPosition:self.frame.size.width/2 + 130 - patternWidth/2 BaseYPosition:-3 Width:patternWidth];
-    
-    [self drawPatternInContext:ctx BaseXPosition:self.frame.size.width/2 - 190 - patternWidth/2 BaseYPosition:-3 Width:patternWidth];
-    [self drawPatternInContext:ctx BaseXPosition:self.frame.size.width/2 + 190 - patternWidth/2 BaseYPosition:-3 Width:patternWidth];
-    
-    [self drawPatternInContext:ctx BaseXPosition:self.frame.size.width/2 - 250 - patternWidth/2 BaseYPosition:-3 Width:patternWidth];
-    [self drawPatternInContext:ctx BaseXPosition:self.frame.size.width/2 + 250 - patternWidth/2 BaseYPosition:-3 Width:patternWidth];
+    float offset = 70;
+    for (NSInteger i = 0; i < 5; i++) {
+        [self drawPatternInContext:ctx BaseXPosition:self.frame.size.width/2 - offset - patternWidth/2 BaseYPosition:-3 Width:patternWidth];
+        [self drawPatternInContext:ctx BaseXPosition:self.frame.size.width/2 + offset - patternWidth/2 BaseYPosition:-3 Width:patternWidth];
+        
+        offset += 60;
+    }
 }
 
 - (void) drawPatternInContext:(CGContextRef)ctx BaseXPosition:(float)baseXPos BaseYPosition:(float)baseYPos Width:(float)width

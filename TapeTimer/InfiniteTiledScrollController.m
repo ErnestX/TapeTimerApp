@@ -57,7 +57,7 @@ typedef enum {
         scrollUpFriction = 1.0;
         scrollDownFriction = 1.0;
         TIMER_LAYER_HEIGHT = [self getScreenHeight];
-        TIMER_LAYER_WIDTH = [self getScreenWidth] + 200;
+        TIMER_LAYER_WIDTH = [self getScreenWidth] + 300;
         LETTER_HEIGHT = 37.0;
         DISTANCE_PER_MINUTE = [self getScreenHeight] / MINUITES_PER_LAYER;
         TAPE_LENGTH = 10 * 60 - 1; // 9 hours 59 min
@@ -482,7 +482,7 @@ typedef enum {
     if (scrollDownFriction < 1.0 || scrollUpFriction < 1.0)
         return 1.0; // don't scale if out of bound
     else
-        return MAX(0.1, 1.0 - absV * 0.0005); // make sure scale factor is not too small (turn upside down if < 0)
+        return MAX(0.3, 1.0 - absV * 0.0005); // make sure scale factor is not too small (turn upside down if < 0)
 }
 
 /*
