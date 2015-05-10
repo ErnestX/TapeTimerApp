@@ -83,7 +83,7 @@ typedef enum {
  */
 - (BOOL) shouldAddNewTail
 {
-    return [self getTailLayer].position.y < [self getScreenHeight] && [self getTailLayer].rangeTo + 1 < TAPE_LENGTH;
+    return [self getTailLayer].position.y < [self getScreenHeight] * 2 && [self getTailLayer].rangeTo + 1 < TAPE_LENGTH;
 }
 
 /*
@@ -91,7 +91,7 @@ typedef enum {
  */
 - (BOOL) shouldRemoveTail
 {
-    return [self getTailLayer].position.y > [self getScreenHeight] * 2;
+    return [self getTailLayer].position.y > [self getScreenHeight] * 3;
 }
 
 /*
@@ -99,7 +99,7 @@ typedef enum {
  */
 - (BOOL) shouldAddNewHead
 {
-    return [self getHeadLayer].position.y > 0 && [self getHeadLayer].rangeFrom > 0;
+    return [self getHeadLayer].position.y + [self getScreenHeight] > 0 && [self getHeadLayer].rangeFrom > 0;
 }
 
 /*
@@ -107,7 +107,7 @@ typedef enum {
  */
 - (BOOL) shouldRemoveHead
 {
-    return [self getHeadLayer].position.y < -1 * [self getScreenHeight] * 2;
+    return [self getHeadLayer].position.y < -1 * [self getScreenHeight] * 3;
 }
 
 - (void) addNewTailRulerLayer
@@ -238,9 +238,9 @@ typedef enum {
     [self checkBoundAndSlowDownOrReverse];
     
     if (translation > 0) {
-        [self scrollByTranslation:translation * scrollUpFriction];
+        [self scrollByTranslation:translation / scale * scrollUpFriction]; // divide by scale to reverse the scalling effect on the translation
     } else {
-        [self scrollByTranslation:translation * scrollDownFriction];
+        [self scrollByTranslation:translation / scale * scrollDownFriction];
     }
     
     [CATransaction commit];
@@ -266,13 +266,14 @@ typedef enum {
             vTemp *= scrollDownFriction;
         }
         
+        float scale = [self calcScaleWithSpeed:vTemp];
+        
         for (NSInteger i = 0; i < [self getRulerLayerCount]; i++)
         {
             RulerScaleLayer* rsl = [self getRulerLayerAtIndex:i];
-            [rsl setPosition: CGPointMake(rsl.position.x, rsl.position.y + vTemp)];
+            [rsl setPosition: CGPointMake(rsl.position.x, rsl.position.y + vTemp/scale)]; // divide by scale to reverse the scalling effect on the translation
         }
         
-        float scale = [self calcScaleWithSpeed:vTemp];
         backgroundLayer.transform = CATransform3DMakeScale(scale, scale, 1);
         
         [self manageLayersOnScreen]; // add and remove layers as needed
@@ -484,7 +485,7 @@ typedef enum {
     if (scrollDownFriction < 1.0 || scrollUpFriction < 1.0)// || absV < 500)
         return 1.0; // don't scale if out of bound or too slow
     else {
-        float a = 2.0;
+        float a = 1.3;
         float velocityFactor = 0.007;
         return MAX(0.2, 1.0 - (powf(absV*velocityFactor,a)/(powf(absV*velocityFactor, a)+powf((1-absV*velocityFactor),a)))); //2.0 - powf(1.0004, absV));//1.0 - absV * 0.0005); // make sure scale factor is not too small (turn upside down if < 0)
         //http://math.stackexchange.com/questions/121720/ease-in-out-function
