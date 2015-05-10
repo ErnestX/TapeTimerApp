@@ -50,7 +50,7 @@ typedef enum {
         defaultSubLayerNumber = [self getTimerViewSubLayers].count;
         NSLog(@"layer number: %ld", (long)defaultSubLayerNumber);
         MOMENTUM_FRICTION = 5.0;
-        MIN_SCROLL_SPEED = 0.1;
+        MIN_SCROLL_SPEED = 0.0;
         currentTailTo = -1;
         currentHeadFrom = 0;
         MINUITES_PER_LAYER = 10;
@@ -261,9 +261,11 @@ typedef enum {
     POPCustomAnimation *customAnimation = [POPCustomAnimation animationWithBlock:^BOOL(id obj, POPCustomAnimation *animation) {
         
         if (vTemp > MIN_SCROLL_SPEED) {
-            vTemp = vInit - MOMENTUM_FRICTION*iteration; // scrolling up
+            //vTemp = vInit - MOMENTUM_FRICTION*iteration; // scrolling up
+            vTemp *= 0.95;
         } else if (vTemp < -1 * MIN_SCROLL_SPEED) {
-            vTemp = vInit + MOMENTUM_FRICTION*iteration; // scrolling down
+            //vTemp = vInit + MOMENTUM_FRICTION*iteration; // scrolling down
+            vTemp *= 0.95;
         }
         iteration ++;
         
@@ -488,9 +490,9 @@ typedef enum {
 {
     float absV = fabsf(v);
     
-    if (absV < 100.0) // don't bother to zoom if speed is too low???
-        return 1.0;
-    else
+//    if (absV < 100.0) // don't bother to zoom if speed is too low???
+//        return 1.0;
+//    else
         return MAX(0.1, 1.0 - absV * 0.0005); // make sure scale factor is not too small (turn upside down if < 0)
 }
 
