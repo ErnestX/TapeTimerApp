@@ -411,6 +411,13 @@ typedef enum {
     }
     
     // TODO: snap to integer minutes
+    float minuteOff = fmodf([self getCurrentTime], 1); // since minute cannot be negative, minuteOff is always positive, except for -0.0
+    NSLog(@"minuteOff = %f", minuteOff);
+    if (minuteOff > 0.5) {
+        [self scrollByTranslation:-1 * ((1 - minuteOff) * DISTANCE_PER_MINUTE)]; //ceiling
+    } else {
+        [self scrollByTranslation: minuteOff * DISTANCE_PER_MINUTE];
+    }
 }
 
 /*
@@ -447,7 +454,7 @@ typedef enum {
 #pragma mark - Getters
 
 /*
- Return the time the red line is currently pointing at
+ Return the time (in minute) the red line is currently pointing at
  */
 - (float) getCurrentTime
 {
