@@ -15,7 +15,8 @@
     RulerScaleLayer* rsl = [RulerScaleLayer layer];
     if (rsl) {
         rsl.frame = CGRectMake(0, 0, w, h);
-        rsl.position = CGPointMake(rsl.position.x, py);
+//        rsl.position = CGPointMake(rsl.position.x, py);
+        rsl.position = CGPointMake([UIScreen mainScreen].bounds.size.width/2 , py);
         rsl.rangeFrom = f;
         rsl.rangeTo = t;
         
@@ -54,8 +55,8 @@
         UIFont* font = [UIFont fontWithName:@"Futura" size:32.0f];
         NSDictionary* attributes = @{NSFontAttributeName: font,
                                      NSForegroundColorAttributeName: [UIColor blackColor]};
-        NSString* numS = [NSString stringWithFormat:@"- %ld -", num];
-        [numS drawAtPoint:CGPointMake(115, drawPos) withAttributes:attributes];
+        NSString* numS = [NSString stringWithFormat:@"- %02ld -", num % 60]; //number only goes from 0-60
+        [numS drawAtPoint:CGPointMake(self.frame.size.width/2 - 40, drawPos) withAttributes:attributes];
         
         drawPos += 57.0; // TODO: extract a method to calculate this based on layer size.
     }
@@ -63,13 +64,13 @@
 
 - (void) drawLargeNumbers:(CGContextRef)ctx
 {
-    UIFont* font = [UIFont fontWithName:@"Futura" size:100.0f];
+    float fontSize = 280.0f;
+    UIFont* font = [UIFont fontWithName:@"Avenir" size:fontSize];
     NSDictionary* attributes = @{NSFontAttributeName: font,
                                  NSForegroundColorAttributeName: [UIColor blackColor]};
     NSString* numS = [NSString stringWithFormat:@"%ld", self.rangeFrom / 60];
-    [numS drawAtPoint:CGPointMake(0, 200) withAttributes:attributes];
-
-    
+    [numS drawAtPoint:CGPointMake(0, self.frame.size.height/2 - fontSize/2) withAttributes:attributes];
+    [numS drawAtPoint:CGPointMake(self.frame.size.width - 150, self.frame.size.height/2 - fontSize/2) withAttributes:attributes];
 }
 
 @end

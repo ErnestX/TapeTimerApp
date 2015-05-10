@@ -53,7 +53,7 @@ typedef enum {
         scrollUpFriction = 1.0;
         scrollDownFriction = 1.0;
         TIMER_LAYER_HEIGHT = [self getScreenHeight];
-        TIMER_LAYER_WIDTH = [self getScreenWidth];
+        TIMER_LAYER_WIDTH = [self getScreenWidth] + 180;
         LETTER_HEIGHT = 37.0;
         DISTANCE_PER_MINUTE = [self getScreenHeight] / MINUITES_PER_LAYER;
         TAPE_LENGTH = 10 * 60 - 1; // 9 hours 59 min
@@ -195,7 +195,7 @@ typedef enum {
 
 /*
  Barebone scroll with implicit animation.
- Cannot scroll more than one screen within one call. (this may cause bug when speed is too high, b/c new layer won't be alloced in time) 
+ Cannot scroll more than one screen within one call. (this may cause bug when speed is too high, b/c new layer won't be alloced in time)
  */
 - (void)scrollByTranslation:(float)translation
 {
