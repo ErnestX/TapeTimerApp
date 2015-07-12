@@ -21,6 +21,7 @@ typedef enum {
     float LETTER_HEIGHT;
     NSInteger defaultSubLayerNumber;
     float MIN_SCROLL_SPEED;
+    float SNAP_SCROLL_FRICTION_SPEED_THRESHOLD;
     NSInteger MINUITES_PER_LAYER;
     float TIMER_LAYER_HEIGHT;
     float TIMER_LAYER_WIDTH;
@@ -50,7 +51,8 @@ typedef enum {
         self.timerView = tv;
         defaultSubLayerNumber = [self getTimerViewSubLayers].count;
         NSLog(@"layer number: %ld", (long)defaultSubLayerNumber);
-        MIN_SCROLL_SPEED = 0.5;
+        MIN_SCROLL_SPEED = 0.1;
+        SNAP_SCROLL_FRICTION_SPEED_THRESHOLD = 10;
         currentTailTo = -1;
         currentHeadFrom = 0;
         MINUITES_PER_LAYER = 10;
@@ -235,11 +237,29 @@ typedef enum {
     
     [self checkBoundAndSlowDownOrReverse];
     
+    
+//    if (v < SNAP_SCROLL_FRICTION_SPEED_THRESHOLD) {
+//        // do snapping
+//        float minuteOff;
+//        if (fmodf([self getCurrentTime], 1) > 0.5) {
+//            minuteOff = 1 - fmodf([self getCurrentTime], 1);
+//        } else {
+//            minuteOff = -1 * fmodf([self getCurrentTime], 1);
+//        }
+//        NSLog(@"minuteOff = %f", minuteOff);
+//        translation += cosf( minuteOff * M_PI);
+////        if (translation < 0) {
+////            translation += minuteOff * DISTANCE_PER_MINUTE * 0.05;
+////        } else {
+////            translation -= minuteOff * DISTANCE_PER_MINUTE * 0.05;
+////        }
+//    }
     if (translation > 0) {
         [self scrollByTranslation:translation / scale * scrollUpFriction]; // divide by scale to reverse the scalling effect on the translation
     } else {
         [self scrollByTranslation:translation / scale * scrollDownFriction];
     }
+    
     
     [CATransaction commit];
     
@@ -412,7 +432,6 @@ typedef enum {
     
     //snap to integer minutes
     float minuteOff = fmodf([self getCurrentTime], 1); // since minute cannot be negative, minuteOff is always positive, except for -0.0
-    NSLog(@"minuteOff = %f", minuteOff);
     if (minuteOff > 0.5) {
         [self scrollByTranslation: -1 * ((1 - minuteOff) * DISTANCE_PER_MINUTE)]; //ceiling
     } else {

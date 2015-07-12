@@ -43,12 +43,12 @@
     //float distanceFromCenter = 80;
     float patternWidth = 10;
     
-    float offset = 70;
+    float DISTANCE_FROM_CENTER = 70;
     for (NSInteger i = 0; i < 5; i++) {
-        [self drawPatternInContext:ctx BaseXPosition:self.frame.size.width/2 - offset - patternWidth/2 BaseYPosition:-3 Width:patternWidth];
-        [self drawPatternInContext:ctx BaseXPosition:self.frame.size.width/2 + offset - patternWidth/2 BaseYPosition:-3 Width:patternWidth];
+        [self drawPatternInContext:ctx BaseXPosition:self.frame.size.width/2 - DISTANCE_FROM_CENTER - patternWidth/2 BaseYPosition:-3 Width:patternWidth];
+        [self drawPatternInContext:ctx BaseXPosition:self.frame.size.width/2 + DISTANCE_FROM_CENTER - patternWidth/2 BaseYPosition:-3 Width:patternWidth];
         
-        offset += 60;
+        DISTANCE_FROM_CENTER += 60;
     }
 }
 
@@ -106,13 +106,14 @@
 - (void) drawLargeNumbers:(CGContextRef)ctx
 {
     float fontSize = 280.0f;
+    float DISTANCE_FROM_CENTER = 85;
     UIFont* font = [UIFont fontWithName:@"Avenir" size:fontSize];
     NSDictionary* attributes = @{NSFontAttributeName: font,
                                  NSForegroundColorAttributeName: [UIColor blackColor]};
     NSString* numS = [NSString stringWithFormat:@"%ld", self.rangeFrom / 60];
     
-    [numS drawAtPoint:CGPointMake(self.frame.size.width/2 - 243, self.frame.size.height/2 - fontSize/2) withAttributes:attributes];
-    [numS drawAtPoint:CGPointMake(self.frame.size.width/2 + 88, self.frame.size.height/2 - fontSize/2) withAttributes:attributes];
+    [numS drawAtPoint:CGPointMake(self.frame.size.width/2 - 155 - DISTANCE_FROM_CENTER, self.frame.size.height/2 - fontSize/2) withAttributes:attributes];
+    [numS drawAtPoint:CGPointMake(self.frame.size.width/2 + DISTANCE_FROM_CENTER, self.frame.size.height/2 - fontSize/2) withAttributes:attributes];
 }
 
 - (float) getDistanceBetweenTwoNumbers
